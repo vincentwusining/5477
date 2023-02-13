@@ -1,111 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>awa</title>
-    <style>
-      p {
-      }
-    </style>
-  </head>
 
-  <body style="display: flex; flex-direction: column; margin: 0px">
-    <div
-      style="
-        display: flex;
-        flex-direction: row-reverse;
-        background-color: #393d49;
-        height: 50px;
-      "
-    >
-      <div
-        style="
-          margin: 5px;
-          font-size: 30px;
-          display: block;
-          position: absolute;
-          left: 0px;
-        "
-      >
-        <p style="margin: 0px">540</p>
-      </div>
-      <div style="width: 50px">
-        <p>1</p>
-      </div>
-      <div style="width: 50px">
-        <p>2</p>
-      </div>
-      <div style="width: 50px">
-        <p>3</p>
-      </div>
-      <div style="width: 50px">
-        <p>4</p>
-      </div>
-    </div>
-    <div style="display: flex; flex-direction: column">
-      <p style="text-align: center">逃出生天活动</p>
-      <p style="margin: 10px">
-        <b style="background-color: red">背景</b
-        >：所有玩家一不小心传送带了这个地方。这个地方是由近百个“区块”组成，每个“区块”大小不定，与原版区块概念不同。每个“区块”都是一个独立的空间，进入和出去的方式都不同，玩家会首先会进入一个随机的教程区块，完成教程区块后会集体来到4个不同的区块，这四个区块比较安全，但会给予玩家饥饿效果，促使玩家去探索别的区块，最终离开区块或在区块中达成一些目标。
-        <br />
-        <b style="background-color: red">区块</b
-        >：一个空间，类型不定（露天、空岛、房间、自然地形、地狱、末地、通风管道等等），可以用传送门模组模拟无边界。
-        <br />
-        预计制作100个区块。 <br />
-        用“编号-名字”命名区块。 <br />
-        每个区块风格类型不同，制造多样化的地图。 <br />
-        区块按照危险等级分类：安全、风险、危险、高危、极限。越危险收益越大
-        <br />
-        <b style="background-color: red">教程区块</b
-        >：有贴心的教程，预计做十几个不同区块，每个区块复制几十个，让每个玩家单独进入不同教程区块，学习一些基本出入区块的方法和游戏规则。因每名玩家进入的教程区块不同，得到的信息不同，所以教程区块本身就是玩家在游戏内得到的第一份财富。
-        <br />
-        <b style="background-color: red">初始区块</b
-        >：在玩家完成教程区块后分别进入四个初始区块，初始区块危险等级为安全，可以通向其他较为安全的区块，区块内持续给予玩家饥饿，促使玩家去别的区块探索。有现成商铺，可租借/购买。
-        <br />
-        <b style="background-color: red">出入区块方式</b
-        >：从一个区块进入另一个区块。非顺序，与编号无关，可以一对一、一对多、多对一、多对多，出入方式可不同，出入位置可不同。
-        <br />
-        <b style="background-color: red">直接出入</b
-        >：基础区块（较少）可以通过门、按钮、传送门、水池等显而易见的方式进出。
-        <br />
-        <b style="background-color: red">方式出入</b
-        >：一些稍微隐藏的区块，通过例如
-        在特定位置蹲起、在水里淹到一滴血、拿钻石块砸自己的脸、在公屏发癫、沿着特定路线行走、在特定容器放入特定物品（有关联）、多人站在多个不同的地方、从高处跳下等
-        不容易被正常人想到的方法出入，这些出入方式一般在教程区块中有明显的提示，在区块内有不太明显的提示，让玩家相互交换信息，并让没有信息的玩家也有概率能出来。
-        <br />
-        <b style="background-color: red">特殊出入</b
-        >：一些隐蔽的区块，可以通过特殊信物、在特定容器内放入特定物品（无关联）、丢出特殊物品、密码
-        等方式出入区块，无信息或信物无法出入，信息或信物可以在其他区块内获得。
-        <br />
-        <b style="background-color: red">怪物</b
-        >：尽量不考验pvp技术，将怪物改为只有特殊道具才能攻击，促使玩家合作、组队，不同怪物有对应的道具。
-        <br />
-        <b style="background-color: red">游戏方式</b
-        >：大部分情况下为冒险，非一条命，死亡掉落，死亡回到初始区块。建议屏蔽全局聊天，只能和附近的人沟通。玩家主要时间花费在探索各个区块、交流合作。无阵营对立。
-        <br />
-        <b style="background-color: red">角色扮演</b
-        >：角色扮演是社会模拟等活动必不可少的。在教程区块就可以让部分玩家获得一些道具（如：只有自己能用的熔炉、永久抗火、召唤术、盾牌、永久水下速撅）等等，让这些玩家在游戏的必经之路上发挥作用，促使交流合作组队，在队伍中扮演特殊的一员。也可以增加一些商铺、建筑等，让玩家多样化。
-        <br />
-        <b style="background-color: red">游戏目标</b
-        >：最终目标是逃离这里，可以打怪升级杀boss，也可以找到通道跑出去，有多样的离开方式，在离开后可以在外界帮助内部玩家逃离（比如让自己的物品出现在特定区块的随机容器、写一段话出现在随机容器、临时进入特定区块30秒等）。也不一定要追求逃离，可以添加一些有意思的道具、收藏品，或者安全的小游戏区块、游戏积分，或添加宠物，或在特殊区块内玩生存，让每个玩家即便出不去也能获得乐趣、有事可干。最后一日末日降临，所有区块都会刷新怪物（或者水淹火烧等任意方式杀死玩家），没逃出去的玩家的极小部分也可以用道具或藏在某些特殊区块来躲避死亡（躲避方式应不出现在逃离区块的主要路线上，即逃到一半的玩家必死，从一开始就没想着要逃的玩家却有概率幸存（如宠物猫猫合体成机甲保护玩家））
-        <br />
-        <b style="background-color: red">可能发生的/希望发生的</b
-        >：玩家能意识到信息的价值、地位高，能互相交流、交易信息，能利用已有的信息为自己牟利（如在初始区块兜售某区块的出入方式）。玩家死亡后重要物品遗落在易入难出的区块，重生后不断重复进入区块寻找出路。组队合作，包括战斗、后勤、拥有特殊能力或物品的人。在四个初始区块出现玩家自发形成的稳定货价、稳定市场，有人专职提供食品。有买卖信息的商人。
-        <br />
-        <b style="background-color: red">道具</b
-        >：可以攻击所有怪物，但伤害不高的武器。可以攻击特定种类的怪物，且伤害较高。可以攻击玩家的武器，伤害较低，防止魔怔人乱杀。所有武器可以做成药水或tag标签等形式来与玩家绑定，不可重复使用，尽量避免单人无双，给更多玩家游戏体验。各种药水，可以进入特殊地形。召唤物法棍，召唤兔子猫猫之类的，一般没用，特殊情况可以踩踩压力板，吸引仇恨等。<br />
-        <b style="background-color: red">游戏流程</b
-        >：教程区块—初始区块—饿—去别的区块找吃的—探索别的区块或定居交易—形成稳定市场—形成队伍—部分玩家在更深入的区块建立营地—不断探索—逃出生天<br />
-        <b style="background-color: red">mod指令等</b
-        >：屏蔽全局聊天，添加附近聊天，添加物品展示，/tell
-        /msg只能发送给附近玩家，传送门mod，自定义合成道具，自定义怪物，掉落物不清除。每通过一个区块都能获得可展示的便携证明，一定程度上防止信口开河、欺骗玩家的行为(技术支持的话可以创建指令/show
-        玩家 区块编号 )。 <br /><b style="background-color: red">问题及解决</b
-        >：建造过于麻烦；慢慢建，一些区块建在虚空上，或者纯封闭，建造速度可以提升。多次游玩后流程速通；制造非线性化的通关过程，通关需要去多个区块收集物品道具，每次活动用指令修改区块连接顺序，区块不变，但玩家所需经过的路线变了。
-      </p>
-    </div>
-    <p></p>
-    <b></b>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>awa</title>
+  <style>
+    button {
+      display: flex;
+      color: white;
+      background-color: rgb(0, 0, 0, 0);
+      padding: 0px;
+      margin: 0px;
+      width: 50px;
+      height: 50px;
+      font-size: large;
+      transition: 0.5s;
+      align-items: center;
+      justify-content: center;
+      background: url(img/back.png) no-repeat;
+      background-size: 426px 50px;
+      border-right: 0px;
+      border-top: 0px;
+      border-bottom: 0px;
+    }
+
+    button:hover {
+      width: 150px;
+    }
+
+    button>span {
+      display: flex;
+      position: relative;
+      left: 25px;
+      color: white;
+      border: 0px;
+      margin: 0px;
+      padding: 0px;
+      height: 50px;
+      width: 0px;
+      opacity: 1;
+      align-items: center;
+      white-space: nowrap;
+      transition: all 0.5s;
+    }
+
+    button:hover>span {
+      width: 100px;
+    }
+  </style>
+</head>
+
+<body style="display: flex; flex-direction: column; margin: 0px;background-color:#abfffc;">
+  <div
+    style="display: flex; flex-direction: row-reverse; height: 50px;background-color: #393d49;background: url(img/back1.png) no-repeat;background-size:100% 100px;">
+    <p style="margin: 5px;font-size: 30px;position: absolute;left: 0px; color: wheat">540</p>
+    <button style="z-index: 10;">1<span>内容</span></button>
+    <button style="z-index: 9;">2<span>内容</span></button>
+    <button style="z-index: 8;">3<span>内容</span></button>
+    <button>4<span>内容</span></button>
+  </div>
+  <div style="display: flex; flex-direction: column">
+    <p style="text-align: center">主页面</p>
+    <p style="margin: 10px"></p>
+  </div>
+</body>
+
 </html>
