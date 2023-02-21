@@ -6,11 +6,87 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>game</title>
+    <style>
+        button {
+            display: flex;
+            color: white;
+            background-color: rgb(0, 0, 0, 0);
+            padding: 0px;
+            margin: 0px;
+            width: 50px;
+            height: 50px;
+            font-size: large;
+            transition: 0.5s;
+            align-items: center;
+            justify-content: center;
+            background: url(img/back.png) no-repeat;
+            background-size: 426px 50px;
+            border-right: 0px;
+            border-top: 0px;
+            border-bottom: 0px;
+        }
+
+        button:hover {
+            width: 150px;
+        }
+
+        button>span {
+            display: flex;
+            position: relative;
+            left: 25px;
+            color: white;
+            border: 0px;
+            margin: 0px;
+            padding: 0px;
+            height: 50px;
+            width: 0px;
+            opacity: 1;
+            align-items: center;
+            white-space: nowrap;
+            transition: all 0.5s;
+        }
+
+        button:hover>span {
+            width: 100px;
+        }
+
+        button:hover>span:active {
+            background-color: rgb(60, 60, 60, 0.4);
+            transition: 0s
+        }
+    </style>
+    <script>
+        function index1() {
+            window.location.assign("./game.html");
+        }
+        function index2() {
+            window.location.assign("./test.html");
+        }
+        function index3() {
+            window.location.assign("./test.html");
+        }
+        function index4() {
+            window.location.assign("./test.html");
+        }
+    </script>
 </head>
 
-<body>
-    <div style="display:flex;justify-content: center;">
-        <img src="img/back3.png" style="width: 300px;height: 450px;">
+<body style="margin:0px">
+    <div
+        style="display: flex; flex-direction: row-reverse; height: 50px;background-color: #393d49;background: url(img/back1.png) no-repeat;background-size:100% 100px;">
+        <p style="margin: 5px;font-size: 30px;position: absolute;left: 0px; color: wheat">540</p>
+        <button style="z-index: 10;">1<span onclick="index1()">自制游戏</span></button>
+        <button style="z-index: 9;">2<span onclick="index2()">内容</span></button>
+        <button style="z-index: 8;">3<span onclick="index3()">内容</span></button>
+        <button style="z-index: 7;">4<span onclick="index4()">内容</span></button>
+    </div>
+    <div style="height:350px;background-image: url(img/board.png);background-size: 25px ;"></div>
+    <div style="display: flex;">
+        <div style="background-image: url(img/back2.png);width:200px;height: 200px;">目标选择器</div>
+        <div style="display: flex;flex-direction: column;">
+            <div style="display: flex;flex-direction: row;height:30px;background-color: #393d49;width:200px;"></div>
+            <div style="background-color: aqua;height:170px">控制区</div>
+        </div>
     </div>
 </body>
 
