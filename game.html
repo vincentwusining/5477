@@ -7,30 +7,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>game</title>
     <script>
-        var id = 1;
-        var state = 0;<!--0正常选择,1等待输入对象,2等待输入坐标-->;
-        var selectid = 0;
-        var control = 1;
-        function selector(id) {
+        var id = 1;/*动态id*/
+        var state = 0;/*0正常选择,1等待输入对象,2等待输入坐标*/;
+        var selectid = 0;/*选择目标*/
+        var control = 1;/*控制区状态*/
+        function detect_resist(x, y) {/*检测阻挡*/
+            var chess = document.getElementById("board").children;
+            for (var i = 0; i < chess.length; i++) {
+                if (chess[i].x == x) {
+                    if (chess[i].y == y) {
+                        if (chess[i].resist == 1) {
+                            return 1;
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+        function selector(id) {/*选择器*/
             if (state == 0) {
-                document.getElementById("img").src = document.getElementById(id).img;
-                document.getElementById("name").innerHTML = document.getElementById(id).name;
-                document.getElementById("max_health").innerHTML = document.getElementById(id).max_health;
-                document.getElementById("health").innerHTML = document.getElementById(id).health;
-                document.getElementById("movement").innerHTML = document.getElementById(id).movement;
-                document.getElementById("reflect").innerHTML = document.getElementById(id).reflect;
-                document.getElementById("skill1").childNodes[1].src = document.getElementById(id).skill1_src;
-                document.getElementById("skill1").childNodes[3].innerHTML = document.getElementById(id).skill1_name;
-                document.getElementById("skill2").childNodes[1].src = document.getElementById(id).skill2_src;
-                document.getElementById("skill2").childNodes[3].innerHTML = document.getElementById(id).skill2_name;
-                document.getElementById("skill3").childNodes[1].src = document.getElementById(id).skill3_src;
-                document.getElementById("skill3").childNodes[3].innerHTML = document.getElementById(id).skill3_name;
+                var chess = document.getElementById(id);
+                document.getElementById("img").src = chess.img;
+                document.getElementById("name").innerHTML = chess.name;
+                document.getElementById("max_health").innerHTML = chess.max_health;
+                document.getElementById("health").innerHTML = chess.health;
+                document.getElementById("movement").innerHTML = chess.movement;
+                document.getElementById("reflect").innerHTML = chess.reflect;
+                document.getElementById("skill1").childNodes[1].src = chess.skill1_src;
+                document.getElementById("skill1").childNodes[3].innerHTML = chess.skill1_name;
+                document.getElementById("skill2").childNodes[1].src = chess.skill2_src;
+                document.getElementById("skill2").childNodes[3].innerHTML = chess.skill2_name;
+                document.getElementById("skill3").childNodes[1].src = chess.skill3_src;
+                document.getElementById("skill3").childNodes[3].innerHTML = chess.skill3_name;
                 selectid = id;
                 controller(2);
             }
 
         }
-        function controller(page) {
+        function controller(page) {/*控制器*/
             control = page;
             if (control == 1) {
                 document.getElementById("controller_page1").removeAttribute("hidden");
@@ -60,7 +74,7 @@
             }
 
         }
-        function skill(skill) {
+        function skill(skill) {/*控制器技能*/
             if (skill == 0) {
                 var newskill = document.createElement("skill");
                 document.getElementById("controller_page3").replaceChild(newskill, document.getElementById("controller_page3").childNodes[1]);
@@ -94,14 +108,16 @@
             chess.skill2_name = "abcd";
             chess.skill3_src = "./img/skill1.3.png";
             chess.skill3_name = "12+3=540";
-            chess.movefunction = function (id, direction, count, form, source, x, y) {
-                if (direction == 1) { document.getElementById(id).y += 1 }
-                if (direction == 2) { document.getElementById(id).x += 1 }
-                if (direction == 3) { document.getElementById(id).y -= 1 }
-                if (direction == 4) { document.getElementById(id).x -= 1 }
-                document.getElementById(id).style.left = (document.getElementById(id).x - 1) * 25 + "px";
-                document.getElementById(id).style.bottom = (document.getElementById(id).y - 1) * 25 + "px";
+            chess.movefunction = function (id, dir, count, form, source, x, y) {
+                var chess = document.getElementById(id)
+                if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0) { chess.y += 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
+                if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0) { chess.x += 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
+                if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0) { chess.y -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
+                if (dir == 4) { if (chess.direction == 4) { if (detect_resist(chess.x - 1, chess.y) == 0) { chess.x -= 1 } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
+                chess.style.left = (chess.x - 1) * 25 + "px";
+                chess.style.bottom = (chess.y - 1) * 25 + "px";
             }
+            chess.resist = 1;
 
             skill1.setAttribute("hidden", "hidden")
             skill2.setAttribute("hidden", "hidden")
@@ -113,6 +129,7 @@
             chess.move = chess.movement;
             chess.x = x;
             chess.y = y;
+            chess.direction = 1;
             chess.skillable = 1;
             chess.movable = 1;
             chess.style.backgroundImage = "url(" + chess.img + ")";
@@ -140,18 +157,20 @@
             skill3.innerHTML = "";
             chess.skill1_src = "./img/skill2.1.png";
             chess.skill1_name = "傻逼";
-            chess.skill2_src = "./img/skill2.2.png";
+            chess.skill2_src = "./img/skill0.png";
             chess.skill2_name = "无";
-            chess.skill3_src = "./img/skill2.3.png";
+            chess.skill3_src = "./img/skill0.png";
             chess.skill3_name = "无";
-            chess.movefunction = function (id, direction, count, form, source, x, y) {
-                if (direction == 1) { document.getElementById(id).y += -1 }
-                if (direction == 2) { document.getElementById(id).x += -1 }
-                if (direction == 3) { document.getElementById(id).y -= -1 }
-                if (direction == 4) { document.getElementById(id).x -= -1 }
-                document.getElementById(id).style.left = (document.getElementById(id).x - 1) * 25 + "px";
-                document.getElementById(id).style.bottom = (document.getElementById(id).y - 1) * 25 + "px";
+            chess.movefunction = function (id, dir, count, form, source, x, y) {
+                var chess = document.getElementById(id)
+                if (dir == 3) { if (chess.direction == 1) { chess.y += 1 } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
+                if (dir == 4) { if (chess.direction == 2) { chess.x += 1 } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
+                if (dir == 1) { if (chess.direction == 3) { chess.y -= 1 } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
+                if (dir == 2) { if (chess.direction == 4) { chess.x -= 1 } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
+                chess.style.left = (chess.x - 1) * 25 + "px";
+                chess.style.bottom = (chess.y - 1) * 25 + "px";
             }
+            chess.resist = 1;
 
             skill1.setAttribute("hidden", "hidden")
             skill2.setAttribute("hidden", "hidden")
