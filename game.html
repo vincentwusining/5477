@@ -11,17 +11,28 @@
         var state = 0;/*0正常选择,1等待输入对象人物,2等待输入坐标*/;
         var selectid = 0;/*选择目标*/
         var control = 1;/*控制区状态*/
-        function input0() {/*输入地块*/
+        var range = 0;//选择范围
+        function input0(id) {/*输入地块*/
             state = 2;
             var input = document.getElementById("controller_page3").querySelector("#" + id);
             input.style.backgroundColor = "rgb(76, 244, 10,0.5)";
             input.setAttribute("class", "waiting");
         }
-        function input1(id) {/*输入人物/召唤物*/
-            state = 1;
-            var input = document.getElementById("controller_page3").querySelector("#" + id);
-            input.style.backgroundColor = "rgb(76, 244, 10,0.5)";
-            input.setAttribute("class", "waiting");
+        function input1(id, r) {/*输入人物/召唤物*/
+            if (state == 0) {
+                state = 1;
+                range = r;
+                var input = document.getElementById("controller_page3").querySelector("#" + id);
+                input.style.backgroundColor = "rgb(76, 244, 10,0.5)";
+                input.setAttribute("class", "waiting");
+            }
+            else if (state == 1) {
+                state = 0;
+                range = 0;
+                var input = document.getElementById("controller_page3").querySelector("#" + id);
+                input.style.backgroundColor = "rgb(0,0,0,0)";
+                input.removeAttribute("class");
+            }
         }
         function detect_resist(x, y) {/*检测阻挡*/
             var chess = document.getElementById("board").children;
@@ -35,6 +46,39 @@
                 }
             }
             return 0;
+        }
+        function detect_range(r, id1, id2) {/*检测范围*/
+            if (r == 1) {
+                var x0 = document.getElementById(id1).x;
+                var y0 = document.getElementById(id1).y;
+                var x1 = document.getElementById(id2).x;
+                var y1 = document.getElementById(id2).y;
+                if (y1 - y0 == 1 && x1 - x0 == 0) {
+                    return 1;
+                }
+                else if (y1 - y0 == -1 && x1 - x0 == 0) {
+                    return 1;
+                }
+                else if (y1 - y0 == 0 && x1 - x0 == -1) {
+                    return 1;
+                }
+                else if (y1 - y0 == 0 && x1 - x0 == 1) {
+                    return 1;
+                }
+                return 0;
+            }
+            else if (r == 2) {
+
+            }
+            else if (r == 3) {
+
+            }
+            else if (r == 4) {
+
+            }
+            else if (r == 2) {
+
+            }
         }
         function selector(id) {/*选择器*/
             var chess = document.getElementById(id);
@@ -56,22 +100,26 @@
             }
             if (state == 1) {
                 if (chess.class == 1 || chess.class == 2) {
-                    var input = document.getElementById("controller_page3").querySelector(".waiting");
-                    input.style.backgroundColor = "rgb(0, 0, 0, 0)";
-                    input.src = chess.img;
-                    input.value = id;
-                    input.removeAttribute("class");
-                    state = 0;
+                    if (detect_range(range, selectid, id) == 1) {
+                        var input = document.getElementById("controller_page3").querySelector(".waiting");
+                        input.style.backgroundColor = "rgb(0, 0, 0, 0)";
+                        input.src = chess.img;
+                        input.value = id;
+                        input.removeAttribute("class");
+                        state = 0;
+                    }
                 }
             }
             if (state == 2) {
                 if (chess.class == 0) {
-                    var input = document.getElementById("controller_page3").querySelector(".waiting");
-                    input.style.backgroundColor = "rgb(0, 0, 0, 0)";
-                    input.src = chess.img;
-                    input.value = [chess.x, chess.y];
-                    input.removeAttribute("class");
-                    state = 0;
+                    if (detect_range(range, selectid, id) == 1) {
+                        var input = document.getElementById("controller_page3").querySelector(".waiting");
+                        input.style.backgroundColor = "rgb(0, 0, 0, 0)";
+                        input.src = chess.img;
+                        input.value = [chess.x, chess.y];
+                        input.removeAttribute("class");
+                        state = 0;
+                    }
                 }
             }
         }
@@ -105,6 +153,7 @@
             }
         }
         function skill(skill) {/*控制器技能*/
+            state = 0;
             var page = document.getElementById("controller_page3");
             if (skill == 0) {
                 var newskill = document.createElement("skill");
@@ -196,6 +245,9 @@
             chess.skill3_name = "";
             chess.skill3_cooling =;
             chess.skill3_class = ;
+            chess.skill1_launch = function (){}
+            chess.skill2_launch = function (){}
+            chess.skill3_launch = function (){}
             chess.movefunction = function (id, dir, count, form, source, x, y) {
                 var chess = document.getElementById(id)
                 if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0) { chess.y += 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
@@ -258,7 +310,7 @@
             chess.attack_multiply = 1;
             chess.hit_add = 0;
             chess.hit_multiply = 1;
-            skill1.innerHTML = '对目标<img height="25px" width="25px" id="input1_1_1" onclick="input1(id)">造成5点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+            skill1.innerHTML = '对目标<img height="25px" width="25px" id="input1_1_1" onclick="input1(id,1)">造成5点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
             skill2.innerHTML = "妈妈省的";
             skill3.innerHTML = "妈妈sheng的";
             chess.skill1_launch = function () {
@@ -266,8 +318,10 @@
                 var id = document.getElementById("controller_page3").querySelector("#input1_1_1").value;
                 document.getElementById(id).hitfunction(id, -5, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
             }
+            chess.skill2_launch = function () { }
+            chess.skill3_launch = function () { }
             chess.skill1_src = "./img/skill1.1.png";
-            chess.skill1_name = "喝喝哈嘿！";
+            chess.skill1_name = "攻击";
             chess.skill1_cooling = 114514;
             chess.skill1_class = 1;
             chess.skill2_src = "./img/skill1.2.png";
@@ -297,6 +351,8 @@
                 chess.reflect += hit_reflect;
                 if (chess.health > chess.max_health) { chess.health = chess.max_health; }
                 if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
+                chess.setAttribute("class", "anim1");
+                setTimeout(function () { chess.removeAttribute("class") }, 300);
                 if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
             }
             chess.resist = 1;
@@ -494,6 +550,20 @@
             margin: 0px;
         }
 
+        @keyframes anim1 {
+            50% {
+                background-color: rgba(222, 17, 17, 0.5);
+            }
+
+            100% {
+                background-color: rgba(0, 0, 0, 0);
+            }
+        }
+
+        chess0.anim1 {
+            animation: anim1 0.3s;
+        }
+
         skill {}
     </style>
 </head>
@@ -565,16 +635,16 @@
                 <div id="controller_page2" hidden
                     style="position: absolute;background-color: red;height: 50px;width: 50px;left:81.25px;top: 60px;">
                     <p onclick="document.getElementById(selectid).movefunction(selectid,1,1,0,0,0,0)"
-                        style="transform:rotate(0deg);font-size:50px;background-color:rgb(1,1,1,0.3);position: absolute;left:0px;top: -66px;">
+                        style="transform:rotate(0deg);font-size:50px;background-color:rgb(1,1,1,0.3);position: absolute;left:0px;top: -66px;cursor: pointer;">
                         ▲</p>
                     <p onclick="document.getElementById(selectid).movefunction(selectid,2,1,0,0,0,0)"
-                        style="transform: rotate(90deg);font-size:50px;background-color:rgb(1,1,1,0.3);position: absolute;left:59px;top: -8px;">
+                        style="transform: rotate(90deg);font-size:50px;background-color:rgb(1,1,1,0.3);position: absolute;left:59px;top: -8px;cursor: pointer;">
                         ▲</p>
                     <p onclick="document.getElementById(selectid).movefunction(selectid,3,1,0,0,0,0)"
-                        style="transform: rotate(180deg);font-size:50px;background-color:rgb(1,1,1,0.3);position: absolute;left:0px;top: 50px;">
+                        style="transform: rotate(180deg);font-size:50px;background-color:rgb(1,1,1,0.3);position: absolute;left:0px;top: 50px;cursor: pointer;">
                         ▲</p>
                     <p onclick="document.getElementById(selectid).movefunction(selectid,4,1,0,0,0,0)"
-                        style="transform: rotate(270deg);font-size:50px;background-color:rgb(1,1,1,0.3);position: absolute;left:-58px;top:-8px;">
+                        style="transform: rotate(270deg);font-size:50px;background-color:rgb(1,1,1,0.3);position: absolute;left:-58px;top:-8px;cursor: pointer;">
                         ▲</p>
                 </div>
                 <!--3技-->
