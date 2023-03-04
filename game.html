@@ -8,9 +8,21 @@
     <title>game</title>
     <script>
         var id = 1;/*动态id*/
-        var state = 0;/*0正常选择,1等待输入对象,2等待输入坐标*/;
+        var state = 0;/*0正常选择,1等待输入对象人物,2等待输入坐标*/;
         var selectid = 0;/*选择目标*/
         var control = 1;/*控制区状态*/
+        function input0() {/*输入地块*/
+            state = 2;
+            var input = document.getElementById("controller_page3").querySelector("#" + id);
+            input.style.backgroundColor = "rgb(76, 244, 10,0.5)";
+            input.setAttribute("class", "waiting");
+        }
+        function input1(id) {/*输入人物/召唤物*/
+            state = 1;
+            var input = document.getElementById("controller_page3").querySelector("#" + id);
+            input.style.backgroundColor = "rgb(76, 244, 10,0.5)";
+            input.setAttribute("class", "waiting");
+        }
         function detect_resist(x, y) {/*检测阻挡*/
             var chess = document.getElementById("board").children;
             for (var i = 0; i < chess.length; i++) {
@@ -25,13 +37,13 @@
             return 0;
         }
         function selector(id) {/*选择器*/
+            var chess = document.getElementById(id);
             if (state == 0) {
-                var chess = document.getElementById(id);
                 document.getElementById("img").src = chess.img;
                 document.getElementById("name").innerHTML = chess.name;
                 document.getElementById("max_health").innerHTML = chess.max_health;
                 document.getElementById("health").innerHTML = chess.health;
-                document.getElementById("movement").innerHTML = chess.movement;
+                document.getElementById("max_movement").innerHTML = chess.max_movement;
                 document.getElementById("reflect").innerHTML = chess.reflect;
                 document.getElementById("skill1").childNodes[1].src = chess.skill1_src;
                 document.getElementById("skill1").childNodes[3].innerHTML = chess.skill1_name;
@@ -42,7 +54,26 @@
                 selectid = id;
                 controller(2);
             }
-
+            if (state == 1) {
+                if (chess.class == 1 || chess.class == 2) {
+                    var input = document.getElementById("controller_page3").querySelector(".waiting");
+                    input.style.backgroundColor = "rgb(0, 0, 0, 0)";
+                    input.src = chess.img;
+                    input.value = id;
+                    input.removeAttribute("class");
+                    state = 0;
+                }
+            }
+            if (state == 2) {
+                if (chess.class == 0) {
+                    var input = document.getElementById("controller_page3").querySelector(".waiting");
+                    input.style.backgroundColor = "rgb(0, 0, 0, 0)";
+                    input.src = chess.img;
+                    input.value = [chess.x, chess.y];
+                    input.removeAttribute("class");
+                    state = 0;
+                }
+            }
         }
         function controller(page) {/*控制器*/
             control = page;
@@ -72,20 +103,144 @@
                 document.getElementById("controller_button2").style.backgroundColor = "#393d49";
                 document.getElementById("controller_button3").style.backgroundColor = "rgb(0, 255, 255)";
             }
-
         }
         function skill(skill) {/*控制器技能*/
+            var page = document.getElementById("controller_page3");
             if (skill == 0) {
                 var newskill = document.createElement("skill");
-                document.getElementById("controller_page3").replaceChild(newskill, document.getElementById("controller_page3").childNodes[1]);
+                page.replaceChild(newskill, page.childNodes[1]);
+                page.childNodes[3].childNodes[1].innerHTML = "";
+                page.childNodes[5].childNodes[1].innerHTML = "";
             }
-            else {
-                controller(3);
-                var newskill = document.getElementById(selectid).childNodes[skill - 1].cloneNode(true);
-                document.getElementById("controller_page3").replaceChild(newskill, document.getElementById("controller_page3").childNodes[1]);
-                document.getElementById("controller_page3").childNodes[1].removeAttribute("hidden");
+            else if (skill == 1) {
+                if (document.getElementById(selectid).skill1_name == "无") {
+                }
+                else {
+                    controller(3);
+                    var newskill = document.getElementById(selectid).childNodes[skill - 1].cloneNode(true);
+                    page.replaceChild(newskill, page.childNodes[1]);
+                    page.childNodes[1].removeAttribute("hidden");
+                    page.childNodes[3].childNodes[1].innerHTML = document.getElementById(selectid).skill1_cooling;
+                    if (document.getElementById(selectid).skill1_class == 0) {
+                        page.childNodes[5].childNodes[1].innerHTML = "被动";
+                    }
+                    if (document.getElementById(selectid).skill1_class == 1) {
+                        page.childNodes[5].childNodes[1].innerHTML = "主动";
+                    }
+                }
+            }
+            else if (skill == 2) {
+                if (document.getElementById(selectid).skill2_name == "无") {
+                }
+                else {
+                    controller(3);
+                    var newskill = document.getElementById(selectid).childNodes[skill - 1].cloneNode(true);
+                    page.replaceChild(newskill, page.childNodes[1]);
+                    page.childNodes[1].removeAttribute("hidden");
+                    page.childNodes[3].childNodes[1].innerHTML = document.getElementById(selectid).skill2_cooling;
+                    if (document.getElementById(selectid).skill2_class == 0) {
+                        page.childNodes[5].childNodes[1].innerHTML = "被动";
+                    }
+                    if (document.getElementById(selectid).skill2_class == 1) {
+                        page.childNodes[5].childNodes[1].innerHTML = "主动";
+                    }
+                }
+            }
+            else if (skill == 3) {
+                if (document.getElementById(selectid).skill3_name == "无") {
+                }
+                else {
+                    controller(3);
+                    var newskill = document.getElementById(selectid).childNodes[skill - 1].cloneNode(true);
+                    page.replaceChild(newskill, page.childNodes[1]);
+                    page.childNodes[1].removeAttribute("hidden");
+                    page.childNodes[3].childNodes[1].innerHTML = document.getElementById(selectid).skill3_cooling;
+                    if (document.getElementById(selectid).skill3_class == 0) {
+                        page.childNodes[5].childNodes[1].innerHTML = "被动";
+                    }
+                    if (document.getElementById(selectid).skill3_class == 1) {
+                        page.childNodes[5].childNodes[1].innerHTML = "主动";
+                    }
+                }
             }
         }
+        /*function model(x, y) {
+            var chess = document.createElement("chess0");
+            var skill1 = document.createElement("skill");
+            var skill2 = document.createElement("skill");
+            var skill3 = document.createElement("skill");
+            chess.id = id;
+
+            chess.fixedid = ;
+            chess.img = "./img/chess.png";
+            chess.name = "";
+            chess.max_health = ;
+            chess.max_movement = ;
+            chess.reflect = ;
+            chess.attack_add = 0;
+            chess.attack_multiply = 1;
+            chess.hit_add = 0;
+            chess.hit_multiply = 1;
+            skill1.innerHTML = "";
+            skill2.innerHTML = "";
+            skill3.innerHTML = "";
+            chess.skill1_src = "./img/skill0.1.png";
+            chess.skill1_name = "";
+            chess.skill1_cooling = ;
+            chess.skill1_class = ;
+            chess.skill2_src = "./img/skill0.png";
+            chess.skill2_name = "";
+            chess.skill2_cooling = ;
+            chess.skill2_class = ;
+            chess.skill3_src = "./img/skill0.png";
+            chess.skill3_name = "";
+            chess.skill3_cooling =;
+            chess.skill3_class = ;
+            chess.movefunction = function (id, dir, count, form, source, x, y) {
+                var chess = document.getElementById(id)
+                if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0) { chess.y += 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
+                if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0) { chess.x += 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
+                if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0) { chess.y -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
+                if (dir == 4) { if (chess.direction == 4) { if (detect_resist(chess.x - 1, chess.y) == 0) { chess.x -= 1 } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
+                chess.style.left = (chess.x - 1) * 25 + "px";
+                chess.style.bottom = (chess.y - 1) * 25 + "px";
+            }
+            chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
+                var chess = document.getElementById(id);
+                chess.health += hit_health * chess.hit_multiply;
+                chess.health += chess.hit_add;
+                chess.max_health += hit_max_health;
+                chess.movement += hit_movement;
+                chess.max_movement += hit_max_movement;
+                chess.reflect += hit_reflect;
+                if (chess.health > chess.max_health) { chess.health = chess.max_health; }
+                if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
+                if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
+            }
+            chess.resist = ;
+            chess.class = ;
+            chess.style.zIndex = ;
+
+            skill1.setAttribute("hidden", "hidden")
+            skill2.setAttribute("hidden", "hidden")
+            skill3.setAttribute("hidden", "hidden")
+            chess.appendChild(skill1);
+            chess.appendChild(skill2);
+            chess.appendChild(skill3);
+            chess.health = chess.max_health;
+            chess.movement = chess.max_movement;
+            chess.x = x;
+            chess.y = y;
+            chess.direction = 1;
+            chess.skillable = 1;
+            chess.movable = 1;
+            chess.style.backgroundImage = "url(" + chess.img + ")";
+            chess.style.left = (chess.x - 1) * 25 + "px";
+            chess.style.bottom = (chess.y - 1) * 25 + "px";
+            chess.setAttribute("onclick", "selector(id)")
+            document.getElementById("board").appendChild(chess);
+            id++;
+        }*/
         function chess1(x, y) {
             var chess = document.createElement("chess0");
             var skill1 = document.createElement("skill");
@@ -97,19 +252,34 @@
             chess.img = "./img/chess1.png";
             chess.name = "勇士";
             chess.max_health = 20;
-            chess.movement = 5;
+            chess.max_movement = 5;
             chess.reflect = 1;
-            skill1.innerHTML = "妈妈<b>生的</b>";
+            chess.attack_add = 0;
+            chess.attack_multiply = 1;
+            chess.hit_add = 0;
+            chess.hit_multiply = 1;
+            skill1.innerHTML = '对目标<img height="25px" width="25px" id="input1_1_1" onclick="input1(id)">造成5点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
             skill2.innerHTML = "妈妈省的";
             skill3.innerHTML = "妈妈sheng的";
+            chess.skill1_launch = function () {
+                var chess = document.getElementById(selectid);
+                var id = document.getElementById("controller_page3").querySelector("#input1_1_1").value;
+                document.getElementById(id).hitfunction(id, -5, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
+            }
             chess.skill1_src = "./img/skill1.1.png";
             chess.skill1_name = "喝喝哈嘿！";
+            chess.skill1_cooling = 114514;
+            chess.skill1_class = 1;
             chess.skill2_src = "./img/skill1.2.png";
             chess.skill2_name = "abcd";
+            chess.skill2_cooling = 20;
+            chess.skill2_class = 1;
             chess.skill3_src = "./img/skill1.3.png";
             chess.skill3_name = "12+3=540";
+            chess.skill3_cooling = 1;
+            chess.skill3_class = 0;
             chess.movefunction = function (id, dir, count, form, source, x, y) {
-                var chess = document.getElementById(id)
+                var chess = document.getElementById(id);
                 if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0) { chess.y += 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
                 if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0) { chess.x += 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
                 if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0) { chess.y -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
@@ -117,7 +287,21 @@
                 chess.style.left = (chess.x - 1) * 25 + "px";
                 chess.style.bottom = (chess.y - 1) * 25 + "px";
             }
+            chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
+                var chess = document.getElementById(id);
+                chess.health += hit_health * chess.hit_multiply;
+                chess.health += chess.hit_add;
+                chess.max_health += hit_max_health;
+                chess.movement += hit_movement;
+                chess.max_movement += hit_max_movement;
+                chess.reflect += hit_reflect;
+                if (chess.health > chess.max_health) { chess.health = chess.max_health; }
+                if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
+                if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
+            }
             chess.resist = 1;
+            chess.class = 1;
+            chess.style.zIndex = 5;
 
             skill1.setAttribute("hidden", "hidden")
             skill2.setAttribute("hidden", "hidden")
@@ -126,7 +310,7 @@
             chess.appendChild(skill2);
             chess.appendChild(skill3);
             chess.health = chess.max_health;
-            chess.move = chess.movement;
+            chess.movement = chess.max_movement;
             chess.x = x;
             chess.y = y;
             chess.direction = 1;
@@ -149,28 +333,56 @@
             chess.fixedid = 2;
             chess.img = "./img/chess2.png";
             chess.name = "傻逼";
-            chess.max_health = 5;
-            chess.movement = 0;
+            chess.max_health = 6;
+            chess.max_movement = 0;
             chess.reflect = -50;
+            chess.attack_add = 0;
+            chess.attack_multiply = 1;
+            chess.hit_add = 0;
+            chess.hit_multiply = 1;
             skill1.innerHTML = "傻逼会朝着反方向移动";
             skill2.innerHTML = "";
             skill3.innerHTML = "";
             chess.skill1_src = "./img/skill2.1.png";
             chess.skill1_name = "傻逼";
+            chess.skill1_cooling = 0;
+            chess.skill1_class = 0;
             chess.skill2_src = "./img/skill0.png";
             chess.skill2_name = "无";
+            chess.skill2_cooling = 1;
+            chess.skill2_class = 1;
             chess.skill3_src = "./img/skill0.png";
             chess.skill3_name = "无";
+            chess.skill3_cooling = 1;
+            chess.skill3_class = 1;
             chess.movefunction = function (id, dir, count, form, source, x, y) {
                 var chess = document.getElementById(id)
-                if (dir == 3) { if (chess.direction == 1) { chess.y += 1 } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
-                if (dir == 4) { if (chess.direction == 2) { chess.x += 1 } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
-                if (dir == 1) { if (chess.direction == 3) { chess.y -= 1 } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
-                if (dir == 2) { if (chess.direction == 4) { chess.x -= 1 } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
+                if (dir == 1) { dir = 3; }
+                else if (dir == 3) { dir = 1; }
+                else if (dir == 2) { dir = 4; }
+                else if (dir == 4) { dir = 2; }
+                if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0) { chess.y += 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
+                if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0) { chess.x += 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
+                if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0) { chess.y -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
+                if (dir == 4) { if (chess.direction == 4) { if (detect_resist(chess.x - 1, chess.y) == 0) { chess.x -= 1 } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
                 chess.style.left = (chess.x - 1) * 25 + "px";
                 chess.style.bottom = (chess.y - 1) * 25 + "px";
             }
+            chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
+                var chess = document.getElementById(id);
+                chess.health += hit_health * chess.hit_multiply;
+                chess.health += chess.hit_add;
+                chess.max_health += hit_max_health;
+                chess.movement += hit_movement;
+                chess.max_movement += hit_max_movement;
+                chess.reflect += hit_reflect;
+                if (chess.health > chess.max_health) { chess.health = chess.max_health; }
+                if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
+                if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
+            }
             chess.resist = 1;
+            chess.class = 1;
+            chess.style.zIndex = 5;
 
             skill1.setAttribute("hidden", "hidden")
             skill2.setAttribute("hidden", "hidden")
@@ -179,9 +391,86 @@
             chess.appendChild(skill2);
             chess.appendChild(skill3);
             chess.health = chess.max_health;
-            chess.move = chess.movement;
+            chess.movement = chess.max_movement;
             chess.x = x;
             chess.y = y;
+            chess.skillable = 1;
+            chess.movable = 1;
+            chess.style.backgroundImage = "url(" + chess.img + ")";
+            chess.style.left = (chess.x - 1) * 25 + "px";
+            chess.style.bottom = (chess.y - 1) * 25 + "px";
+            chess.setAttribute("onclick", "selector(id)")
+            document.getElementById("board").appendChild(chess);
+            id++;
+        }
+        function chess2001(x, y) {
+            var chess = document.createElement("chess0");
+            var skill1 = document.createElement("skill");
+            var skill2 = document.createElement("skill");
+            var skill3 = document.createElement("skill");
+            chess.id = id;
+
+            chess.fixedid = 2001;
+            chess.img = "./img/chess2001.png";
+            chess.name = "基础地块";
+            chess.max_health = "∞";
+            chess.max_movement = 0;
+            chess.reflect = 0;
+            chess.attack_add = 0;
+            chess.attack_multiply = 1;
+            chess.hit_add = 0;
+            chess.hit_multiply = 1;
+            skill1.innerHTML = "可在此移动、生成";
+            skill2.innerHTML = "";
+            skill3.innerHTML = "";
+            chess.skill1_src = "./img/skill2001.1.png";
+            chess.skill1_name = "地块";
+            chess.skill1_cooling = 1;
+            chess.skill1_class = 0;
+            chess.skill2_src = "./img/skill0.png";
+            chess.skill2_name = "无";
+            chess.skill2_cooling = 1;
+            chess.skill2_class = 1;
+            chess.skill3_src = "./img/skill0.png";
+            chess.skill3_name = "无";
+            chess.skill3_cooling = 1;
+            chess.skill3_class = 1;
+            chess.movefunction = function (id, dir, count, form, source, x, y) {
+                var chess = document.getElementById(id)
+                if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0) { chess.y += 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
+                if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0) { chess.x += 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
+                if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0) { chess.y -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
+                if (dir == 4) { if (chess.direction == 4) { if (detect_resist(chess.x - 1, chess.y) == 0) { chess.x -= 1 } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
+                chess.style.left = (chess.x - 1) * 25 + "px";
+                chess.style.bottom = (chess.y - 1) * 25 + "px";
+            }
+            chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
+                var chess = document.getElementById(id);
+                chess.health += hit_health * chess.hit_multiply;
+                chess.health += chess.hit_add;
+                chess.max_health += hit_max_health;
+                chess.movement += hit_movement;
+                chess.max_movement += hit_max_movement;
+                chess.reflect += hit_reflect;
+                if (chess.health > chess.max_health) { chess.health = chess.max_health; }
+                if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
+                if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
+            }
+            chess.resist = 0;
+            chess.class = 0;
+            chess.style.zIndex = 0;
+
+            skill1.setAttribute("hidden", "hidden")
+            skill2.setAttribute("hidden", "hidden")
+            skill3.setAttribute("hidden", "hidden")
+            chess.appendChild(skill1);
+            chess.appendChild(skill2);
+            chess.appendChild(skill3);
+            chess.health = chess.max_health;
+            chess.movement = chess.max_movement;
+            chess.x = x;
+            chess.y = y;
+            chess.direction = 1;
             chess.skillable = 1;
             chess.movable = 1;
             chess.style.backgroundImage = "url(" + chess.img + ")";
@@ -211,9 +500,16 @@
 
 <body style="margin:0px">
     <!--棋盘-->
-    <div id="board" style="position:relative;height:400px;background-image: url(img/board.png);background-size: 25px ;">
+    <div id="board" style="position:relative;height:400px;">
 
     </div>
+    <script>
+        for (var i = 1; i <= 16; i++) {
+            for (var j = 1; j <= 16; j++) {
+                chess2001(i, j);
+            }
+        }
+    </script>
     <div style="display: flex;">
         <!--目标选择器-->
         <div id="selector" style="background-image:url(img/back2.png) ;width:200px;height: 200px;">
@@ -222,7 +518,7 @@
             <p style="display: inline;">目标:</p><b id="name" style="display: inline"></b><br>
             <p style="display: inline;">血量:</p><b id="health" style="display: inline"></b><b>/</b><b id="max_health"
                 style="display: inline"></b><br>
-            <p style="display: inline;">移动:</p><b id="movement" style="display: inline"></b><br>
+            <p style="display: inline;">移动:</p><b id="max_movement" style="display: inline"></b><br>
             <p style="display: inline;">反应:</p><b id="reflect" style="display: inline"></b><br>
             <!--skill-->
             <p>技能:</p>
@@ -255,9 +551,9 @@
             <div style="background-color: aqua;height:170px;position: relative;">
                 <!--1生-->
                 <div id="controller_page1">
-                    <button onclick="chess1(16,1)">1</button>
-                    <button onclick="chess2(5,5)">2</button>
-                    <button onclick="chess2(5,5)">3</button>
+                    <button onclick="chess1(16,1)">勇者</button>
+                    <button onclick="chess2(5,5)">傻逼</button>
+                    <button onclick="chess2001(5,5)">地块</button>
                     <button onclick="chess2(5,5)">4</button>
                     <button onclick="chess2(5,5)">5</button>
                     <button onclick="chess2(5,5)">6</button>
@@ -284,6 +580,9 @@
                 <!--3技-->
                 <div id="controller_page3" hidden>
                     <skill></skill>
+                    <p style="position: absolute;bottom: 20px;">冷却：<b></b>(回合)</p>
+                    <p style="position: absolute;bottom: 0px;">类型：<b></b></p>
+
                 </div>
             </div>
         </div>
