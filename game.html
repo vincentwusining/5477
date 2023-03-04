@@ -267,6 +267,8 @@
                 chess.reflect += hit_reflect;
                 if (chess.health > chess.max_health) { chess.health = chess.max_health; }
                 if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
+                chess.setAttribute("class", "anim1");
+                setTimeout(function () { chess.removeAttribute("class") }, 300);
                 if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
             }
             chess.resist = ;
@@ -310,7 +312,7 @@
             chess.attack_multiply = 1;
             chess.hit_add = 0;
             chess.hit_multiply = 1;
-            skill1.innerHTML = '对目标<img height="25px" width="25px" id="input1_1_1" onclick="input1(id,1)">造成5点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+            skill1.innerHTML = '选择周围四格内目标<img height="25px" width="25px" id="input1_1_1" onclick="input1(id,1)">造成5点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
             skill2.innerHTML = "妈妈省的";
             skill3.innerHTML = "妈妈sheng的";
             chess.skill1_launch = function () {
@@ -434,6 +436,8 @@
                 chess.reflect += hit_reflect;
                 if (chess.health > chess.max_health) { chess.health = chess.max_health; }
                 if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
+                chess.setAttribute("class", "anim1");
+                setTimeout(function () { chess.removeAttribute("class") }, 300);
                 if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
             }
             chess.resist = 1;
