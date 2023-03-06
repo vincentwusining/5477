@@ -294,7 +294,7 @@
             chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
                 var chess = document.getElementById(id);
                 chess.health += hit_health * chess.hit_multiply;
-                if(hit.health<0){
+                if(hit_health<0){
                 chess.health += chess.hit_add;
                 }
                 chess.max_health += hit_max_health;
@@ -303,8 +303,7 @@
                 chess.reflect += hit_reflect;
                 if (chess.health > chess.max_health) { chess.health = chess.max_health; }
                 if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
-                chess.setAttribute("class", "anim1");
-                setTimeout(function () { chess.removeAttribute("class") }, 300);
+                anim1(chess.x, chess.y);
                 if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
             }
             chess.resist = 1;//1阻挡0不阻挡
@@ -482,8 +481,7 @@
                 chess.reflect += hit_reflect;
                 if (chess.health > chess.max_health) { chess.health = chess.max_health; }
                 if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
-                chess.setAttribute("class", "anim1");
-                setTimeout(function () { chess.removeAttribute("class") }, 300);
+                anim1(chess.x, chess.y);
                 if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
             }
             chess.resist = 1;
@@ -633,7 +631,7 @@
             chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
                 var chess = document.getElementById(id);
                 chess.health += hit_health * chess.hit_multiply;
-                if (hit.health < 0) {
+                if (hit_health < 0) {
                     chess.health += chess.hit_add;
                 }
                 chess.max_health += hit_max_health;
@@ -642,8 +640,7 @@
                 chess.reflect += hit_reflect;
                 if (chess.health > chess.max_health) { chess.health = chess.max_health; }
                 if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
-                chess.setAttribute("class", "anim1");
-                setTimeout(function () { chess.removeAttribute("class") }, 300);
+                anim1(chess.x, chess.y);
                 if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
             }
             chess.resist = 1;//1阻挡0不阻挡
@@ -722,7 +719,7 @@
             chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
                 var chess = document.getElementById(id);
                 chess.health += hit_health * chess.hit_multiply;
-                if (hit.health < 0) {
+                if (hit_health < 0) {
                     chess.health += chess.hit_add;
                 }
                 chess.max_health += hit_max_health;
@@ -731,8 +728,7 @@
                 chess.reflect += hit_reflect;
                 if (chess.health > chess.max_health) { chess.health = chess.max_health; }
                 if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
-                chess.setAttribute("class", "anim1");
-                setTimeout(function () { chess.removeAttribute("class") }, 300);
+                anim1(chess.x, chess.y);
                 if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
             }
             chess.resist = 1;//1阻挡0不阻挡
@@ -811,7 +807,7 @@
             chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
                 var chess = document.getElementById(id);
                 chess.health += hit_health * chess.hit_multiply;
-                if (hit.health < 0) {
+                if (hit_health < 0) {
                     chess.health += chess.hit_add;
                 }
                 chess.max_health += hit_max_health;
@@ -820,8 +816,7 @@
                 chess.reflect += hit_reflect;
                 if (chess.health > chess.max_health) { chess.health = chess.max_health; }
                 if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
-                chess.setAttribute("class", "anim1");
-                setTimeout(function () { chess.removeAttribute("class") }, 300);
+                anim1(chess.x, chess.y);
                 if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
             }
             chess.resist = 1;//1阻挡0不阻挡
