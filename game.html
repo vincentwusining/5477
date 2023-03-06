@@ -8,11 +8,12 @@
     <title>game</title>
     <script>
         var id = 1;/*动态id*/
+        var pid = 10000;/*特效动态id*/
         var state = 0;/*0正常选择,1等待输入对象人物,2等待输入坐标*/;
         var selectid = 0;/*选择目标*/
         var control = 1;/*控制区状态*/
         var range = 0;//选择范围
-        function input0(id) {/*输入地块*/
+        function input0(id, r) {/*输入地块*/
             state = 2;
             var input = document.getElementById("controller_page3").querySelector("#" + id);
             input.style.backgroundColor = "rgb(76, 244, 10,0.5)";
@@ -34,6 +35,10 @@
                 input.removeAttribute("class");
             }
         }
+        function input3(id, r) {//输入方向
+
+        }
+
         function detect_resist(x, y) {/*检测阻挡*/
             var chess = document.getElementById("board").children;
             for (var i = 0; i < chess.length; i++) {
@@ -80,6 +85,7 @@
 
             }
         }
+
         function selector(id) {/*选择器*/
             var chess = document.getElementById(id);
             if (state == 0) {
@@ -213,6 +219,34 @@
                 }
             }
         }
+
+        function anim1(x, y) {
+            var opa = 0;
+            var p1 = document.createElement("img");
+            p1.id = pid;
+            p1.src = "./img/particle1.png";
+            p1.style.position = "absolute";
+            p1.style.height = 25 + "px";
+            p1.style.width = 25 + "px";
+            p1.style.left = (x - 1) * 25 + "px";
+            p1.style.bottom = (y - 1) * 25 + "px";
+            p1.style.opacity = 0;
+            document.getElementById("board").appendChild(p1);
+            var anim1_1 = setInterval(function () { opa += 0.033; document.getElementById(p1.id).style.opacity = opa; }, 10);
+            setTimeout(function () { anim1_2() }, 150);
+            function anim1_2() {
+                clearInterval(anim1_1);
+                var anim1_3 = setInterval(function () { opa -= 0.033; document.getElementById(p1.id).style.opacity = opa }, 10);
+                setTimeout(function () { clearInterval(anim1_3) }, 150);
+            }
+            pid++;
+        }
+        function anim2(x, y) { }
+        function anim3(x, y) { }
+        function anim4(x, y) { }
+        function anim5(x, y) { }
+        function anim6(x, y) { }
+
         /*function model(x, y) {
             var chess = document.createElement("chess0");
             var skill1 = document.createElement("skill");
@@ -220,34 +254,34 @@
             var skill3 = document.createElement("skill");
             chess.id = id;
 
-            chess.fixedid = ;
+            //以下需改动
+            chess.fixedid = ;//1~1000人物1001~2000召唤物2001~3000地块
             chess.img = "./img/chess.png";
             chess.name = "";
-            chess.max_health = ;
-            chess.max_movement = ;
-            chess.reflect = ;
-            chess.attack_add = 0;
-            chess.attack_multiply = 1;
-            chess.hit_add = 0;
-            chess.hit_multiply = 1;
+            chess.max_health = 20;
+            chess.max_movement = 5;
+            chess.reflect = 5;
             skill1.innerHTML = "";
             skill2.innerHTML = "";
             skill3.innerHTML = "";
-            chess.skill1_src = "./img/skill0.1.png";
-            chess.skill1_name = "";
+            chess.skill1_launch = function () { }
+            chess.skill2_launch = function () { }
+            chess.skill3_launch = function () { }
+            chess.skill1_src = "./img/skill0.png";//skill1
+            chess.skill1_name = "无";
+            chess.skill1_max_cooling = 1;
             chess.skill1_cooling = ;
             chess.skill1_class = ;
-            chess.skill2_src = "./img/skill0.png";
-            chess.skill2_name = "";
+            chess.skill2_src = "./img/skill0.png";//skill2
+            chess.skill2_name = "无";
+            chess.skill2_max_cooling = 1;
             chess.skill2_cooling = ;
             chess.skill2_class = ;
-            chess.skill3_src = "./img/skill0.png";
-            chess.skill3_name = "";
+            chess.skill3_src = "./img/skill0.png";//skill3
+            chess.skill3_name = "无";
+            chess.skill3_max_cooling = 1;
             chess.skill3_cooling =;
             chess.skill3_class = ;
-            chess.skill1_launch = function (){}
-            chess.skill2_launch = function (){}
-            chess.skill3_launch = function (){}
             chess.movefunction = function (id, dir, count, form, source, x, y) {
                 var chess = document.getElementById(id)
                 if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0) { chess.y += 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
@@ -260,7 +294,9 @@
             chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
                 var chess = document.getElementById(id);
                 chess.health += hit_health * chess.hit_multiply;
+                if(hit.health<0){
                 chess.health += chess.hit_add;
+                }
                 chess.max_health += hit_max_health;
                 chess.movement += hit_movement;
                 chess.max_movement += hit_max_movement;
@@ -271,10 +307,15 @@
                 setTimeout(function () { chess.removeAttribute("class") }, 300);
                 if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
             }
-            chess.resist = ;
-            chess.class = ;
-            chess.style.zIndex = ;
+            chess.resist = 1;//1阻挡0不阻挡
+            chess.class = 1;
+            chess.style.zIndex =5 ;
 
+            chess.attack_add = 0;
+            chess.attack_multiply = 1;
+            chess.hit_add = 0;
+            chess.hit_multiply = 1;
+            chess.data = new Array(100);
             skill1.setAttribute("hidden", "hidden")
             skill2.setAttribute("hidden", "hidden")
             skill3.setAttribute("hidden", "hidden")
@@ -307,11 +348,7 @@
             chess.name = "勇士";
             chess.max_health = 20;
             chess.max_movement = 5;
-            chess.reflect = 1;
-            chess.attack_add = 0;
-            chess.attack_multiply = 1;
-            chess.hit_add = 0;
-            chess.hit_multiply = 1;
+            chess.reflect = 5;
             skill1.innerHTML = '选择周围四格内目标<img height="25px" width="25px" id="input1_1_1" onclick="input1(id,1)">造成5点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
             skill2.innerHTML = "妈妈省的";
             skill3.innerHTML = "妈妈sheng的";
@@ -322,16 +359,19 @@
             }
             chess.skill2_launch = function () { }
             chess.skill3_launch = function () { }
-            chess.skill1_src = "./img/skill1.1.png";
+            chess.skill1_src = "./img/skill1.1.png";//skill1
             chess.skill1_name = "攻击";
+            chess.skill1_max_cooling = 114514;
             chess.skill1_cooling = 114514;
             chess.skill1_class = 1;
-            chess.skill2_src = "./img/skill1.2.png";
+            chess.skill2_src = "./img/skill1.2.png";//skill2
             chess.skill2_name = "abcd";
+            chess.skill2_max_cooling = 1;
             chess.skill2_cooling = 20;
             chess.skill2_class = 1;
-            chess.skill3_src = "./img/skill1.3.png";
+            chess.skill3_src = "./img/skill1.3.png";//skill3
             chess.skill3_name = "12+3=540";
+            chess.skill3_max_cooling = 1;
             chess.skill3_cooling = 1;
             chess.skill3_class = 0;
             chess.movefunction = function (id, dir, count, form, source, x, y) {
@@ -346,21 +386,27 @@
             chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
                 var chess = document.getElementById(id);
                 chess.health += hit_health * chess.hit_multiply;
-                chess.health += chess.hit_add;
+                if (hit_health < 0) {
+                    chess.health += chess.hit_add;
+                }
                 chess.max_health += hit_max_health;
                 chess.movement += hit_movement;
                 chess.max_movement += hit_max_movement;
                 chess.reflect += hit_reflect;
                 if (chess.health > chess.max_health) { chess.health = chess.max_health; }
                 if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
-                chess.setAttribute("class", "anim1");
-                setTimeout(function () { chess.removeAttribute("class") }, 300);
+                anim1(chess.x, chess.y);
                 if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
             }
             chess.resist = 1;
             chess.class = 1;
             chess.style.zIndex = 5;
 
+            chess.attack_add = 0;
+            chess.attack_multiply = 1;
+            chess.hit_add = 0;
+            chess.hit_multiply = 1;
+            chess.data = new Array(100);
             skill1.setAttribute("hidden", "hidden")
             skill2.setAttribute("hidden", "hidden")
             skill3.setAttribute("hidden", "hidden")
@@ -540,6 +586,274 @@
             document.getElementById("board").appendChild(chess);
             id++;
         }
+        function chess3(x, y) {
+            var chess = document.createElement("chess0");
+            var skill1 = document.createElement("skill");
+            var skill2 = document.createElement("skill");
+            var skill3 = document.createElement("skill");
+            chess.id = id;
+
+            //以下需改动
+            chess.fixedid = 3;//1~1000人物1001~2000召唤物2001~3000地块
+            chess.img = "./img/chess3.png";
+            chess.name = "";
+            chess.max_health = 20;
+            chess.max_movement = 5;
+            chess.reflect = 5;
+            skill1.innerHTML = "";
+            skill2.innerHTML = "";
+            skill3.innerHTML = "";
+            chess.skill1_launch = function () { }
+            chess.skill2_launch = function () { }
+            chess.skill3_launch = function () { }
+            chess.skill1_src = "./img/skill0.png";//skill1
+            chess.skill1_name = "无";
+            chess.skill1_max_cooling = 1;
+            chess.skill1_cooling = 1;
+            chess.skill1_class = 1;
+            chess.skill2_src = "./img/skill0.png";//skill2
+            chess.skill2_name = "无";
+            chess.skill2_max_cooling = 1;
+            chess.skill2_cooling = 1;
+            chess.skill2_class = 1;
+            chess.skill3_src = "./img/skill0.png";//skill3
+            chess.skill3_name = "无";
+            chess.skill3_max_cooling = 1;
+            chess.skill3_cooling = 1;
+            chess.skill3_class = 1;
+            chess.movefunction = function (id, dir, count, form, source, x, y) {
+                var chess = document.getElementById(id)
+                if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0) { chess.y += 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
+                if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0) { chess.x += 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
+                if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0) { chess.y -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
+                if (dir == 4) { if (chess.direction == 4) { if (detect_resist(chess.x - 1, chess.y) == 0) { chess.x -= 1 } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
+                chess.style.left = (chess.x - 1) * 25 + "px";
+                chess.style.bottom = (chess.y - 1) * 25 + "px";
+            }
+            chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
+                var chess = document.getElementById(id);
+                chess.health += hit_health * chess.hit_multiply;
+                if (hit.health < 0) {
+                    chess.health += chess.hit_add;
+                }
+                chess.max_health += hit_max_health;
+                chess.movement += hit_movement;
+                chess.max_movement += hit_max_movement;
+                chess.reflect += hit_reflect;
+                if (chess.health > chess.max_health) { chess.health = chess.max_health; }
+                if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
+                chess.setAttribute("class", "anim1");
+                setTimeout(function () { chess.removeAttribute("class") }, 300);
+                if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
+            }
+            chess.resist = 1;//1阻挡0不阻挡
+            chess.class = 1;
+            chess.style.zIndex = 5;
+
+            chess.attack_add = 0;
+            chess.attack_multiply = 1;
+            chess.hit_add = 0;
+            chess.hit_multiply = 1;
+            chess.data = new Array(100);
+            skill1.setAttribute("hidden", "hidden")
+            skill2.setAttribute("hidden", "hidden")
+            skill3.setAttribute("hidden", "hidden")
+            chess.appendChild(skill1);
+            chess.appendChild(skill2);
+            chess.appendChild(skill3);
+            chess.health = chess.max_health;
+            chess.movement = chess.max_movement;
+            chess.x = x;
+            chess.y = y;
+            chess.direction = 1;
+            chess.skillable = 1;
+            chess.movable = 1;
+            chess.style.backgroundImage = "url(" + chess.img + ")";
+            chess.style.left = (chess.x - 1) * 25 + "px";
+            chess.style.bottom = (chess.y - 1) * 25 + "px";
+            chess.setAttribute("onclick", "selector(id)")
+            document.getElementById("board").appendChild(chess);
+            id++;
+        }
+        function chess4(x, y) {
+            var chess = document.createElement("chess0");
+            var skill1 = document.createElement("skill");
+            var skill2 = document.createElement("skill");
+            var skill3 = document.createElement("skill");
+            chess.id = id;
+
+            //以下需改动
+            chess.fixedid = 4;//1~1000人物1001~2000召唤物2001~3000地块
+            chess.img = "./img/chess4.png";
+            chess.name = "";
+            chess.max_health = 20;
+            chess.max_movement = 5;
+            chess.reflect = 5;
+            skill1.innerHTML = "";
+            skill2.innerHTML = "";
+            skill3.innerHTML = "";
+            chess.skill1_launch = function () { }
+            chess.skill2_launch = function () { }
+            chess.skill3_launch = function () { }
+            chess.skill1_src = "./img/skill0.png";//skill1
+            chess.skill1_name = "无";
+            chess.skill1_max_cooling = 1;
+            chess.skill1_cooling = 1;
+            chess.skill1_class = 1;
+            chess.skill2_src = "./img/skill0.png";//skill2
+            chess.skill2_name = "无";
+            chess.skill2_max_cooling = 1;
+            chess.skill2_cooling = 1;
+            chess.skill2_class = 1;
+            chess.skill3_src = "./img/skill0.png";//skill3
+            chess.skill3_name = "无";
+            chess.skill3_max_cooling = 1;
+            chess.skill3_cooling = 1;
+            chess.skill3_class = 1;
+            chess.movefunction = function (id, dir, count, form, source, x, y) {
+                var chess = document.getElementById(id)
+                if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0) { chess.y += 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
+                if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0) { chess.x += 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
+                if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0) { chess.y -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
+                if (dir == 4) { if (chess.direction == 4) { if (detect_resist(chess.x - 1, chess.y) == 0) { chess.x -= 1 } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
+                chess.style.left = (chess.x - 1) * 25 + "px";
+                chess.style.bottom = (chess.y - 1) * 25 + "px";
+            }
+            chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
+                var chess = document.getElementById(id);
+                chess.health += hit_health * chess.hit_multiply;
+                if (hit.health < 0) {
+                    chess.health += chess.hit_add;
+                }
+                chess.max_health += hit_max_health;
+                chess.movement += hit_movement;
+                chess.max_movement += hit_max_movement;
+                chess.reflect += hit_reflect;
+                if (chess.health > chess.max_health) { chess.health = chess.max_health; }
+                if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
+                chess.setAttribute("class", "anim1");
+                setTimeout(function () { chess.removeAttribute("class") }, 300);
+                if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
+            }
+            chess.resist = 1;//1阻挡0不阻挡
+            chess.class = 1;
+            chess.style.zIndex = 5;
+
+            chess.attack_add = 0;
+            chess.attack_multiply = 1;
+            chess.hit_add = 0;
+            chess.hit_multiply = 1;
+            chess.data = new Array(100);
+            skill1.setAttribute("hidden", "hidden")
+            skill2.setAttribute("hidden", "hidden")
+            skill3.setAttribute("hidden", "hidden")
+            chess.appendChild(skill1);
+            chess.appendChild(skill2);
+            chess.appendChild(skill3);
+            chess.health = chess.max_health;
+            chess.movement = chess.max_movement;
+            chess.x = x;
+            chess.y = y;
+            chess.direction = 1;
+            chess.skillable = 1;
+            chess.movable = 1;
+            chess.style.backgroundImage = "url(" + chess.img + ")";
+            chess.style.left = (chess.x - 1) * 25 + "px";
+            chess.style.bottom = (chess.y - 1) * 25 + "px";
+            chess.setAttribute("onclick", "selector(id)")
+            document.getElementById("board").appendChild(chess);
+            id++;
+        }
+        function chess5(x, y) {
+            var chess = document.createElement("chess0");
+            var skill1 = document.createElement("skill");
+            var skill2 = document.createElement("skill");
+            var skill3 = document.createElement("skill");
+            chess.id = id;
+
+            //以下需改动
+            chess.fixedid = 5;//1~1000人物1001~2000召唤物2001~3000地块
+            chess.img = "./img/chess5.png";
+            chess.name = "";
+            chess.max_health = 20;
+            chess.max_movement = 5;
+            chess.reflect = 5;
+            skill1.innerHTML = "";
+            skill2.innerHTML = "";
+            skill3.innerHTML = "";
+            chess.skill1_launch = function () { }
+            chess.skill2_launch = function () { }
+            chess.skill3_launch = function () { }
+            chess.skill1_src = "./img/skill0.png";//skill1
+            chess.skill1_name = "无";
+            chess.skill1_max_cooling = 1;
+            chess.skill1_cooling = 1;
+            chess.skill1_class = 1;
+            chess.skill2_src = "./img/skill0.png";//skill2
+            chess.skill2_name = "无";
+            chess.skill2_max_cooling = 1;
+            chess.skill2_cooling = 1;
+            chess.skill2_class = 1;
+            chess.skill3_src = "./img/skill0.png";//skill3
+            chess.skill3_name = "无";
+            chess.skill3_max_cooling = 1;
+            chess.skill3_cooling = 1;
+            chess.skill3_class = 1;
+            chess.movefunction = function (id, dir, count, form, source, x, y) {
+                var chess = document.getElementById(id)
+                if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0) { chess.y += 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
+                if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0) { chess.x += 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
+                if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0) { chess.y -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
+                if (dir == 4) { if (chess.direction == 4) { if (detect_resist(chess.x - 1, chess.y) == 0) { chess.x -= 1 } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
+                chess.style.left = (chess.x - 1) * 25 + "px";
+                chess.style.bottom = (chess.y - 1) * 25 + "px";
+            }
+            chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {
+                var chess = document.getElementById(id);
+                chess.health += hit_health * chess.hit_multiply;
+                if (hit.health < 0) {
+                    chess.health += chess.hit_add;
+                }
+                chess.max_health += hit_max_health;
+                chess.movement += hit_movement;
+                chess.max_movement += hit_max_movement;
+                chess.reflect += hit_reflect;
+                if (chess.health > chess.max_health) { chess.health = chess.max_health; }
+                if (chess.movement > chess.max_movement) { chess.movement = chess.max_movement; }
+                chess.setAttribute("class", "anim1");
+                setTimeout(function () { chess.removeAttribute("class") }, 300);
+                if (chess.health <= 0) { document.getElementById("board").removeChild(chess); }
+            }
+            chess.resist = 1;//1阻挡0不阻挡
+            chess.class = 1;
+            chess.style.zIndex = 5;
+
+            chess.attack_add = 0;
+            chess.attack_multiply = 1;
+            chess.hit_add = 0;
+            chess.hit_multiply = 1;
+            chess.data = new Array(100);
+            skill1.setAttribute("hidden", "hidden")
+            skill2.setAttribute("hidden", "hidden")
+            skill3.setAttribute("hidden", "hidden")
+            chess.appendChild(skill1);
+            chess.appendChild(skill2);
+            chess.appendChild(skill3);
+            chess.health = chess.max_health;
+            chess.movement = chess.max_movement;
+            chess.x = x;
+            chess.y = y;
+            chess.direction = 1;
+            chess.skillable = 1;
+            chess.movable = 1;
+            chess.style.backgroundImage = "url(" + chess.img + ")";
+            chess.style.left = (chess.x - 1) * 25 + "px";
+            chess.style.bottom = (chess.y - 1) * 25 + "px";
+            chess.setAttribute("onclick", "selector(id)")
+            document.getElementById("board").appendChild(chess);
+            id++;
+        }
+
     </script>
     <style>
         chess0 {
@@ -628,9 +942,9 @@
                     <button onclick="chess1(16,1)">勇者</button>
                     <button onclick="chess2(5,5)">傻逼</button>
                     <button onclick="chess2001(5,5)">地块</button>
-                    <button onclick="chess2(5,5)">4</button>
-                    <button onclick="chess2(5,5)">5</button>
-                    <button onclick="chess2(5,5)">6</button>
+                    <button onclick="chess3(1,1)">少女-蓝</button>
+                    <button onclick="chess4(2,1)">少女-红</button>
+                    <button onclick="chess5(3,1)">阿巴阿巴</button>
                     <button onclick="chess2(5,5)">7</button>
                     <button onclick="chess2(5,5)">8</button>
                     <button onclick="chess2(5,5)">9</button>
