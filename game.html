@@ -26,6 +26,7 @@
                 var input = document.getElementById("controller_page3").querySelector("#" + id);
                 input.style.backgroundColor = "rgb(76, 244, 10,0.5)";
                 input.setAttribute("class", "waiting");
+                range_display(1);
             }
             else if (state == 1) {
                 state = 0;
@@ -33,10 +34,26 @@
                 var input = document.getElementById("controller_page3").querySelector("#" + id);
                 input.style.backgroundColor = "rgb(0,0,0,0)";
                 input.removeAttribute("class");
+                range_display(0);
             }
         }
-        function input3(id, r) {//输入方向
-
+        function range_display(i) {
+            if (i == 0) { }
+            if (i == 1) {
+                var rimg = document.createElement("img");
+                var chess = document.getElementById(selectid);
+                rimg.src = "./img/range" + range + ".png";
+                rimg.style.position = "absolute";
+                rimg.style.height = 25 + "px";
+                rimg.style.width = 25 + "px";
+                rimg.style.left = (chess.x - 1) * 25 + "px";
+                rimg.style.bottom = (chess.y - 1) * 25 + "px";
+                rimg.style.transform = "scale(25,25)";
+                rimg.style.zIndex = 20;
+                rimg.style.pointerEvents = "none";
+                rimg.class = "range_display";
+                document.getElementById("board").appendChild(rimg);
+            }
         }
 
         function detect_resist(x, y) {/*检测阻挡*/
@@ -53,7 +70,7 @@
             return 0;
         }
         function detect_range(r, id1, id2) {/*检测范围*/
-            if (r == 1) {
+            if (r == 1) {//上下左右
                 var x0 = document.getElementById(id1).x;
                 var y0 = document.getElementById(id1).y;
                 var x1 = document.getElementById(id2).x;
@@ -72,8 +89,8 @@
                 }
                 return 0;
             }
-            else if (r == 2) {
-
+            else if (r == 2) {//全屏
+                return 1;
             }
             else if (r == 3) {
 
@@ -220,7 +237,7 @@
             }
         }
 
-        function anim1(x, y) {
+        function anim1(x, y) {//受击动画
             var opa = 0;
             var p1 = document.createElement("img");
             p1.id = pid;
@@ -237,11 +254,37 @@
             function anim1_2() {
                 clearInterval(anim1_1);
                 var anim1_3 = setInterval(function () { opa -= 0.033; document.getElementById(p1.id).style.opacity = opa }, 10);
-                setTimeout(function () { clearInterval(anim1_3) }, 150);
+                setTimeout(function () { document.getElementById("board").removeChild(document.getElementById(p1.id)); }, 150);
             }
             pid++;
         }
-        function anim2(x, y) { }
+        function anim2(x1, y1, x2, y2) {//攻击动画
+            var p3 = document.createElement("img");
+            var x = (x1 - 1) * 25;
+            var y = (y1 - 1) * 25;
+            if (x2 - x1 == 0) {
+                if (y2 - y1 >= 0) { var zita = 0; }
+                else { var zita = 180; }
+            }
+            else if (x2 - x1 > 0) {
+                var zita = 90 - Math.atan((y2 - y1) / (x2 - x1)) * 180 / Math.PI;
+            }
+            else if (x2 - x1 < 0) {
+                var zita = 270 - Math.atan((y2 - y1) / (x2 - x1)) * 180 / Math.PI;
+            }
+            p3.id = pid;
+            p3.src = "./img/particle3.png";
+            p3.style.position = "absolute";
+            p3.style.height = 25 + "px";
+            p3.style.width = 25 + "px";
+            p3.style.left = x + "px";
+            p3.style.bottom = y + "px";
+            p3.style.transform = "rotate(" + zita + "deg)"
+            document.getElementById("board").appendChild(p3);
+            var anim2_1 = setInterval(function () { x += (x2 - x1) * 25 / 15; y += (y2 - y1) * 25 / 15; document.getElementById(p3.id).style.left = x + "px"; document.getElementById(p3.id).style.bottom = y + "px"; }, 10);
+            setTimeout(function () { document.getElementById("board").removeChild(document.getElementById(p3.id)); }, 150);
+            pid++;
+        }
         function anim3(x, y) { }
         function anim4(x, y) { }
         function anim5(x, y) { }
@@ -349,14 +392,21 @@
             chess.max_movement = 5;
             chess.reflect = 5;
             skill1.innerHTML = '选择周围四格内目标<img height="25px" width="25px" id="input1_1_1" onclick="input1(id,1)">造成5点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-            skill2.innerHTML = "妈妈省的";
+            skill2.innerHTML = '选择全屏内目标<img height="25px" width="25px" id="input1_2_1" onclick="input1(id,2)">造成2点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
             skill3.innerHTML = "妈妈sheng的";
             chess.skill1_launch = function () {
                 var chess = document.getElementById(selectid);
                 var id = document.getElementById("controller_page3").querySelector("#input1_1_1").value;
-                document.getElementById(id).hitfunction(id, -5, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
+                var target = document.getElementById(id);
+                target.hitfunction(id, -5, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
             }
-            chess.skill2_launch = function () { }
+            chess.skill2_launch = function () {
+                var chess = document.getElementById(selectid);
+                var id = document.getElementById("controller_page3").querySelector("#input1_2_1").value;
+                var target = document.getElementById(id);
+                target.hitfunction(id, -2, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
+                anim2(chess.x, chess.y, target.x, target.y);
+            }
             chess.skill3_launch = function () { }
             chess.skill1_src = "./img/skill1.1.png";//skill1
             chess.skill1_name = "攻击";
@@ -364,7 +414,7 @@
             chess.skill1_cooling = 114514;
             chess.skill1_class = 1;
             chess.skill2_src = "./img/skill1.2.png";//skill2
-            chess.skill2_name = "abcd";
+            chess.skill2_name = "远程攻击";
             chess.skill2_max_cooling = 1;
             chess.skill2_cooling = 20;
             chess.skill2_class = 1;
@@ -907,15 +957,15 @@
             <p>技能:</p>
             <div style="display:flex;flex-direction: row;height: 66.6px;">
                 <div id="skill1" style="width: 66.6px;">
-                    <img width="50px" height="50px" onclick="skill(1)">
+                    <img width="50px" height="50px" onclick="skill(1)" style="cursor: pointer;">
                     <p style="font-size:10px;"></p>
                 </div>
-                <div id="skill2" style="width: 66.6px;" onclick="skill(2)">
-                    <img width="50px" height="50px">
+                <div id="skill2" style="width: 66.6px;">
+                    <img width="50px" height="50px" onclick="skill(2)" style="cursor: pointer;">
                     <p style="font-size:10px;"></p>
                 </div>
-                <div id="skill3" style="width: 66.6px;" onclick="skill(3)">
-                    <img width="50px" height="50px">
+                <div id="skill3" style="width: 66.6px;">
+                    <img width="50px" height="50px" onclick="skill(3)" style="cursor: pointer;">
                     <p style="font-size:10px;"></p>
                 </div>
             </div>
@@ -940,7 +990,7 @@
                     <button onclick="chess3(1,1)">少女-蓝</button>
                     <button onclick="chess4(2,1)">少女-红</button>
                     <button onclick="chess5(3,1)">阿巴阿巴</button>
-                    <button onclick="chess2(5,5)">7</button>
+                    <button onclick="chess1(5,5)">test</button>
                     <button onclick="chess2(5,5)">8</button>
                     <button onclick="chess2(5,5)">9</button>
                 </div>
