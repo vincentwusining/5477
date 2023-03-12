@@ -427,15 +427,15 @@
                         if (count > 0) {
                             if (x > chess.x && detect_resist(chess.x - 1, chess.y) == 0) { prex -= 1; }
                             if (x < chess.x && detect_resist(chess.x + 1, chess.y) == 0) { prex += 1; }
-                            if (y > chess.x && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
-                            if (y < chess.x && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
+                            if (y > chess.y && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
+                            if (y < chess.y && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
                             if (detect_resist(prex, prey) == 0) { setTimeout(function () { chess.x = prex; chess.y = prey; chess.style.left = (chess.x - 1) * 25 + "px"; chess.style.bottom = (chess.y - 1) * 25 + "px"; }, 100) }
                         }
                         else if (count < 0) {
                             if (x > chess.x && detect_resist(chess.x + 1, chess.y) == 0) { prex += 1; }
                             if (x < chess.x && detect_resist(chess.x - 1, chess.y) == 0) { prex -= 1; }
-                            if (y > chess.x && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
-                            if (y < chess.x && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
+                            if (y > chess.y && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
+                            if (y < chess.y && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
                             if (detect_resist(prex, prey) == 0) { setTimeout(function () { chess.x = prex; chess.y = prey; chess.style.left = (chess.x - 1) * 25 + "px"; chess.style.bottom = (chess.y - 1) * 25 + "px"; }, 100) }
                         }
                     }
@@ -576,15 +576,15 @@
                         if (count > 0) {
                             if (x > chess.x && detect_resist(chess.x - 1, chess.y) == 0) { prex -= 1; }
                             if (x < chess.x && detect_resist(chess.x + 1, chess.y) == 0) { prex += 1; }
-                            if (y > chess.x && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
-                            if (y < chess.x && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
+                            if (y > chess.y && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
+                            if (y < chess.y && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
                             if (detect_resist(prex, prey) == 0) { setTimeout(function () { chess.x = prex; chess.y = prey; chess.style.left = (chess.x - 1) * 25 + "px"; chess.style.bottom = (chess.y - 1) * 25 + "px"; }, 100) }
                         }
                         else if (count < 0) {
                             if (x > chess.x && detect_resist(chess.x + 1, chess.y) == 0) { prex += 1; }
                             if (x < chess.x && detect_resist(chess.x - 1, chess.y) == 0) { prex -= 1; }
-                            if (y > chess.x && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
-                            if (y < chess.x && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
+                            if (y > chess.y && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
+                            if (y < chess.y && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
                             if (detect_resist(prex, prey) == 0) { setTimeout(function () { chess.x = prex; chess.y = prey; chess.style.left = (chess.x - 1) * 25 + "px"; chess.style.bottom = (chess.y - 1) * 25 + "px"; }, 100) }
                         }
                     }
