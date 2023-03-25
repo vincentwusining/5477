@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>log</title>
+    <style>
+        button {
+            display: flex;
+            color: white;
+            background-color: rgb(0, 0, 0, 0);
+            padding: 0px;
+            margin: 0px;
+            width: 50px;
+            height: 50px;
+            font-size: large;
+            transition: 0.5s;
+            align-items: center;
+            justify-content: center;
+            background: url(img/back.png) no-repeat;
+            background-size: 426px 50px;
+            border-right: 0px;
+            border-top: 0px;
+            border-bottom: 0px;
+        }
+
+        button:hover {
+            width: 150px;
+        }
+
+        button>span {
+            display: flex;
+            position: relative;
+            left: 25px;
+            color: white;
+            border: 0px;
+            margin: 0px;
+            padding: 0px;
+            height: 50px;
+            width: 0px;
+            opacity: 1;
+            align-items: center;
+            white-space: nowrap;
+            transition: all 0.5s;
+        }
+
+        button:hover>span {
+            width: 100px;
+        }
+
+        button:hover>span:active {
+            background-color: rgb(60, 60, 60, 0.4);
+            transition: 0s
+        }
+    </style>
+    <script>
+        function index() {
+            window.location.assign("./index.html");
+        }
+        function index1() {
+            window.location.assign("./game.html");
+        }
+        function index2() {
+            window.location.assign("./reference.html");
+        }
+        function index3() {
+            window.location.assign("./log.html");
+        }
+        function index4() {
+            window.location.assign("./test.html");
+        }
+    </script>
+</head>
+
+<body style="display: flex; flex-direction: column; margin: 0px;background-color:#abfffc;">
+    <div
+        style="display: flex; flex-direction: row-reverse; height: 50px;background-color: #393d49;background: url(img/back1.png) no-repeat;background-size:100% 100px;">
+        <p onclick="index()"
+            style="cursor: pointer;margin: 5px;font-size: 30px;position: absolute;left: 0px; color: wheat">
+            540</p>
+        <button style="z-index: 10;">1<span onclick="index1()">自制游戏</span></button>
+        <button style="z-index: 9;">2<span onclick="index2()">参考</span></button>
+        <button style="z-index: 8;">3<span onclick="index3()">日志</span></button>
+        <button style="z-index: 7;">4<span onclick="index4()">内容</span></button>
+    </div>
+    <div style="display: flex; flex-direction: column;align-items: center;">
+        <p>日志：</p>
+        <p></p>
+        <p>2023.3.26：太离谱了，找了三个小时的bug发现是动画被误认成人物，然后找不到它的属性，程序就卡住暴毙了。有用settimeinterval和if检测两种方法，最后选择了不给动画加class，并检测其class是否存在。因为在以往循环board内子元素后都有if检测某些条件，而全局技能模块没有条件，所以将动画误判。找bug时增加了选择器id和fixedid（已隐藏）,意外发现了控制器中hidden被打成了hiddden（那么久居然没发现）。太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了。优化了受击特效，增加受击、回血粒子效果。发现了同时推拉，拉无效的bug，原因为推时清空了skill面板导致拉的数据丢失，然后就不拉了。后将skill（3）增加10ms延迟解决此bug。换用了外源js文件，html干净多了，原游戏代码从1177行减到500行，人物信息全储存在外源js。
+        </p>
+        <p>2023.3.25：确定全局技能模块形式为任何操作后运行一次，制作了小道行者第三个技能窒息，并发现了无法在元素的函数中调用元素属性，但可以在元素属性值中调用元素属性。期间出现把造成伤害打成回血造成程序暴毙、无法选中本人（通过给人物skillfunction加一个输入值id解决）、移动/下一回合会无线循环把人瞬间炸死（通过修改
+            修改data值的位置解决）。随后再次发现了勇士一技能无冷却的bug，初步判定是因为运行全局技能模块时有人物没有此模块导致嵌套循环无法运行而冷却没有被加，仍需进一步确认。</p>
+        <p>2023.3.18：因为显示全屏攻击范围时，此前用scale放大贴图导致贴图偏移的bug更加严重，所以修复了此bug，直接生成625*625的图片。修改攻击范围贴图大小至3100*3100,以此显示全屏攻击的攻击范围。下一回合重置移动和冷却。显示冷却/最大冷却。将技能冷却实用。将勇士的攻击延迟，让动画更加合理。增加控制区0
+        </p>
+        <p>2023.3.12：增加移动消耗移动值，显示移动/最大移动，基本完成被移动判定（推、拉、传送）,代码基础比较牢固，所以写起来问题不是很多，阻挡判定也并不困难。增加勇者第三个技能推拉。发现推拉bug：宏观上同时推拉两人，两人理应相互阻挡，而实际上是两个人有推拉先后顺序，导致前者会阻挡后者，后者不会阻挡前者。解决方案：在确定prex和prey后，延迟输入至chess的xy，来确保所有人物都能在延迟时间内完成阻挡检测。仍存bug：斜对角两人物同时推拉，会直接让两人物重合。并不打算解决此bug。每个人物代码超100行。修复了因复制粘贴代码后忘记将x改成y而造成的弱智判定bug（因为测试位置固定，每次测试时代码都能错误得输出正确判定，所以此bug是在部署后许久才发现）
+        </p>
+        <p>2023.3.11：完成第一个技能范围显示，但此前地块转向会导致贴图位置偏移的bug
+            在此处放大贴图时也会导致贴图位置偏移，而且在浏览器中运行时浏览器的缩放倍率也会影响其相对位置。总之，未知bug，原理不清除，目前仅是手动将其偏移了5px，不清除是否适配所有设备以及未来会不会产生其他问题。完成回合制度、增加顶部结束行动按钮和回合现实、完成行动顺序、完成人物在非自身回合无法行动、完成结束行动后各区域数据及显示的变化。
+        </p>
+        <p>2023.3.10；修复了潜在的小bug：选择器三个技能的onclick函数位置不一样，一个在img上，两个在div上。具体体现为一个只能点图片触发，另两个可以点击下方文字触发。统一修改至img。修复了受击动画播放完后，不透明度为0的img仍留在原地导致无法选中其下人物的bug。完成第一个攻击动画，从发起者出发朝向受击者，在0.15秒内更新15次飞至受击者。同时为了测试，制作了勇士的第二个技能和第二个检测范围
+        </p>
+        <p>2023.3.6：改进动画，受击动画从css自带动画关键帧转为
+            以js计时事件为基础的延迟更改不透明度opacity。从而实现动画无冷却，可多线互不干扰播放。增加技能最大冷却，人物技能数据属性。模板人物基本完成。修复了由于受击模块hit_health参数写成hit.health而导致受击失效的弱智bug。新加入三个人物（只有图片），于是代码达到975行
+        </p>
+        <p>2023.3.5：感谢LH工作室艺术部成员荧提供的数张的像素画</p>
+        <p>2023.3.4：添加受击/攻击倍率/增加，修复了切换技能后冷却、类型仍残留的显示bug。添加技能内人物/地块选择、技能模块、技能发动、技能范围侦测、技能特效（皆为第一个）</p>
+        <p>2023.3.2：初步完成地块实体化，添加技能冷却类型、人物类型等,添加、检测空白技能，确定人物、召唤物、地块id，确定图层。代码超300行。出现本游戏历史上第一个真正意义上的bug：傻逼反方向移动不检测阻挡</p>
+        <p>2023.3.1：用github，许多人都说要梯子才能上，又因为梯子寄了，找遍国内外所有提供静态网站的地方，没一个能用。点名批评gitee、腾讯云还要实名认证，阿里云的人类没法用。</p>
+        <p>2023.2.28：完成方向、移动阻挡检测</p>
+        <p>2023.2.25：完成目标选择器、移动模块、控制区移动生成技能、人物技能图像显示、人物基本模块化,实现可用外源js。加入参考页面，加入历史页面</p>
+        <p>2023.2.18：确定游戏界面划分、游戏机制、生成对象</p>
+        <p>2023.2.10：完成索引界面</p>
+        <p>2023.2.4：部署网站</p>
+        <p>2023.1.30：购买域名</p>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <p>没了，你还期望有多少</p>
+    </div>
+    </script>
+</body>
+
+</html>
