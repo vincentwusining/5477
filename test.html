@@ -1,19 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Pixel Art Generator</title>
 </head>
 
 <body>
-    <button onclick="myFunction()">点我</button>
-
+    <canvas id="myCanvas" width="64" height="64"></canvas>
+    <button onclick="generate()">Generate</button>
+    <a id="downloadLink" href="#" download="pixel_art.png">Download</a>
     <script>
-        function myFunction() {
-            document.write("Hello World");
+        function generate() {
+            var canvas = document.getElementById("myCanvas");
+            var ctx = canvas.getContext("2d");
+
+            // 绘制像素画
+            ctx.fillStyle = "#ffffff"; // 白色
+            ctx.fillRect(0, 0, 8, 8);
+            ctx.fillStyle = "#ff0000"; // 红色
+            ctx.fillRect(1, 1, 6, 6);
+            ctx.fillStyle = "#00ff00"; // 绿色
+            ctx.fillRect(2, 2, 4, 4);
+            ctx.fillStyle = "#0000ff"; // 蓝色
+            ctx.fillRect(3, 3, 2, 2);
+
+            // 将像素画转换为 PNG 图片数据
+            var pngData = canvas.toDataURL("image/png");
+
+            // 创建 Image 对象并在网页上显示 PNG 图片
+            /*var img = new Image();
+            img.src = pngData;
+            document.body.appendChild(img);
+            document.write(pngData)*/
+
+            // 创建下载链接并点击下载
+            var downloadLink = document.getElementById("downloadLink");
+            downloadLink.href = pngData;
+            downloadLink.click();
         }
     </script>
 </body>
