@@ -32,12 +32,12 @@ function chess1005(x, y) {//名称
             overall_skill();
         }
     }
-    chess.skill1_src = "./img/skill-1.png";//skill1
+    chess.skill1_src = "./img/skill-2.png";//skill1
     chess.skill1_name = "攻击";
     chess.skill1_max_cooling = 1;
     chess.skill1_cooling = 1;
     chess.skill1_class = 1;//1主动0被动
-    chess.skill2_src = "./img/skill-1.png";//skill2
+    chess.skill2_src = "./img/skill-3.png";//skill2
     chess.skill2_name = "暴走";
     chess.skill2_max_cooling = 0;
     chess.skill2_cooling = 0;

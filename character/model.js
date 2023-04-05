@@ -13,7 +13,7 @@ function model(x, y) {//名称
     chess.health = 20;
     chess.max_movement = 5;//1~20 5
     chess.movement = 5;
-    chess.reflect = 5;//1~20 5
+    chess.reflect = 5;//1~20 5   -1不可行动
     skill1.innerHTML = '<img height="25px" width="25px" id="input0_1_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
     skill2.innerHTML = '<img height="25px" width="25px" id="input0_2_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
     skill3.innerHTML = '<img height="25px" width="25px" id="input0_3_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
@@ -59,7 +59,7 @@ function model(x, y) {//名称
     chess.skill3_max_cooling = 1;
     chess.skill3_cooling =;
     chess.skill3_class = ;
-    chess.movefunction = function (id, dir, count, form, source, x, y) {//form1主动0被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送
+    chess.movefunction = function (id, dir, count, form, source, x, y) {//form0主动1被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送
         var chess = document.getElementById(id);
         if (form == 0 && chess.fixedid == active_fixedid) {
             if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0 && chess.movement >= 1) { chess.y += 1; chess.movement -= 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }

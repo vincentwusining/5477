@@ -20,12 +20,12 @@ function chess1006(x, y) {//名称
     chess.skill1_launch = function () { var chess = document.getElementById(selectid); if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) { chess.skill1_cooling = chess.skill1_max_cooling; skill(1); } }
     chess.skill2_launch = function () { var chess = document.getElementById(selectid); if (chess.fixedid == active_fixedid && chess.skill2_cooling <= 0) { chess.skill2_cooling = chess.skill2_max_cooling; skill(2); } }
     chess.skill3_launch = function () { var chess = document.getElementById(selectid); if (chess.fixedid == active_fixedid && chess.skill3_cooling <= 0) { chess.skill3_cooling = chess.skill3_max_cooling; skill(3); } }
-    chess.skill1_src = "./img/skill-1.png";//skill1
+    chess.skill1_src = "./img/skill-2.png";//skill1
     chess.skill1_name = "治疗";
     chess.skill1_max_cooling = 0;
     chess.skill1_cooling = 0;
     chess.skill1_class = 0;//1主动0被动
-    chess.skill2_src = "./img/skill-1.png";//skill2
+    chess.skill2_src = "./img/skill-3.png";//skill2
     chess.skill2_name = "暴走";
     chess.skill2_max_cooling = 0;
     chess.skill2_cooling = 0;
