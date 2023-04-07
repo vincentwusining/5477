@@ -16,10 +16,10 @@ function chess6(x, y) {//名称
     chess.reflect = 5;//1~20 5   -1不可行动
     skill1.innerHTML = '选择最多5个目标<img height="25px" width="25px" id="input6_1_1" onclick="input(1,id,5)"><img height="25px" width="25px" id="input6_1_2" onclick="input(1,id,5)"><img height="25px" width="25px" id="input6_1_3" onclick="input(1,id,5)"><img height="25px" width="25px" id="input6_1_4" onclick="input(1,id,5)"><img height="25px" width="25px" id="input6_1_5" onclick="input(1,id,5)">拉动2格<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
     skill2.innerHTML = '对面朝方向 前一排五格以及再前一排三格 发动一次斩击，造成2点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '选择一个目标<img height="25px" width="25px" id="input6_3_1" onclick="input(1,id,1)">将其推动2格，若推动过程中或结束后目标碰到阻挡则眩晕一回合<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill3.innerHTML = '选择一个目标<img height="25px" width="25px" id="input6_3_1" onclick="input(1,id,1)">造成1点伤害并将其推动2格。若推动过程中或结束后目标碰到阻挡则使其眩晕一回合；否则技能冷却减一<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
-        if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
+        if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0 && chess.reflect != -1) {
             setTimeout(function () { skill1_1() }, 0);
             setTimeout(function () { skill1_2() }, 0);
             setTimeout(function () { skill1_3() }, 0);
@@ -46,13 +46,13 @@ function chess6(x, y) {//名称
                 document.getElementById(input5).movefunction(input5, 0, -2, 1, selectid, chess.x, chess.y);
             }
             chess.skill1_cooling = chess.skill1_max_cooling;
-            setTimeout(function () { skill(1) }, 100)
+            setTimeout(function () { skill(1) }, 10)
             overall_skill();
         }
     }
     chess.skill2_launch = function () {
         var chess = document.getElementById(selectid);
-        if (chess.fixedid == active_fixedid && chess.skill2_cooling <= 0) {
+        if (chess.fixedid == active_fixedid && chess.skill2_cooling <= 0 && chess.reflect != -1) {
             var board = document.getElementById("board").children;
             var target = new Array(10);
             var num = 0;
@@ -73,16 +73,34 @@ function chess6(x, y) {//名称
     }
     chess.skill3_launch = function () {
         var chess = document.getElementById(selectid);
-        if (chess.fixedid == active_fixedid && chess.skill3_cooling <= 0) {
-            var input1 = document.getElementById("controller_page3").querySelector("#input0_3_1").value;
+        if (chess.fixedid == active_fixedid && chess.skill3_cooling <= 0 && chess.reflect != -1) {
+            var input1 = document.getElementById("controller_page3").querySelector("#input6_3_1").value;
+            var target = document.getElementById(input1);
+            var bool = 0;
+            target.hitfunction(input1, -1, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
+            skill3_2();
+            target.movefunction(input1, 0, 1, 1, selectid, chess.x, chess.y);
+            setTimeout(function () { skill3_1() }, 150)
+            function skill3_1() {
+                skill3_2();
+                target.movefunction(input1, 0, 1, 1, selectid, chess.x, chess.y);
+            }
+            setTimeout(function () { skill3_2() }, 300)
+            function skill3_2() {
+                if (chess.x > target.x && detect_resist(target.x - 1, target.y) == 1) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
+                if (chess.x < target.x && detect_resist(target.x - 1, target.y) == 1) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
+                if (chess.y > target.y && detect_resist(target.x - 1, target.y) == 1) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
+                if (chess.y < target.y && detect_resist(target.x - 1, target.y) == 1) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
+            }
             chess.skill3_cooling = chess.skill3_max_cooling;
+            if (bool == 0) { chess.skill3_cooling -= 1; }
             skill(3);
             overall_skill();
         }
     }
     chess.skill1_src = "./img/skill-2.png";//skill1
     chess.skill1_name = "牵束";
-    chess.skill1_max_cooling = 3;
+    chess.skill1_max_cooling = 2;
     chess.skill1_cooling = 0;
     chess.skill1_class = 1;//1主动0被动
     chess.skill2_src = "./img/skill-2.png";//skill2
@@ -97,7 +115,7 @@ function chess6(x, y) {//名称
     chess.skill3_class = 1;
     chess.movefunction = function (id, dir, count, form, source, x, y) {//form0主动1被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送
         var chess = document.getElementById(id);
-        if (form == 0 && chess.fixedid == active_fixedid) {
+        if (form == 0 && chess.fixedid == active_fixedid && chess.reflect != -1) {
             if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0 && chess.movement >= 1) { chess.y += 1; chess.movement -= 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
             if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0 && chess.movement >= 1) { chess.x += 1; chess.movement -= 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
             if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0 && chess.movement >= 1) { chess.y -= 1; chess.movement -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
@@ -156,12 +174,18 @@ function chess6(x, y) {//名称
         overall_skill();
     }
     chess.skillfunction = function (id) {//全局技能模块
-        var chess = document.getElementById(selectid);
+        var chess = document.getElementById(id);
+        if (chess.data[3] + 1 == round && active_fixedid == chess.fixedid) {
+            document.getElementById(chess.data[1]).reflect = chess.data[2];
+        }
     }
     chess.resist = 1;//1阻挡0不阻挡
     chess.class = 1;//0地块,1人物,2召唤物
     chess.style.zIndex = 5;//地块0,人物5,动画粒子等20+
     chess.data = new Array(1000);//数据
+    chess.data[1] = 0;//眩晕id
+    chess.data[2] = 0;//眩晕人物原反应
+    chess.data[3] = -2;//眩晕时回合
     //tag
 
     chess.attack_add = 0;

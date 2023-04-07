@@ -17,10 +17,7 @@ function chess1006(x, y) {//名称
     skill1.innerHTML = '每回合治疗场上所有无人机1点生命';
     skill2.innerHTML = '暴走状态下治疗2点生命，移动+2';
     skill3.innerHTML = '';
-    chess.skill1_launch = function () { var chess = document.getElementById(selectid); if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) { chess.skill1_cooling = chess.skill1_max_cooling; skill(1); } }
-    chess.skill2_launch = function () { var chess = document.getElementById(selectid); if (chess.fixedid == active_fixedid && chess.skill2_cooling <= 0) { chess.skill2_cooling = chess.skill2_max_cooling; skill(2); } }
-    chess.skill3_launch = function () { var chess = document.getElementById(selectid); if (chess.fixedid == active_fixedid && chess.skill3_cooling <= 0) { chess.skill3_cooling = chess.skill3_max_cooling; skill(3); } }
-    chess.skill1_src = "./img/skill-2.png";//skill1
+    chess.skill1_src = "./img/skill-3.png";//skill1
     chess.skill1_name = "治疗";
     chess.skill1_max_cooling = 0;
     chess.skill1_cooling = 0;
@@ -37,7 +34,7 @@ function chess1006(x, y) {//名称
     chess.skill3_class = 0;
     chess.movefunction = function (id, dir, count, form, source, x, y) {//form1主动0被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送
         var chess = document.getElementById(id);
-        if (form == 0 && chess.fixedid == active_fixedid) {
+        if (form == 0 && chess.fixedid == active_fixedid && chess.reflect != -1) {
             if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0 && chess.movement >= 1) { chess.y += 1; chess.movement -= 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
             if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0 && chess.movement >= 1) { chess.x += 1; chess.movement -= 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
             if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0 && chess.movement >= 1) { chess.y -= 1; chess.movement -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
@@ -101,7 +98,7 @@ function chess1006(x, y) {//名称
             chess.data[2] = 1;//已加速度
             chess.hitfunction(id, 0, 0, 2, 2, 0, 0, 0, id, chess.x, chess.y);
         }
-        if (active_fixedid == chess.fixedid && chess.data[3] != round) {
+        if (active_fixedid == chess.fixedid && chess.data[3] != round && chess.reflect != -1) {
             var board = document.getElementById("board").children
             chess.data[3] = round;
             for (var i = 0; i < board.length; i++) {

@@ -19,7 +19,7 @@ function chess1005(x, y) {//名称
     skill3.innerHTML = '';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
-        if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
+        if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0 && chess.reflect != -1) {
             var input1 = document.getElementById("controller_page3").querySelector("#input1005_1_1").value;
             if (chess.data[1] == 0) {
                 document.getElementById(input1).hitfunction(input1, -1, 0, 0, 0, 0, 0, 0, chess.id, chess.x, chess.y);
@@ -49,7 +49,7 @@ function chess1005(x, y) {//名称
     chess.skill3_class = 0;
     chess.movefunction = function (id, dir, count, form, source, x, y) {//form1主动0被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送
         var chess = document.getElementById(id);
-        if (form == 0 && chess.fixedid == active_fixedid) {
+        if (form == 0 && chess.fixedid == active_fixedid && chess.reflect != -1) {
             if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0 && chess.movement >= 1) { chess.y += 1; chess.movement -= 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
             if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0 && chess.movement >= 1) { chess.x += 1; chess.movement -= 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
             if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0 && chess.movement >= 1) { chess.y -= 1; chess.movement -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }

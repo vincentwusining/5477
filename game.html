@@ -26,7 +26,7 @@
             var act_find = 0;
             active_fixedid = -1;
             for (var i = 0; i < chess.length; i++) {//找
-                if (chess[i].class != 0 && acted_fixedid[chess[i].fixedid] != 1 && chess[i].reflect <= last_reflect) {//不是地块，未行动过，比上一个行动的人的反应小
+                if (chess[i].class != 0 && acted_fixedid[chess[i].fixedid] != 1 && chess[i].reflect <= last_reflect && chess[i].reflect >= 0) {//不是地块，未行动过，比上一个行动的人的反应小，反应大于等于0
                     if (chess[i].fixedid == active_fixedid) continue;
                     if (chess[i].reflect > active_reflect) {
                         active_reflect = chess[i].reflect;
@@ -92,7 +92,8 @@
         }
 
         function input(form, id, r) {//1人物2坐标
-            if (document.getElementById(selectid).fixedid == active_fixedid) {
+            var chess = document.getElementById(selectid);
+            if (chess.fixedid == active_fixedid && chess.reflect != -1) {
                 if (state == 0) {
                     if (form == 1) {
                         state = 1;
@@ -716,11 +717,11 @@
             <div style="background-color: aqua;height:170px;position: relative;">
                 <!--1生-->
                 <div id="controller_page1" hidden>
-                    <button onclick="chess1(16,1)">勇者</button>
+                    <!--<button onclick="chess1(16,1)">勇者</button>
                     <button onclick="chess2001(5,5)">地块</button>
-                    <button onclick="chess3(1,1)">小道行者</button>
-                    <button onclick="chess5(16,1)">无人机操控者</button>
-                    <button onclick="chess6(14,3)">红王</button>
+                    <button onclick="chess3(1,1)">小道行者</button>-->
+                    <button onclick="chess5(16,6)">无人机操控者</button>
+                    <button onclick="chess6(1,6)">红王</button>
                 </div>
                 <!--2移-->
                 <div id="controller_page2" hidden
