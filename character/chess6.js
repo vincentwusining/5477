@@ -87,13 +87,13 @@ function chess6(x, y) {//名称
             }
             setTimeout(function () { skill3_2() }, 300)
             function skill3_2() {
-                if (chess.x > target.x && detect_resist(target.x - 1, target.y) == 1) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
-                if (chess.x < target.x && detect_resist(target.x - 1, target.y) == 1) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
-                if (chess.y > target.y && detect_resist(target.x - 1, target.y) == 1) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
-                if (chess.y < target.y && detect_resist(target.x - 1, target.y) == 1) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
+                if (chess.x > target.x && detect_resist(target.x - 1, target.y) == 1 && bool == 0) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
+                if (chess.x < target.x && detect_resist(target.x + 1, target.y) == 1 && bool == 0) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
+                if (chess.y > target.y && detect_resist(target.x, target.y - 1) == 1 && bool == 0) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
+                if (chess.y < target.y && detect_resist(target.x, target.y + 1) == 1 && bool == 0) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
             }
             chess.skill3_cooling = chess.skill3_max_cooling;
-            setTimeout(function () { if (bool == 0) { chess.skill3_cooling -= 1; skill(3); } }, 350)
+            setTimeout(function () { if (bool == 0) { chess.skill3_cooling -= 1; } skill(3); }, 350)
             overall_skill();
         }
     }

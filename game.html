@@ -152,10 +152,10 @@
             var chess = document.getElementById("board").children;
             var bool = 0;
             for (var i = 0; i < chess.length; i++) {
-                if (chess[i].x == x && chess[i].y == y && chess[i].resist == 1) {
+                if (chess[i].x == x && chess[i].y == y && chess[i].resist == 1) {//有阻挡
                     return 1;
                 }
-                else if (chess[i].x == x && chess[i].y == y && chess[i].class == 0) {
+                else if (chess[i].x == x && chess[i].y == y && chess[i].class == 0) {//有地块
                     bool = 1;
                 }
             }
@@ -721,7 +721,7 @@
                     <button onclick="chess2001(5,5)">地块</button>
                     <button onclick="chess3(1,1)">小道行者</button>-->
                     <button onclick="chess5(16,6)">无人机操控者</button>
-                    <button onclick="chess6(1,6)">红王</button>
+                    <button onclick="chess6(15,6)">红王</button>
                 </div>
                 <!--2移-->
                 <div id="controller_page2" hidden
