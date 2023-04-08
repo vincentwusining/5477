@@ -14,7 +14,7 @@ function chess6(x, y) {//名称
     chess.max_movement = 5;//1~20 5
     chess.movement = 5;
     chess.reflect = 5;//1~20 5   -1不可行动
-    skill1.innerHTML = '选择最多5个目标<img height="25px" width="25px" id="input6_1_1" onclick="input(1,id,5)"><img height="25px" width="25px" id="input6_1_2" onclick="input(1,id,5)"><img height="25px" width="25px" id="input6_1_3" onclick="input(1,id,5)"><img height="25px" width="25px" id="input6_1_4" onclick="input(1,id,5)"><img height="25px" width="25px" id="input6_1_5" onclick="input(1,id,5)">拉动2格<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    skill1.innerHTML = '选择最多5个目标<img height="25px" width="25px" id="input6_1_1" onclick="input(1,id,7)"><img height="25px" width="25px" id="input6_1_2" onclick="input(1,id,7)"><img height="25px" width="25px" id="input6_1_3" onclick="input(1,id,7)"><img height="25px" width="25px" id="input6_1_4" onclick="input(1,id,7)"><img height="25px" width="25px" id="input6_1_5" onclick="input(1,id,7)">拉动2格<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
     skill2.innerHTML = '对面朝方向 前一排五格以及再前一排三格 发动一次斩击，造成2点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
     skill3.innerHTML = '选择一个目标<img height="25px" width="25px" id="input6_3_1" onclick="input(1,id,1)">造成1点伤害并将其推动2格。若推动过程中或结束后目标碰到阻挡则使其眩晕一回合；否则技能冷却减一<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
@@ -93,8 +93,7 @@ function chess6(x, y) {//名称
                 if (chess.y < target.y && detect_resist(target.x - 1, target.y) == 1) { chess.data[1] = input1; chess.data[2] = target.reflect; chess.data[3] = round; target.reflect = -1; bool = 1; }
             }
             chess.skill3_cooling = chess.skill3_max_cooling;
-            if (bool == 0) { chess.skill3_cooling -= 1; }
-            skill(3);
+            setTimeout(function () { if (bool == 0) { chess.skill3_cooling -= 1; skill(3); } }, 350)
             overall_skill();
         }
     }
