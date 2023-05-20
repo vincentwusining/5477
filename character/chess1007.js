@@ -150,12 +150,17 @@ function chess1007(x, y) {//机枪
     }
     chess.skillfunction = function (id) {//全局技能模块
         var chess = document.getElementById(id);
+        if (chess.data[2] < round) {
+            chessdata[1] = 0;
+            chess.data[2] = round;
+        }
     }
     chess.resist = 1;//1阻挡0不阻挡
     chess.class = 2;//0地块,1人物,2召唤物
     chess.style.zIndex = 5;//地块0,人物5,动画粒子等20+
     chess.data = new Array(1000);//数据
     chess.data[1] = 0;
+    chess.data[2] = 0;
     //tag
 
     chess.attack_add = 0;

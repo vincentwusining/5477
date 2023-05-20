@@ -11,8 +11,8 @@ function chess7(x, y) {//军火商
     chess.name = "军火商";
     chess.max_health = 16;//1~30 20
     chess.health = 16;
-    chess.max_movement = 12;//1~20 5
-    chess.movement = 12;
+    chess.max_movement = 13;//1~20 5
+    chess.movement = 13;
     chess.reflect = 7;//1~20 5   -1不可行动
     skill1.innerHTML = '选择一个位置<img height="25px" width="25px" id="input7_1_1" onclick="input(2,id,1)">放置一架机枪。当自身靠近机枪周围四格，可操控机枪。<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
     skill2.innerHTML = '选择一个位置<img height="25px" width="25px" id="input7_2_1" onclick="input(2,id,1)">放置一门大炮。当自身靠近机枪周围四格，可操控机枪。<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
@@ -134,12 +134,17 @@ function chess7(x, y) {//军火商
     }
     chess.skillfunction = function (id) {//全局技能模块
         var chess = document.getElementById(id);
+        if (chess.data[2] < round) {
+            chess.data[1] = 0;
+            chess.data[2] = round;
+        }
     }
     chess.resist = 1;//1阻挡0不阻挡
     chess.class = 1;//0地块,1人物,2召唤物
     chess.style.zIndex = 5;//地块0,人物5,动画粒子等20+
     chess.data = new Array(1000);//数据
     chess.data[1] = 0;
+    chess.data[2] = 0;
     //tag
 
     chess.attack_add = 0;
