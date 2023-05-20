@@ -404,7 +404,7 @@
             }
             pid++;
         }
-        function anim2(x1, y1, x2, y2) {//远程攻击动画150ms
+        function anim2(x1, y1, x2, y2, num) {//远程攻击动画150ms
             var p1 = document.createElement("img");
             var x = (x1 - 1) * 25;
             var y = (y1 - 1) * 25;
@@ -419,7 +419,7 @@
                 var zita = 270 - Math.atan((y2 - y1) / (x2 - x1)) * 180 / Math.PI;
             }
             p1.id = pid;
-            p1.src = "./img/particle3.png";
+            p1.src = "./img/particle" + num + ".png";
             p1.style.position = "absolute";
             p1.style.height = 25 + "px";
             p1.style.width = 25 + "px";

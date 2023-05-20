@@ -16,6 +16,7 @@ function chess1007(x, y) {//机枪
     chess.reflect = -1;//1~20 5   -1不可行动
     skill1.innerHTML = '无法行动，无法移动，无法被移动。';
     skill2.innerHTML = '若军火商在周围四格，则朝反方向攻击第一个物体，造成1点伤害。每回合可发动两次（需在军火商行动回合行动）<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill3.innerHTML = '若军火商在周围四格，则对自身造成10点伤害。（需在军火商行动回合行动）<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill2_launch = function () {
         var chess = document.getElementById(selectid);
         if (7 == active_fixedid && chess.skill2_cooling <= 0) {
@@ -91,6 +92,7 @@ function chess1007(x, y) {//机枪
             }
             if (tar != -1) {
                 board[tar].hitfunction(board[tar].id, -1, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
+                anim2(chess.x, chess.y, board[tar].x, board[tar].y, "7");
                 chess.data[1]++;
                 if (chess.data[1] == 2) {
                     chess.skill2_cooling = chess.skill2_max_cooling;
@@ -99,6 +101,21 @@ function chess1007(x, y) {//机枪
             }
             skill(2);
             overall_skill();
+        }
+    }
+    chess.skill3_launch = function () {
+        var chess = document.getElementById(selectid);
+        if (7 == active_fixedid && chess.skill3_cooling <= 0) {
+            var board = document.getElementById("board").children;
+            for (var i = 0; i < board.length; i++) {
+                if (board[i].fixedid == 7) {
+                    alert(board[i].x);
+                    if ((board[i].x == chess.x && board[i].y == chess.y + 1) || (board[i].x == chess.x + 1 && board[i].y == chess.y) || (board[i].x == chess.x && board[i].y == chess.y - 1) || (board[i].x == chess.x - 1 && board[i].y == chess.y)) {
+                        alert("Aas")
+                        chess.hitfunction(chess.id, -10, 0, 0, 0, 0, 0, 0, board[i].id, chess.x, chess.y);
+                    }
+                }
+            }
         }
     }
     chess.skill1_src = "./img/skill-3.png";//skill1
@@ -111,10 +128,10 @@ function chess1007(x, y) {//机枪
     chess.skill2_max_cooling = 1;
     chess.skill2_cooling = 1;
     chess.skill2_class = 1;
-    chess.skill3_src = "./img/skill0.png";//skill3
-    chess.skill3_name = "无";
-    chess.skill3_max_cooling = 1;
-    chess.skill3_cooling = 1;
+    chess.skill3_src = "./img/skill-2.png";//skill3
+    chess.skill3_name = "拆除";
+    chess.skill3_max_cooling = 0;
+    chess.skill3_cooling = 0;
     chess.skill3_class = 1;
     chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {//0物1真，0锁敌1锁地 11个值
         var chess = document.getElementById(id);
