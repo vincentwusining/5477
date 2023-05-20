@@ -34,7 +34,7 @@ function chess1006(x, y) {//名称
     chess.skill3_class = 0;
     chess.movefunction = function (id, dir, count, form, source, x, y) {//form1主动0被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送
         var chess = document.getElementById(id);
-        if (form == 0 && chess.fixedid == active_fixedid && chess.reflect != -1) {
+        if (form == 0 && chess.fixedid == active_fixedid) {
             if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0 && chess.movement >= 1) { chess.y += 1; chess.movement -= 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
             if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0 && chess.movement >= 1) { chess.x += 1; chess.movement -= 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
             if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0 && chess.movement >= 1) { chess.y -= 1; chess.movement -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
@@ -98,7 +98,7 @@ function chess1006(x, y) {//名称
             chess.data[2] = 1;//已加速度
             chess.hitfunction(id, 0, 0, 2, 2, 0, 0, 0, id, chess.x, chess.y);
         }
-        if (active_fixedid == chess.fixedid && chess.data[3] != round && chess.reflect != -1) {
+        if (active_fixedid == chess.fixedid && chess.data[3] != round) {
             var board = document.getElementById("board").children
             chess.data[3] = round;
             for (var i = 0; i < board.length; i++) {

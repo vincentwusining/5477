@@ -19,27 +19,31 @@ function chess5(x, y) {//无人飞只因操作员
     skill3.innerHTML = '选择最多五个目标<img height="25px" width="25px" id="input5_3_1" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_2" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_3" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_4" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_5" onclick="input(1,id,12)">使其中的无人机进入暴走状态，持续两回合。两回合后对所有无人机造成100点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
-        if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0 && chess.reflect != -1) {
+        if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
             var input1 = document.getElementById("controller_page3").querySelector("#input5_1_1").value;
-            chess1005(input1[0], input1[1]);
-            chess.skill1_cooling = chess.skill1_max_cooling;
-            skill(1);
-            overall_skill();
+            if (detect_resist(input1[0], input1[1]) == 0) {
+                chess1005(input1[0], input1[1]);
+                chess.skill1_cooling = chess.skill1_max_cooling;
+                skill(1);
+                overall_skill();
+            }
         }
     }
     chess.skill2_launch = function () {
         var chess = document.getElementById(selectid);
-        if (chess.fixedid == active_fixedid && chess.skill2_cooling <= 0 && chess.reflect != -1) {
+        if (chess.fixedid == active_fixedid && chess.skill2_cooling <= 0) {
             var input1 = document.getElementById("controller_page3").querySelector("#input5_2_1").value;
-            chess1006(input1[0], input1[1]);
-            chess.skill2_cooling = chess.skill2_max_cooling;
-            skill(2);
-            overall_skill();
+            if (detect_resist(input1[0], input1[1]) == 0) {
+                chess1006(input1[0], input1[1]);
+                chess.skill2_cooling = chess.skill2_max_cooling;
+                skill(2);
+                overall_skill();
+            }
         }
     }
     chess.skill3_launch = function () {
         var chess = document.getElementById(selectid);
-        if (chess.fixedid == active_fixedid && chess.skill3_cooling <= 0 && chess.reflect != -1) {
+        if (chess.fixedid == active_fixedid && chess.skill3_cooling <= 0) {
             setTimeout(function () { skill3_1() }, 0);
             setTimeout(function () { skill3_2() }, 0);
             setTimeout(function () { skill3_3() }, 0);
@@ -102,7 +106,7 @@ function chess5(x, y) {//无人飞只因操作员
     chess.skill3_class = 1;
     chess.movefunction = function (id, dir, count, form, source, x, y) {//form1主动0被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送
         var chess = document.getElementById(id);
-        if (form == 0 && chess.fixedid == active_fixedid && chess.reflect != -1) {
+        if (form == 0 && chess.fixedid == active_fixedid) {
             if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0 && chess.movement >= 1) { chess.y += 1; chess.movement -= 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
             if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0 && chess.movement >= 1) { chess.x += 1; chess.movement -= 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
             if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0 && chess.movement >= 1) { chess.y -= 1; chess.movement -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
