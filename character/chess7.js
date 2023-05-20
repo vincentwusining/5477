@@ -16,7 +16,7 @@ function chess7(x, y) {//军火商
     chess.reflect = 7;//1~20 5   -1不可行动
     skill1.innerHTML = '选择一个位置<img height="25px" width="25px" id="input7_1_1" onclick="input(2,id,1)">放置一架机枪。当自身靠近机枪周围四格，可操控机枪。<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
     skill2.innerHTML = '选择一个位置<img height="25px" width="25px" id="input7_2_1" onclick="input(2,id,1)">放置一门大炮。当自身靠近机枪周围四格，可操控机枪。<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '选择一个位置<img height="25px" width="25px" id="input7_3_1" onclick="input(2,id,1)">放置一袋沙袋。每回合可发动两次<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill3.innerHTML = '选择一个位置<img height="25px" width="25px" id="input7_3_1" onclick="input(2,id,1)">放置一袋沙袋。每回合可发动三次<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
         if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
@@ -48,7 +48,7 @@ function chess7(x, y) {//军火商
             if (detect_resist(input1[0], input1[1]) == 0) {
                 chess1009(input1[0], input1[1]);
                 chess.data[1]++;
-                if (chess.data[1] == 2) {
+                if (chess.data[1] == 3) {
                     chess.skill3_cooling = chess.skill3_max_cooling;
                     chess.data[1] = 0;
                 }
