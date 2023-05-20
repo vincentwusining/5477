@@ -77,6 +77,13 @@
                 document.getElementById("next").style.backgroundSize = "50px 50px";
                 last_reflect = document.getElementById(active_id).reflect;
                 acted_fixedid[active_fixedid] = 1;
+                var num = 0;
+                for (var i = 0; i < chess.length; i++) {//找可行动人数量
+                    if (chess[i].fixedid == active_fixedid) { num++; }
+                }
+                if (num == 1) {//自动选择
+                    selector(active_id);
+                }
             }
             overall_skill();
         }
@@ -148,7 +155,7 @@
             }
         }
 
-        function detect_resist(x, y) {/*检测阻挡*/
+        function detect_resist(x, y) {//检测阻挡 阻挡/无地块1 空地块0
             var chess = document.getElementById("board").children;
             var bool = 0;
             for (var i = 0; i < chess.length; i++) {
@@ -187,7 +194,6 @@
                 return 1;
             }
         }
-
 
         function selector(id) {/*选择器*/
             if (id == 0) {//选择器0
@@ -315,8 +321,10 @@
             if (skill == 0) {
                 var newskill = document.createElement("skill");
                 page.replaceChild(newskill, page.childNodes[1]);
-                page.childNodes[3].childNodes[1].innerHTML = "";
-                page.childNodes[5].childNodes[1].innerHTML = "";
+                page.childNodes[1].innerHTML = "你点技能啊，点技能图标啊！不点技能图标我怎么知道开什么技能";
+                page.childNodes[3].childNodes[1].innerHTML = "我不";
+                page.childNodes[3].childNodes[3].innerHTML = "到啊";
+                page.childNodes[5].childNodes[1].innerHTML = "要不你猜猜";
             }
             else if (skill == 1) {
                 if (document.getElementById(selectid).skill1_name == "无") {
@@ -631,10 +639,13 @@
     <script src="./character/chess4.js">//</script>
     <script src="./character/chess5.js">//无人机操控者</script>
     <script src="./character/chess6.js">//红王</script>
-    <script src="./character/chess7.js">//</script>
+    <script src="./character/chess7.js">//军火商</script>
     <script src="./character/chess8.js">//</script>
     <script src="./character/chess1005.js">//战斗无人机</script>
     <script src="./character/chess1006.js">//救治无人机</script>
+    <script src="./character/chess1007.js">//机枪</script>
+    <script src="./character/chess1008.js">//大炮</script>
+    <script src="./character/chess1009.js">//沙袋</script>
     <script src="./character/chess2001.js">//基础地块</script>
     <style>
         chess0 {
@@ -672,6 +683,7 @@
                 chess2001(i, j);
             }
         }
+        var b = document.getElementById("board").children;
     </script>
     <div style="display: flex;">
         <!--目标选择器-->
@@ -720,8 +732,11 @@
                     <!--<button onclick="chess1(16,1)">勇者</button>
                     <button onclick="chess2001(5,5)">地块</button>
                     <button onclick="chess3(1,1)">小道行者</button>-->
-                    <button onclick="chess5(16,6)">无人机操控者</button>
-                    <button onclick="chess6(1,6)">红王</button>
+                    <button onclick="chess5(16,16)">无人机操控者</button>
+                    <button onclick="chess6(1,16)">红王</button>
+                    <button onclick="chess1005(1,6)">wurenji</button>
+                    <button onclick="chess7(1,1)">军火商</button>
+                    <button onclick="chess1005(1,6)"></button>
                 </div>
                 <!--2移-->
                 <div id="controller_page2" hidden
