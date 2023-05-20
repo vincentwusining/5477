@@ -56,9 +56,7 @@ function chess1007(x, y) {//机枪
             var tar = -1;
             for (var i = 0; i < board.length; i++) {
                 if (dir == 1) {
-                    if (board[i].x == chess.x && board[i].y < chess.y && board[i].class != 0 && board[i].class != 1009) {
-                        alert("trst")
-                        alert(i);
+                    if (board[i].x == chess.x && board[i].y < chess.y && board[i].class != 0 && board[i].fixedid != 1009) {
                         if (Math.abs(board[i].y - chess.y) < abs) {
                             abs = Math.abs(board[i].y - chess.y);
                             tar = i;
@@ -66,7 +64,7 @@ function chess1007(x, y) {//机枪
                     }
                 }
                 if (dir == 2) {
-                    if (board[i].x < chess.x && board[i].y == chess.y && board[i].class != 0 && board[i].class != 1009) {
+                    if (board[i].x < chess.x && board[i].y == chess.y && board[i].class != 0 && board[i].fixedid != 1009) {
                         if (Math.abs(board[i].x - chess.x) < abs) {
                             abs = Math.abs(board[i].x - chess.x);
                             tar = i;
@@ -74,7 +72,7 @@ function chess1007(x, y) {//机枪
                     }
                 }
                 if (dir == 3) {
-                    if (board[i].x == chess.x && board[i].y > chess.y && board[i].class != 0 && board[i].class != 1009) {
+                    if (board[i].x == chess.x && board[i].y > chess.y && board[i].class != 0 && board[i].fixedid != 1009) {
                         if (Math.abs(board[i].y - chess.y) < abs) {
                             abs = Math.abs(board[i].y - chess.y);
                             tar = i;
@@ -82,7 +80,7 @@ function chess1007(x, y) {//机枪
                     }
                 }
                 if (dir == 4) {
-                    if (board[i].x > chess.x && board[i].y == chess.y && board[i].class != 0 && board[i].class != 1009) {
+                    if (board[i].x > chess.x && board[i].y == chess.y && board[i].class != 0 && board[i].fixedid != 1009) {
                         if (Math.abs(board[i].x - chess.x) < abs) {
                             abs = Math.abs(board[i].x - chess.x);
                             tar = i;
@@ -109,9 +107,7 @@ function chess1007(x, y) {//机枪
             var board = document.getElementById("board").children;
             for (var i = 0; i < board.length; i++) {
                 if (board[i].fixedid == 7) {
-                    alert(board[i].x);
                     if ((board[i].x == chess.x && board[i].y == chess.y + 1) || (board[i].x == chess.x + 1 && board[i].y == chess.y) || (board[i].x == chess.x && board[i].y == chess.y - 1) || (board[i].x == chess.x - 1 && board[i].y == chess.y)) {
-                        alert("Aas")
                         chess.hitfunction(chess.id, -10, 0, 0, 0, 0, 0, 0, board[i].id, chess.x, chess.y);
                     }
                 }

@@ -73,9 +73,7 @@ function chess1008(x, y) {//大炮
             var board = document.getElementById("board").children;
             for (var i = 0; i < board.length; i++) {
                 if (board[i].fixedid == 7) {
-                    alert(board[i].x);
                     if ((board[i].x == chess.x && board[i].y == chess.y + 1) || (board[i].x == chess.x + 1 && board[i].y == chess.y) || (board[i].x == chess.x && board[i].y == chess.y - 1) || (board[i].x == chess.x - 1 && board[i].y == chess.y)) {
-                        alert("Aas")
                         chess.hitfunction(chess.id, -10, 0, 0, 0, 0, 0, 0, board[i].id, chess.x, chess.y);
                     }
                 }
