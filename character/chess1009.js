@@ -14,7 +14,7 @@ function chess1009(x, y) {//沙袋
     chess.max_movement = 0;//1~20 5
     chess.movement = 0;
     chess.reflect = -1;//1~20 5   -1不可行动
-    skill1.innerHTML = '无法行动，无法移动，无法被移动。';
+    skill1.innerHTML = '无法行动，无法移动，无法被移动。不会成为机枪的攻击目标。';
     chess.skill1_src = "./img/skill-3.png";//skill1
     chess.skill1_name = "固定";
     chess.skill1_max_cooling = 0;

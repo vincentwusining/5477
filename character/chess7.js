@@ -59,13 +59,13 @@ function chess7(x, y) {//军火商
     }
     chess.skill1_src = "./img/skill-2.png";//skill1
     chess.skill1_name = "军事机枪";
-    chess.skill1_max_cooling = 3;
+    chess.skill1_max_cooling = 2;
     chess.skill1_cooling = 0;
     chess.skill1_class = 1;//1主动0被动
     chess.skill2_src = "./img/skill-2.png";//skill2
     chess.skill2_name = "军事大炮";
-    chess.skill2_max_cooling = 4;
-    chess.skill2_cooling = 0;
+    chess.skill2_max_cooling = 3;
+    chess.skill2_cooling = 1;
     chess.skill2_class = 1;
     chess.skill3_src = "./img/skill-2.png";//skill3
     chess.skill3_name = "军事防御";
