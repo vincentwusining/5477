@@ -151,7 +151,7 @@ function chess1007(x, y) {//机枪
     chess.skillfunction = function (id) {//全局技能模块
         var chess = document.getElementById(id);
         if (chess.data[2] < round) {
-            chessdata[1] = 0;
+            chess.data[1] = 0;
             chess.data[2] = round;
         }
     }
