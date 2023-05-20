@@ -53,14 +53,20 @@ function chess1008(x, y) {//大炮
                     }
                 }
             }
+            var target = new Array(30);
+            var num = 0;
             for (var i = 0; i < board.length; i++) {
                 if (board[i].class == 0) { continue; }
                 var dx = Math.abs(loc[0] - board[i].x);
                 var dy = Math.abs(loc[1] - board[i].y);
                 var abs_diff = dx + dy;
                 if (dx <= 2 && dy <= 2 && abs_diff <= 3) {
-                    board[i].hitfunction(board[i].id, -3, 0, 0, 0, 0, 0, 1, selectid, chess.x, chess.y);
+                    target[num] = board[i].id;
+                    num++;
                 }
+            }
+            for (var i = 0; i < num; i++) {
+                document.getElementById(target[i]).hitfunction(target[i], -3, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y)
             }
             chess.skill2_cooling = chess.skill2_max_cooling;
             skill(2);

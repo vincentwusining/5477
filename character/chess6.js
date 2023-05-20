@@ -1,4 +1,4 @@
-function chess6(x, y) {//名称
+function chess6(x, y) {//红王
     var chess = document.createElement("chess0");
     var skill1 = document.createElement("skill");
     var skill2 = document.createElement("skill");
