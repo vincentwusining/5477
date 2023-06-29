@@ -1,4 +1,4 @@
-function chess2001(x, y) {//基础地块
+function chess2007(x, y) {//芦苇
     var chess = document.createElement("chess0");
     var skill1 = document.createElement("skill");
     var skill2 = document.createElement("skill");
@@ -6,9 +6,9 @@ function chess2001(x, y) {//基础地块
     chess.id = id;
 
     //以下需改动
-    chess.fixedid = 2001;//1~1000人物1001~2000召唤物2001~3000地块
-    chess.img = "./img/chess2001.png";
-    chess.name = "基础地块";
+    chess.fixedid = 2007;//1~1000人物1001~2000召唤物2001~3000地块
+    chess.img = "./img/chess2007.png";
+    chess.name = "芦苇";
     chess.max_health = 0;//1~30 20
     chess.health = 0;
     chess.max_movement = 0;//1~20 5

@@ -15,8 +15,8 @@ function chess1007(x, y) {//机枪
     chess.movement = 0;
     chess.reflect = -1;//1~20 5   -1不可行动
     skill1.innerHTML = '无法行动，无法移动，无法被移动。';
-    skill2.innerHTML = '若军火商在周围四格，则朝反方向攻击第一个物体，造成1点伤害。每回合可发动两次（需在军火商行动回合行动）<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '若军火商在周围四格，则对自身造成10点伤害。（需在军火商行动回合行动）<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill2.innerHTML = '若军火商在周围四格，则朝反方向攻击第一个物体，造成1点伤害。每回合可发动两次（需在军火商行动回合行动）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill3.innerHTML = '若军火商在周围四格，则对自身造成10点伤害。（需在军火商行动回合行动）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill2_launch = function () {
         var chess = document.getElementById(selectid);
         if (7 == active_fixedid && chess.skill2_cooling <= 0) {
@@ -129,6 +129,7 @@ function chess1007(x, y) {//机枪
     chess.skill3_max_cooling = 0;
     chess.skill3_cooling = 0;
     chess.skill3_class = 1;
+    chess.movefunction = function () { }
     chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {//0物1真，0锁敌1锁地 11个值
         var chess = document.getElementById(id);
         chess.health += hit_health * chess.hit_multiply;
@@ -182,7 +183,7 @@ function chess1007(x, y) {//机枪
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
     chess.setAttribute("onclick", "selector(id)")
-    document.getElementById("board").appendChild(chess);
+    if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
     id++;
     overall_skill();
 }

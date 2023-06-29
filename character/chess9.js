@@ -14,23 +14,29 @@ function chess9(x, y) {//定神游
     chess.max_movement = 4;//1~20 5
     chess.movement = 4;
     chess.reflect = 6;//1~20 5   -1不可行动
-    skill1.innerHTML = '移动归0，进入神游状态：最大移动+4，行动结束后立刻回到原位。（神游状态下发动 退出神游状态并回到原位）<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-    skill2.innerHTML = '选择一个目标<img height="25px" width="25px" id="input9_2_1" onclick="input(1,id,3)">造成1一点伤害并施加神游印记。（神游状态下发动 传送至前方第三格）<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '击退范围内所有敌人两格（神游状态下发动 对范围内的敌人造成1点伤害，但对神游印记标记的敌人造成3点伤害并消除神游印记）范围演示：<img height="25px" width="25px" id="input9_3_1" onclick="input(1,id,13)"><button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill1.innerHTML = '移动归0，进入神游状态：最大移动+5，行动结束后立刻回到原位，受击额外受到一点伤害。（神游状态下发动 退出神游状态并回到原位）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    skill2.innerHTML = '选择一个目标<img height="25px" width="25px" id="input9_2_1" onclick="input(1,id,3)">造成1一点伤害并施加神游印记。（神游状态下发动 传送至前方第三格并对周围8格造成1点伤害）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill3.innerHTML = '击退范围内所有敌人两格（神游状态下发动 对范围内的敌人造成1点伤害，但对神游印记标记的敌人造成3点伤害并消除神游印记）范围演示：<img height="25px" width="25px" id="input9_3_1" onclick="input(3,id,13)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
         if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
             if (chess.data[1] == 0) {//非神游
                 chess.data[1] = 1;
                 chess.movement = 0;
-                chess.max_movement += 4;
+                chess.max_movement += 5;
+                chess.img = "./img/chess9_2.png";
+                chess.style.backgroundImage = "url(" + chess.img + ")";
+                chess.hit_add -= 1;
             }
             else {//神游
                 chess.data[1] = 0;
                 chess.movement = 0;
-                chess.max_movement -= 4;
+                chess.max_movement -= 5;
                 chess.x = chess.data[4];
                 chess.y = chess.data[5];
+                chess.img = "./img/chess9.png";
+                chess.style.backgroundImage = "url(" + chess.img + ")";
+                chess.hit_add += 1;
                 chess.style.left = (chess.x - 1) * 25 + "px";
                 chess.style.bottom = (chess.y - 1) * 25 + "px";
             }
@@ -47,19 +53,44 @@ function chess9(x, y) {//定神游
             if (chess.data[1] == 0) {//非神游
                 document.getElementById(input1).hitfunction(input1, -1, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
                 for (var i = 1; i <= 100; i++) {
+                    if (chess.data[2][i] == input1) {
+                        break;
+                    }
                     if (chess.data[2][i] == 0) {
                         chess.data[2][i] = input1;
                         chess.data[2][i + 1] = 0;
                         break;
                     }
                 }
+                chess.skill2_cooling = chess.skill2_max_cooling;
+                skill(2);
+                overall_skill();
             }
             else {//神游
-                document.getElementById(selectid).movefunction(selectid, chess.direction, 3, 1, selectid, chess.x, chess.y);
+                var bool = 0;
+                if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 3) == 0) { bool = 1 } }
+                if (chess.direction == 2) { if (detect_resist(chess.x + 3, chess.y) == 0) { bool = 1 } }
+                if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 3) == 0) { bool = 1 } }
+                if (chess.direction == 4) { if (detect_resist(chess.x - 3, chess.y) == 0) { bool = 1 } }
+                if (bool == 1) {
+                    document.getElementById(selectid).movefunction(selectid, chess.direction, 3, 1, selectid, chess.x, chess.y);
+                    var board = document.getElementById("board").children;
+                    var target = new Array(30);
+                    var num = 0;
+                    for (var i = 0; i < board.length; i++) {
+                        if (board[i].class && Math.abs(board[i].x - chess.x) <= 1 && Math.abs(board[i].y - chess.y) <= 1 && board[i].id != chess.id) {
+                            target[num] = board[i].id;
+                            num++;
+                        }
+                    }
+                    for (var i = 0; i < num; i++) {
+                        document.getElementById(target[i]).hitfunction(target[i], -1, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
+                    }
+                    chess.skill2_cooling = chess.skill2_max_cooling;
+                    skill(2);
+                    overall_skill();
+                }
             }
-            chess.skill2_cooling = chess.skill2_max_cooling;
-            skill(2);
-            overall_skill();
         }
     }
     chess.skill3_launch = function () {
@@ -67,40 +98,60 @@ function chess9(x, y) {//定神游
         if (chess.fixedid == active_fixedid && chess.skill3_cooling <= 0) {
             var board = document.getElementById("board").children;
             if (chess.data[1] == 0) {//非神游
+                var target = new Array(30);
+                var num = 0;
                 for (var i = 0; i < board.length; i++) {
                     if (board[i].class == 0) { continue; }
                     var dx = Math.abs(chess.x - board[i].x);
                     var dy = Math.abs(chess.y - board[i].y);
                     var abs_diff = dx + dy;
                     if (dx <= 2 && dy <= 2 && abs_diff <= 3 && abs_diff != 0) {
-                        board[i].movefunction(board[i].id, 0, 2, 1, selectid, chess.x, chess.y);
+                        target[num] = board[i].id;
+                        num++;
                     }
+                }
+                for (var i = 0; i < num; i++) {
+                    document.getElementById(target[i]).movefunction(target[i], 0, 2, 1, selectid, chess.x, chess.y);
                 }
             }
             else {//神游
+                var target = new Array(30);
+                var num = 0;
                 for (var i = 0; i < board.length; i++) {
                     if (board[i].class == 0) { continue; }
                     var dx = Math.abs(chess.x - board[i].x);
                     var dy = Math.abs(chess.y - board[i].y);
                     var abs_diff = dx + dy;
                     if (dx <= 2 && dy <= 2 && abs_diff <= 3 && abs_diff != 0) {
-                        var bool = 0;
+                        var bool = 0;//是否有印记
                         for (var j = 1; chess.data[2][j] != 0; j++) {
                             if (chess.data[2][j] == board[i].id && bool == 0) {
                                 bool = 1;
                                 chess.data[2][j] = 0
                             }
-                            else if (bool == 1) {
+                            else if (bool == 1) {//向前进位
                                 chess.data[2][j - 1] = chess.data[2][j];
                                 chess.data[2][j] = 0;
                             }
                         }
                         if (bool == 1) {
-                            board[i].hitfunction(board[i].id, -3, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
+                            target[num] = board[i].id;
+                            target[num + 1] = 1;
+                            num += 2;
                         }
                         else {
-                            board[i].hitfunction(board[i].id, -1, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
+                            target[num] = board[i].id;
+                            target[num + 1] = 0;
+                            num += 2;
                         }
+                    }
+                }
+                for (var i = 0; i < num; i += 2) {
+                    if (target[i + 1] == 1) {
+                        document.getElementById(target[i]).hitfunction(target[i], -3, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
+                    }
+                    if (target[i + 1] == 0) {
+                        document.getElementById(target[i]).hitfunction(target[i], -1, 0, 0, 0, 0, 0, 0, selectid, chess.x, chess.y);
                     }
                 }
             }
@@ -126,14 +177,14 @@ function chess9(x, y) {//定神游
     chess.skill3_class = 1;
     chess.movefunction = function (id, dir, count, form, source, x, y) {//form0主动1被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送
         var chess = document.getElementById(id);
-        if (form == 0 && chess.fixedid == active_fixedid) {
+        if (form == 0 && chess.fixedid == active_fixedid) {//走路
             if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0 && chess.movement >= 1) { chess.y += 1; chess.movement -= 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
             if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0 && chess.movement >= 1) { chess.x += 1; chess.movement -= 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
             if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0 && chess.movement >= 1) { chess.y -= 1; chess.movement -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
             if (dir == 4) { if (chess.direction == 4) { if (detect_resist(chess.x - 1, chess.y) == 0 && chess.movement >= 1) { chess.x -= 1; chess.movement -= 1 } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
             selector(id);
         }
-        else if (form == 1) {
+        else if (form == 1) {//推拉\传送
             if (dir == 0) {
                 var prex = chess.x;
                 var prey = chess.y;
@@ -157,6 +208,7 @@ function chess9(x, y) {//定神游
                 if (dir == 2) { if (detect_resist(chess.x + count, chess.y) == 0) { chess.x += count } }
                 if (dir == 3) { if (detect_resist(chess.x, chess.y - count) == 0) { chess.y -= count } }
                 if (dir == 4) { if (detect_resist(chess.x - count, chess.y) == 0) { chess.x -= count } }
+                if (dir == 5) { if (detect_resist(count[0], count[1]) == 0) { chess.x = count[0]; chess.y = count[1]; } }
             }
         }
         chess.style.left = (chess.x - 1) * 25 + "px";
@@ -233,7 +285,7 @@ function chess9(x, y) {//定神游
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
     chess.setAttribute("onclick", "selector(id)")
-    document.getElementById("board").appendChild(chess);
+    if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
     id++;
     overall_skill();
 }

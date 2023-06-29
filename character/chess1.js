@@ -13,9 +13,9 @@ function chess1(x, y) {//勇者
     chess.max_movement = 20;
     chess.movement = 20;
     chess.reflect = 20;
-    skill1.innerHTML = '选择周围四格内目标<img height="25px" width="25px" id="input1_1_1" onclick="input(1,id,1)">造成5点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-    skill2.innerHTML = '选择曼哈顿距离小于7的目标<img height="25px" width="25px" id="input1_2_1" onclick="input(1,id,7)">造成2点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '选择全屏目标<img height="25px" width="25px" id="input1_3_1" onclick="input(1,id,2)">(选填)将其推动3格。选择全屏目标<img height="25px" width="25px" id="input1_3_2" onclick="input(1,id,2)">(选填))将其拉动2格<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill1.innerHTML = '选择周围四格内目标<img height="25px" width="25px" id="input1_1_1" onclick="input(1,id,1)">造成5点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    skill2.innerHTML = '选择曼哈顿距离小于7的目标<img height="25px" width="25px" id="input1_2_1" onclick="input(1,id,7)">造成2点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill3.innerHTML = '选择全屏目标<img height="25px" width="25px" id="input1_3_1" onclick="input(1,id,2)">(选填)将其推动3格。选择全屏目标<img height="25px" width="25px" id="input1_3_2" onclick="input(1,id,2)">(选填))将其拉动2格<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
         if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
@@ -105,6 +105,8 @@ function chess1(x, y) {//勇者
                 if (dir == 2) { if (detect_resist(chess.x + count, chess.y) == 0) { chess.x += count } }
                 if (dir == 3) { if (detect_resist(chess.x, chess.y - count) == 0) { chess.y -= count } }
                 if (dir == 4) { if (detect_resist(chess.x - count, chess.y) == 0) { chess.x -= count } }
+                if (dir == 5) { if (detect_resist(count[0], count[1]) == 0) { chess.x = count[0]; chess.y = count[1]; } }
+                if (dir == 5) { if (detect_resist(count[0], count[1]) == 0) { chess.x = count[0]; chess.y = count[1]; } }
             }
         }
         chess.style.left = (chess.x - 1) * 25 + "px";
@@ -158,7 +160,7 @@ function chess1(x, y) {//勇者
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
     chess.setAttribute("onclick", "selector(id)")
-    document.getElementById("board").appendChild(chess);
+    if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
     id++;
     overall_skill();
 }

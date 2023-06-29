@@ -15,7 +15,7 @@ function chess1009(x, y) {//沙袋
     chess.movement = 0;
     chess.reflect = -1;//1~20 5   -1不可行动
     skill1.innerHTML = '无法行动，无法移动，无法被移动。不会成为机枪的攻击目标。';
-    skill3.innerHTML = '若军火商在周围四格，则对自身造成10点伤害。（需在军火商行动回合行动）<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill3.innerHTML = '若军火商在周围四格，则对自身造成10点伤害。（需在军火商行动回合行动）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill3_launch = function () {
         var chess = document.getElementById(selectid);
         if (7 == active_fixedid && chess.skill3_cooling <= 0) {
@@ -65,9 +65,10 @@ function chess1009(x, y) {//沙袋
     }
     chess.skillfunction = function (id) {//全局技能模块
         var chess = document.getElementById(id);
+
     }
     chess.resist = 1;//1阻挡0不阻挡
-    chess.class = 1;//0地块,1人物,2召唤物
+    chess.class = 2;//0地块,1人物,2召唤物
     chess.style.zIndex = 5;//地块0,人物5,动画粒子等20+
     chess.data = new Array(1000);//数据
     //tag
@@ -91,7 +92,7 @@ function chess1009(x, y) {//沙袋
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
     chess.setAttribute("onclick", "selector(id)")
-    document.getElementById("board").appendChild(chess);
+    if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
     id++;
     overall_skill();
 }

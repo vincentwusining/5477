@@ -14,9 +14,9 @@ function chess6(x, y) {//红王
     chess.max_movement = 5;//1~20 5
     chess.movement = 5;
     chess.reflect = 4;//1~20 5   -1不可行动
-    skill1.innerHTML = '选择最多5个目标<img height="25px" width="25px" id="input6_1_1" onclick="input(1,id,7)"><img height="25px" width="25px" id="input6_1_2" onclick="input(1,id,7)"><img height="25px" width="25px" id="input6_1_3" onclick="input(1,id,7)"><img height="25px" width="25px" id="input6_1_4" onclick="input(1,id,7)"><img height="25px" width="25px" id="input6_1_5" onclick="input(1,id,7)">拉动2格<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-    skill2.innerHTML = '对面朝方向 前一排五格以及再前一排三格 发动一次斩击，造成2点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '选择一个目标<img height="25px" width="25px" id="input6_3_1" onclick="input(1,id,1)">造成1点伤害并将其推动2格。若推动过程中或结束后目标碰到阻挡物则再造成一点伤害；否则技能冷却减一<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill1.innerHTML = '选择最多5个目标<img height="25px" width="25px" id="input6_1_1" onclick="input(1,id,7)"><img height="25px" width="25px" id="input6_1_2" onclick="input(1,id,7)"><img height="25px" width="25px" id="input6_1_3" onclick="input(1,id,7)"><img height="25px" width="25px" id="input6_1_4" onclick="input(1,id,7)"><img height="25px" width="25px" id="input6_1_5" onclick="input(1,id,7)">拉动2格<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    skill2.innerHTML = '对面朝方向 前一排五格以及再前一排三格 发动一次斩击，造成2点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill3.innerHTML = '选择一个目标<img height="25px" width="25px" id="input6_3_1" onclick="input(1,id,1)">造成1点伤害并将其推动2格。若推动过程中或结束后目标碰到阻挡物则再造成一点伤害；否则技能冷却减一<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
         if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
@@ -145,6 +145,7 @@ function chess6(x, y) {//红王
                 if (dir == 2) { if (detect_resist(chess.x + count, chess.y) == 0) { chess.x += count } }
                 if (dir == 3) { if (detect_resist(chess.x, chess.y - count) == 0) { chess.y -= count } }
                 if (dir == 4) { if (detect_resist(chess.x - count, chess.y) == 0) { chess.x -= count } }
+                if (dir == 5) { if (detect_resist(count[0], count[1]) == 0) { chess.x = count[0]; chess.y = count[1]; } }
             }
         }
         chess.style.left = (chess.x - 1) * 25 + "px";
@@ -202,7 +203,7 @@ function chess6(x, y) {//红王
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
     chess.setAttribute("onclick", "selector(id)")
-    document.getElementById("board").appendChild(chess);
+    if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
     id++;
     overall_skill();
 }

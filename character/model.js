@@ -14,9 +14,9 @@ function model(x, y) {//名称
     chess.max_movement = 5;//1~20 5
     chess.movement = 5;
     chess.reflect = 5;//1~20 5   -1不可行动
-    skill1.innerHTML = '<img height="25px" width="25px" id="input0_1_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-    skill2.innerHTML = '<img height="25px" width="25px" id="input0_2_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '<img height="25px" width="25px" id="input0_3_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill1.innerHTML = '<img height="25px" width="25px" id="input0_1_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    skill2.innerHTML = '<img height="25px" width="25px" id="input0_2_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill3.innerHTML = '<img height="25px" width="25px" id="input0_3_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
         if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
@@ -59,27 +59,27 @@ function model(x, y) {//名称
     chess.skill3_max_cooling = 1;
     chess.skill3_cooling =;
     chess.skill3_class = ;
-    chess.movefunction = function (id, dir, count, form, source, x, y) {//form0主动1被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送
+    chess.movefunction = function (id, dir, count, form, source, x, y) {//form0主动1被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送,5为定点传送
         var chess = document.getElementById(id);
-        if (form == 0 && chess.fixedid == active_fixedid) {
+        if (form == 0 && chess.fixedid == active_fixedid) {//走路
             if (dir == 1) { if (chess.direction == 1) { if (detect_resist(chess.x, chess.y + 1) == 0 && chess.movement >= 1) { chess.y += 1; chess.movement -= 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
             if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0 && chess.movement >= 1) { chess.x += 1; chess.movement -= 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
             if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0 && chess.movement >= 1) { chess.y -= 1; chess.movement -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
             if (dir == 4) { if (chess.direction == 4) { if (detect_resist(chess.x - 1, chess.y) == 0 && chess.movement >= 1) { chess.x -= 1; chess.movement -= 1 } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
             selector(id);
         }
-        else if (form == 1) {
-            if (dir == 0) {
+        else if (form == 1) {//推拉\传送
+            if (dir == 0) {//推拉
                 var prex = chess.x;
                 var prey = chess.y;
-                if (count > 0) {
+                if (count > 0) {//推
                     if (x > chess.x && detect_resist(chess.x - 1, chess.y) == 0) { prex -= 1; }
                     if (x < chess.x && detect_resist(chess.x + 1, chess.y) == 0) { prex += 1; }
                     if (y > chess.y && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
                     if (y < chess.y && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
                     if (detect_resist(prex, prey) == 0) { setTimeout(function () { chess.x = prex; chess.y = prey; chess.style.left = (chess.x - 1) * 25 + "px"; chess.style.bottom = (chess.y - 1) * 25 + "px"; }, 100) }
                 }
-                else if (count < 0) {
+                else if (count < 0) {//拉
                     if (x > chess.x && detect_resist(chess.x + 1, chess.y) == 0) { prex += 1; }
                     if (x < chess.x && detect_resist(chess.x - 1, chess.y) == 0) { prex -= 1; }
                     if (y > chess.y && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
@@ -87,11 +87,12 @@ function model(x, y) {//名称
                     if (detect_resist(prex, prey) == 0) { setTimeout(function () { chess.x = prex; chess.y = prey; chess.style.left = (chess.x - 1) * 25 + "px"; chess.style.bottom = (chess.y - 1) * 25 + "px"; }, 100) }
                 }
             }
-            else {
+            else {//传送
                 if (dir == 1) { if (detect_resist(chess.x, chess.y + count) == 0) { chess.y += count } }
                 if (dir == 2) { if (detect_resist(chess.x + count, chess.y) == 0) { chess.x += count } }
                 if (dir == 3) { if (detect_resist(chess.x, chess.y - count) == 0) { chess.y -= count } }
                 if (dir == 4) { if (detect_resist(chess.x - count, chess.y) == 0) { chess.x -= count } }
+                if (dir == 5) { if (detect_resist(count[0], count[1]) == 0) { chess.x = count[0]; chess.y = count[1]; } }
             }
         }
         chess.style.left = (chess.x - 1) * 25 + "px";
@@ -147,7 +148,7 @@ function model(x, y) {//名称
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
     chess.setAttribute("onclick", "selector(id)")
-    document.getElementById("board").appendChild(chess);
+    if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
     id++;
     overall_skill();
 }

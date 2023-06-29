@@ -14,9 +14,9 @@ function chess5(x, y) {//无人飞只因操作员
     chess.max_movement = 4;
     chess.movement = 4;
     chess.reflect = 7;
-    skill1.innerHTML = '选择位置<img height="25px" width="25px" id="input5_1_1" onclick="input(2,id,2)">生成一个战斗无人机<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-    skill2.innerHTML = '选择位置<img height="25px" width="25px" id="input5_2_1" onclick="input(2,id,2)">生成一个救治无人机<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '选择最多五个目标<img height="25px" width="25px" id="input5_3_1" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_2" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_3" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_4" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_5" onclick="input(1,id,12)">使其中的无人机进入暴走状态，持续两回合。两回合后对所有无人机造成100点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill1.innerHTML = '选择位置<img height="25px" width="25px" id="input5_1_1" onclick="input(2,id,2)">生成一个战斗无人机<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    skill2.innerHTML = '选择位置<img height="25px" width="25px" id="input5_2_1" onclick="input(2,id,2)">生成一个救治无人机<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill3.innerHTML = '选择最多五个目标<img height="25px" width="25px" id="input5_3_1" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_2" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_3" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_4" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_5" onclick="input(1,id,12)">使其中的无人机进入暴走状态，持续两回合。两回合后对所有无人机造成100点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
         if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
@@ -137,6 +137,7 @@ function chess5(x, y) {//无人飞只因操作员
                 if (dir == 2) { if (detect_resist(chess.x + count, chess.y) == 0) { chess.x += count } }
                 if (dir == 3) { if (detect_resist(chess.x, chess.y - count) == 0) { chess.y -= count } }
                 if (dir == 4) { if (detect_resist(chess.x - count, chess.y) == 0) { chess.x -= count } }
+                if (dir == 5) { if (detect_resist(count[0], count[1]) == 0) { chess.x = count[0]; chess.y = count[1]; } }
             }
         }
         chess.style.left = (chess.x - 1) * 25 + "px";
@@ -201,7 +202,28 @@ function chess5(x, y) {//无人飞只因操作员
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
     chess.setAttribute("onclick", "selector(id)")
-    document.getElementById("board").appendChild(chess);
-    id++;
-    overall_skill();
+    if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); } yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+} yId("board").appendChild(chess);
+}
+id++;
+overall_skill();
 }

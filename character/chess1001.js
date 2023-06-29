@@ -1,4 +1,4 @@
-function chess2001(x, y) {//基础地块
+function chess1001(x, y) {//障碍物
     var chess = document.createElement("chess0");
     var skill1 = document.createElement("skill");
     var skill2 = document.createElement("skill");
@@ -6,38 +6,34 @@ function chess2001(x, y) {//基础地块
     chess.id = id;
 
     //以下需改动
-    chess.fixedid = 2001;//1~1000人物1001~2000召唤物2001~3000地块
-    chess.img = "./img/chess2001.png";
-    chess.name = "基础地块";
-    chess.max_health = 0;//1~30 20
-    chess.health = 0;
+    chess.fixedid = 1001;//1~1000人物1001~2000召唤物2001~3000地块
+    chess.img = "./img/chess1001.png";
+    chess.name = "障碍物";
+    chess.max_health = 1;//1~30 20
+    chess.health = 1;
     chess.max_movement = 0;//1~20 5
     chess.movement = 0;
-    chess.reflect = -1;//1~20 5
-    skill1.innerHTML = '可在此移动、生成';
-    chess.skill1_src = "./img/skill2001.1.png";//skill1
-    chess.skill1_name = "地块";
+    chess.reflect = -1;//1~20 5   -1不可行动
+    skill1.innerHTML = '无法行动，无法移动，无法被移动，无法受伤。';
+    chess.skill1_src = "./img/skill-3.png";//skill1
+    chess.skill1_name = "障碍";
     chess.skill1_max_cooling = 0;
     chess.skill1_cooling = 0;
     chess.skill1_class = 0;//1主动0被动
     chess.skill2_src = "./img/skill0.png";//skill2
     chess.skill2_name = "无";
-    chess.skill2_max_cooling = 1;
-    chess.skill2_cooling = 0;
-    chess.skill2_class = 0;
     chess.skill3_src = "./img/skill0.png";//skill3
     chess.skill3_name = "无";
-    chess.skill3_max_cooling = 1;
-    chess.skill3_cooling = 0;
-    chess.skill3_class = 0;
+    chess.movefunction = function () { }
+    chess.hitfunction = function (id, hit_health, hit_max_health, hit_movement, hit_max_movement, hit_reflect, hit_class, hit_target, source, x, y) {//0物1真，0锁敌1锁地 11个值
 
-
-    chess.skillfunction = function (id) {//全局技能模块
-        var chess = document.getElementById(selectid);
     }
-    chess.resist = 0;//1阻挡0不阻挡
-    chess.class = 0;//0地块,1人物,2召唤物
-    chess.style.zIndex = 0;//地块0,人物5,动画粒子等20+
+    chess.skillfunction = function (id) {//全局技能模块
+        var chess = document.getElementById(id);
+    }
+    chess.resist = 1;//1阻挡0不阻挡
+    chess.class = 1;//0地块,1人物,2召唤物
+    chess.style.zIndex = 5;//地块0,人物5,动画粒子等20+
     chess.data = new Array(1000);//数据
     //tag
 
@@ -60,7 +56,7 @@ function chess2001(x, y) {//基础地块
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
     chess.setAttribute("onclick", "selector(id)")
-    document.getElementById("board").appendChild(chess);
+    if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
     id++;
     overall_skill();
 }

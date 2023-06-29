@@ -14,9 +14,9 @@ function chess7(x, y) {//军火商
     chess.max_movement = 13;//1~20 5
     chess.movement = 13;
     chess.reflect = 7;//1~20 5   -1不可行动
-    skill1.innerHTML = '选择一个位置<img height="25px" width="25px" id="input7_1_1" onclick="input(2,id,1)">放置一架机枪。当自身靠近机枪周围四格，可操控机枪。<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-    skill2.innerHTML = '选择一个位置<img height="25px" width="25px" id="input7_2_1" onclick="input(2,id,1)">放置一门大炮。当自身靠近机枪周围四格，可操控大炮。<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '选择一个位置<img height="25px" width="25px" id="input7_3_1" onclick="input(2,id,1)">放置一袋沙袋。每回合可发动三次<button style="position: absolute;right: 0px;bottom: 0px;height: 25px;width:25px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill1.innerHTML = '选择一个位置<img height="25px" width="25px" id="input7_1_1" onclick="input(2,id,1)">放置一架机枪。当自身靠近机枪周围四格，可操控机枪。<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    skill2.innerHTML = '选择一个位置<img height="25px" width="25px" id="input7_2_1" onclick="input(2,id,1)">放置一门大炮。当自身靠近机枪周围四格，可操控大炮。<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill3.innerHTML = '选择一个位置<img height="25px" width="25px" id="input7_3_1" onclick="input(2,id,1)">放置一袋沙袋。每回合可发动三次<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
         if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
@@ -105,6 +105,7 @@ function chess7(x, y) {//军火商
                 if (dir == 2) { if (detect_resist(chess.x + count, chess.y) == 0) { chess.x += count } }
                 if (dir == 3) { if (detect_resist(chess.x, chess.y - count) == 0) { chess.y -= count } }
                 if (dir == 4) { if (detect_resist(chess.x - count, chess.y) == 0) { chess.x -= count } }
+                if (dir == 5) { if (detect_resist(count[0], count[1]) == 0) { chess.x = count[0]; chess.y = count[1]; } }
             }
         }
         chess.style.left = (chess.x - 1) * 25 + "px";
@@ -166,7 +167,7 @@ function chess7(x, y) {//军火商
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
     chess.setAttribute("onclick", "selector(id)")
-    document.getElementById("board").appendChild(chess);
+    if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
     id++;
     overall_skill();
 }
