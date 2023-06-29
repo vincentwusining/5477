@@ -7,85 +7,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>game</title>
     <script>
-        var round = 1;
+        var round = 0;
         var id = 1;/*动态id*/
         var pid = 10000;/*特效动态id*/
-        var state = 0;/*0正常选择,1等待输入对象人物,2等待输入坐标*/;
+        var state = 0;/*0正常选择,1等待输入对象人物,2等待输入坐标,3范围演示*/;
         var selectid = 0;/*选择目标*/
         var control = 1;/*控制区状态*/
         var range = 0;//选择范围
-        var active_fixedid = -1;
+        var active_fixedid = 2;
         var last_reflect = 9999;
         var acted_fixedid = new Array(10000);
 
         function next_act() {//下一行动
-            var chess = document.getElementById("board").children;
-            var active_reflect = -1;
-            var active_movement = -1;
-            var active_id = id + 1;
-            var act_find = 0;
-            active_fixedid = -1;
-            for (var i = 0; i < chess.length; i++) {//找
-                if (chess[i].class != 0 && acted_fixedid[chess[i].fixedid] != 1 && chess[i].reflect <= last_reflect && chess[i].reflect >= 0) {//不是地块，未行动过，比上一个行动的人的反应小，反应大于等于0
-                    if (chess[i].fixedid == active_fixedid) continue;
-                    if (chess[i].reflect > active_reflect) {
-                        active_reflect = chess[i].reflect;
-                        active_movement = chess[i].max_movement;
-                        active_id = chess[i].id;
-                        active_fixedid = chess[i].fixedid;
-                        act_find = 1;
+            if (round == 0) {
+                var board = document.getElementById("board").children;
+                round += 1;
+                document.getElementById("round").innerHTML = round;
+                for (var i = 0; i < board.length; i++) {
+                    if (board[i].fixedid == 2) {
+                        board[i].hitfunction(board[i].id, -10, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                        break;
                     }
-                    else if (chess[i].reflect == active_reflect) {
-                        if (chess[i].movement > active_movement) {
+                }
+            }
+            else {
+                var chess = document.getElementById("board").children;
+                var active_reflect = -1;
+                var active_movement = -1;
+                var active_id = id + 1;
+                var act_find = 0;
+                active_fixedid = -1;
+                for (var i = 0; i < chess.length; i++) {//找
+                    if (chess[i].class != 0 && acted_fixedid[chess[i].fixedid] != 1 && chess[i].reflect <= last_reflect && chess[i].reflect >= 0) {//不是地块，未行动过，比上一个行动的人的反应小，反应大于等于0
+                        if (chess[i].fixedid == active_fixedid) continue;
+                        if (chess[i].reflect > active_reflect) {
                             active_reflect = chess[i].reflect;
                             active_movement = chess[i].max_movement;
                             active_id = chess[i].id;
                             active_fixedid = chess[i].fixedid;
                             act_find = 1;
                         }
-                        else if (chess[i].movement == active_movement) {
-                            if (chess[i].id < active_id) {
+                        else if (chess[i].reflect == active_reflect) {
+                            if (chess[i].movement > active_movement) {
                                 active_reflect = chess[i].reflect;
                                 active_movement = chess[i].max_movement;
                                 active_id = chess[i].id;
                                 active_fixedid = chess[i].fixedid;
                                 act_find = 1;
                             }
+                            else if (chess[i].movement == active_movement) {
+                                if (chess[i].id < active_id) {
+                                    active_reflect = chess[i].reflect;
+                                    active_movement = chess[i].max_movement;
+                                    active_id = chess[i].id;
+                                    active_fixedid = chess[i].fixedid;
+                                    act_find = 1;
+                                }
+                            }
                         }
                     }
                 }
-            }
-            selector(0);
-            controller(0);
-            if (act_find == 0) {
-                round += 1;
-                last_reflect = 9999;
-                for (var i = 0; i < chess.length; i++) {
-                    if (chess[i].class != 0) {
-                        chess[i].movement = chess[i].max_movement;
-                        if (chess[i].skill1_cooling > 0) { chess[i].skill1_cooling -= 1; }
-                        if (chess[i].skill2_cooling > 0) { chess[i].skill2_cooling -= 1; }
-                        if (chess[i].skill3_cooling > 0) { chess[i].skill3_cooling -= 1; }
+                selector(0);
+                controller(0);
+                if (act_find == 0) {//没找到
+                    round += 1;
+                    last_reflect = 9999;
+                    for (var i = 0; i < chess.length; i++) {
+                        if (chess[i].class != 0) {
+                            chess[i].movement = chess[i].max_movement;
+                            if (chess[i].skill1_cooling > 0) { chess[i].skill1_cooling -= 1; }
+                            if (chess[i].skill2_cooling > 0) { chess[i].skill2_cooling -= 1; }
+                            if (chess[i].skill3_cooling > 0) { chess[i].skill3_cooling -= 1; }
+                        }
+                    }
+                    acted_fixedid = new Array(10000);
+                    document.getElementById("round").innerHTML = round;
+                    document.getElementById("next").style.backgroundImage = "";
+                }
+                else {//找到了
+                    document.getElementById("next").style.backgroundImage = "url(" + document.getElementById(active_id).img + ")";
+                    document.getElementById("next").style.backgroundSize = "50px 50px";
+                    last_reflect = document.getElementById(active_id).reflect;
+                    acted_fixedid[active_fixedid] = 1;
+                    var num = 0;
+                    for (var i = 0; i < chess.length; i++) {//找可行动人数量
+                        if (chess[i].fixedid == active_fixedid) { num++; }
+                    }
+                    if (num == 1) {//自动选择
+                        selector(active_id);
                     }
                 }
-                acted_fixedid = new Array(10000);
-                document.getElementById("round").innerHTML = round;
-                document.getElementById("next").style.backgroundImage = "";
+                overall_skill();
             }
-            else {
-                document.getElementById("next").style.backgroundImage = "url(" + document.getElementById(active_id).img + ")";
-                document.getElementById("next").style.backgroundSize = "50px 50px";
-                last_reflect = document.getElementById(active_id).reflect;
-                acted_fixedid[active_fixedid] = 1;
-                var num = 0;
-                for (var i = 0; i < chess.length; i++) {//找可行动人数量
-                    if (chess[i].fixedid == active_fixedid) { num++; }
-                }
-                if (num == 1) {//自动选择
-                    selector(active_id);
-                }
-            }
-            overall_skill();
         }
         function overall_skill() {//全局技能模块
             var chess = document.getElementById("board").children;
@@ -100,28 +113,16 @@
 
         function input(form, id, r) {//1人物2坐标
             var chess = document.getElementById(selectid);
-            if (chess.fixedid == active_fixedid && chess.reflect != -1) {
+            if (chess.fixedid == active_fixedid || form == 3) {
                 if (state == 0) {
-                    if (form == 1) {
-                        state = 1;
-                        range = r;
-                        var input = document.getElementById("controller_page3").querySelector("#" + id);
-                        input.src = "./img/void.png";
-                        input.value = new Number;
-                        input.style.backgroundColor = "rgb(76, 244, 10,0.5)";
-                        input.setAttribute("class", "waiting");
-                        range_display(1);
-                    }
-                    if (form == 2) {
-                        state = 2;
-                        range = r;
-                        var input = document.getElementById("controller_page3").querySelector("#" + id);
-                        input.src = "./img/void.png";
-                        input.value = new Number;
-                        input.style.backgroundColor = "rgb(76, 244, 10,0.5)";
-                        input.setAttribute("class", "waiting");
-                        range_display(1);
-                    }
+                    state = form;
+                    range = r;
+                    var input = document.getElementById("controller_page3").querySelector("#" + id);
+                    input.src = "./img/void.png";
+                    input.value = new Number;
+                    input.style.backgroundColor = "rgb(76, 244, 10,0.5)";
+                    input.setAttribute("class", "waiting");
+                    range_display(1);
                 }
                 else if (state != 0) {
                     state = 0;
@@ -628,13 +629,13 @@
             chess.style.left = (chess.x - 1) * 25 + "px";
             chess.style.bottom = (chess.y - 1) * 25 + "px";
             chess.setAttribute("onclick", "selector(id)")
-            document.getElementById("board").appendChild(chess);
+            if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
             id++;
             overall_skill();
         }
     </script>
     <script src="./character/chess1.js">//勇者</script>
-    <script src="./character/chess2.js">//</script>
+    <script src="./character/chess2.js">//操作员</script>
     <script src="./character/chess3.js">//</script>
     <script src="./character/chess4.js">//</script>
     <script src="./character/chess5.js">//无人机操控者</script>
@@ -643,12 +644,20 @@
     <script src="./character/chess8.js">//</script>
     <script src="./character/chess9.js">//定神游</script>
     <script src="./character/chess10.js">//</script>
+    <script src="./character/chess1001.js">//障碍物</script>
     <script src="./character/chess1005.js">//战斗无人机</script>
     <script src="./character/chess1006.js">//救治无人机</script>
     <script src="./character/chess1007.js">//机枪</script>
     <script src="./character/chess1008.js">//大炮</script>
     <script src="./character/chess1009.js">//沙袋</script>
     <script src="./character/chess2001.js">//基础地块</script>
+    <script src="./character/chess2002.js">//石块</script>
+    <script src="./character/chess2003.js">//石砖</script>
+    <script src="./character/chess2004.js">//苔石砖</script>
+    <script src="./character/chess2005.js">//草地</script>
+    <script src="./character/chess2006.js">//积水草地</script>
+    <script src="./character/chess2007.js">//芦苇</script>
+    <script src="./character/chess2008.js">//地刺</script>
     <style>
         chess0 {
             display: block;
@@ -661,6 +670,10 @@
         p {
             margin: 0px;
         }
+
+        button {
+            height: 40px;
+        }
     </style>
 </head>
 
@@ -668,7 +681,7 @@
     <div
         style="display: flex; flex-direction: row; height: 50px;background-color: #393d49;background: url(img/back1.png) no-repeat;background-size:100% 100px;">
         <p style="background-color: black;color: white;width: 200px;font-size:30px;padding: 5px;">回合: <b
-                id="round">1</br></p>
+                id="round">0</br></p>
         <p id="next"
             style="position: absolute;right: 0px;height: 50px;width: 50px;cursor: pointer;background-color: white;color: rgb(1,1,1,0.5);"
             onclick="next_act()">
@@ -680,12 +693,66 @@
     </div>
     <div hidden id="overall_skill"></div>
     <script>//生成地块
-        for (var i = 1; i <= 16; i++) {
-            for (var j = 1; j <= 16; j++) {
-                chess2001(i, j);
+        var r = Math.ceil(Math.random() * 3);
+        if (r == 1) {//基础地块
+            for (var i = 1; i <= 16; i++) {
+                for (var j = 1; j <= 16; j++) {
+                    chess2001(i, j);
+                }
             }
         }
-        var b = document.getElementById("board").children;
+        else if (r == 2) {//石质地块
+            for (var i = 1; i <= 16; i++) {
+                for (var j = 1; j <= 16; j++) {
+                    var k = Math.ceil(Math.random() * 3);
+                    if (k == 1) {
+                        chess2002(i, j);
+                    }
+                    if (k == 2) {
+                        chess2003(i, j);
+                    }
+                    if (k == 3) {
+                        chess2004(i, j);
+                    }
+                }
+            }
+        }
+        else if (r == 3) {//草地
+            for (var i = 1; i <= 16; i++) {
+                for (var j = 1; j <= 16; j++) {
+                    var k = Math.ceil(Math.random() * 1);
+                    if (k == 1) {
+                        chess2005(i, j);
+                    }
+                    if (k == 2) {
+                        chess2007(i, j);
+                    }
+                }
+            }
+        }
+    </script>
+    <script>//随机事件
+        var r = Math.ceil(Math.random() * 1);
+        if (r == 1) {
+            var board = document.getElementById("board").children;
+            for (var i = 1; i <= 16; i++) {
+                var x1 = Math.ceil(Math.random() * 16);
+                var y1 = Math.ceil(Math.random() * 16);
+                for (var j = 0; j < board.length; j++) {
+                    if (board[j].x == x1 && board[j].y == y1) {
+                        document.getElementById("board").removeChild(board[j]);
+                    }
+                }
+                chess2008(x1, y1);
+            }
+        }
+        else if (r == 2) { }
+        else if (r == 3) { }
+        else if (r == 4) { }
+        else if (r == 5) { }
+        else if (r == 6) { }
+        else if (r == 7) { }
+        else if (r == 8) { }
     </script>
     <div style="display: flex;">
         <!--目标选择器-->
@@ -738,7 +805,8 @@
                     <button onclick="chess6(1,16)">红王</button>
                     <button onclick="chess1005(1,6)">无人机</button>
                     <button onclick="chess7(1,1)">军火商</button>
-                    <button onclick="chess9(16,1)">定神游</button>
+                    <button onclick="chess9(2,1)">定神游</button>
+                    <button onclick="chess2(8,8)">操作员</button>
                 </div>
                 <!--2移-->
                 <div id="controller_page2" hidden
