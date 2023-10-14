@@ -125,11 +125,18 @@
             white.style.position = 'fixed';
             white.style.display = 'block';
             white.style.zIndex = 100;
-            white.style.top = 0;
-            white.style.left = 0;
-            white.src = "img/white.png";
-            white.width = window.screen.width;
-            white.height = window.screen.height;
+            white.src = "img/white.png"; if (isMobile && window.orientation == 0) {
+                white.width = window.screen.height;
+                white.height = window.screen.width;
+                white.style.top = (white.width - white.height) / 2 + 'px';
+                white.style.left = (white.height - white.width) / 2 + 'px';
+                white.style.transform = 'rotate(90deg)';
+            } else {
+                white.style.width = '100vw';
+                white.style.height = '100vh';
+                white.style.top = 0;
+                white.style.left = 0;
+            }
             white.id = 'white';
             document.getElementById("body").appendChild(white);
             var genshin = document.createElement("img");
