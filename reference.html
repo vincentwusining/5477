@@ -138,15 +138,15 @@
             genshin.style.zIndex = 101;
             genshin.src = "img/genshin.png";
             alert(navigator.userAgent);
-            if (isMobile) {
+            if (isMobile && window.orientation == 0) {
                 genshin.width = window.screen.height;
                 genshin.height = window.screen.width;
                 genshin.style.top = (genshin.width - genshin.height) / 2 + 'px';
                 genshin.style.left = (genshin.height - genshin.width) / 2 + 'px';
                 genshin.style.transform = 'rotate(90deg)';
             } else {
-                genshin.width = window.screen.width;
-                genshin.height = window.screen.height;
+                genshin.style.width = '100vw';
+                genshin.style.height = '100vh';
                 genshin.style.top = 0;
                 genshin.style.left = 0;
             }
