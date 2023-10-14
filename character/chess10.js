@@ -1,4 +1,4 @@
-function model(x, y) {//名称
+function chess10(x, y) {//选择模式
     var chess = document.createElement("chess0");
     var skill1 = document.createElement("skill");
     var skill2 = document.createElement("skill");
@@ -6,21 +6,21 @@ function model(x, y) {//名称
     chess.id = id;
 
     //以下需改动
-    chess.fixedid = ;//1~1000人物1001~2000召唤物2001~3000地块
-    chess.img = "./img/chess.png";
-    chess.name = "";
-    chess.max_health = 20;//1~30 20
+    chess.fixedid = 10;//1~1000人物1001~2000召唤物2001~3000地块
+    chess.img = "./img/chess10.png";
+    chess.name = "选择模式";
+    chess.max_health = 10;//1~30 20
     chess.health = 20;
     chess.max_movement = 5;//1~20 5
     chess.movement = 5;
-    chess.reflect = 5;//1~20 5   -1不可行动
-    skill1.innerHTML = '<img height="25px" width="25px" id="input0_1_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    chess.reflect = -1;//1~20 5   -1不可行动
+    skill1.innerHTML = '进入PVE模式，自杀。可在任意回合发动<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
     skill2.innerHTML = '<img height="25px" width="25px" id="input0_2_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
     skill3.innerHTML = '<img height="25px" width="25px" id="input0_3_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
-        if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
-            var input1 = document.getElementById("controller_page3").querySelector("#input0_1_1").value;
+        if (chess.skill1_cooling <= 0) {
+
             chess.skill1_cooling = chess.skill1_max_cooling;
             skill(1);
             overall_skill();
@@ -44,21 +44,21 @@ function model(x, y) {//名称
             overall_skill();
         }
     }
-    chess.skill1_src = "./img/skill0.png";//skill1
-    chess.skill1_name = "无";
-    chess.skill1_max_cooling = 1;
-    chess.skill1_cooling = ;
-    chess.skill1_class = ;//1主动0被动
+    chess.skill1_src = "./img/skill-2.png";//skill1
+    chess.skill1_name = "PVE";
+    chess.skill1_max_cooling = 0;
+    chess.skill1_cooling = 0;
+    chess.skill1_class = 1;//1主动0被动
     chess.skill2_src = "./img/skill0.png";//skill2
     chess.skill2_name = "无";
-    chess.skill2_max_cooling = 1;
-    chess.skill2_cooling = ;
-    chess.skill2_class = ;
+    chess.skill2_max_cooling = 0;
+    chess.skill2_cooling = 0;
+    chess.skill2_class = 1;
     chess.skill3_src = "./img/skill0.png";//skill3
     chess.skill3_name = "无";
-    chess.skill3_max_cooling = 1;
-    chess.skill3_cooling =;
-    chess.skill3_class = ;
+    chess.skill3_max_cooling = 0;
+    chess.skill3_cooling = 0;
+    chess.skill3_class = 1;
     chess.movefunction = function (id, dir, count, form, source, x, y) {//form0主动1被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送,5为定点传送
         var chess = document.getElementById(id);
         if (form == 0 && chess.fixedid == active_fixedid) {//走路

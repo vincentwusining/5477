@@ -16,7 +16,7 @@ function chess2(x, y) {//操作员
     chess.reflect = 50;//1~20 5   -1不可行动
     skill1.innerHTML = '在<img height="25px" width="25px" id="input2_1_1" onclick="input(2,id,12)">生成一个障碍物<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
     skill2.innerHTML = '将目标<img height="25px" width="25px" id="input2_2_1" onclick="input(1,id,12)">传送至<img height="25px" width="25px" id="input2_2_2" onclick="input(2,id,12)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '可在第0回合任意行动。其他人物不可在第0回合行动、生效。在第0回合外自身收到10点伤害。<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill3.innerHTML = '可在第0回合任意行动。在第0回合外自身收到10点伤害。';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
         if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
@@ -61,7 +61,7 @@ function chess2(x, y) {//操作员
             if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0 && chess.movement >= 1) { chess.x += 1; chess.movement -= 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
             if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0 && chess.movement >= 1) { chess.y -= 1; chess.movement -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
             if (dir == 4) { if (chess.direction == 4) { if (detect_resist(chess.x - 1, chess.y) == 0 && chess.movement >= 1) { chess.x -= 1; chess.movement -= 1 } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
-            selector(id);
+            selector(id, 1);
         }
         else if (form == 1) {
             if (dir == 0) {
@@ -123,8 +123,10 @@ function chess2(x, y) {//操作员
     }
     chess.resist = 1;//1阻挡0不阻挡
     chess.class = 1;//0地块,1人物,2召唤物
-    chess.style.zIndex = 5;//地块0,人物5,动画粒子等20+
+    chess.style.zIndex = 105;//地块0~100,人物105,动画粒子等120+
     chess.data = new Array(1000);//数据
+    chess.enemy = 0;
+    chess.trap = 0;
     //tag
 
     chess.attack_add = 0;
@@ -145,7 +147,7 @@ function chess2(x, y) {//操作员
     chess.style.backgroundImage = "url(" + chess.img + ")";
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
-    chess.setAttribute("onclick", "selector(id)")
+    chess.setAttribute("onclick", "selector(id,0)")
     if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
     id++;
     overall_skill();

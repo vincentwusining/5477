@@ -58,6 +58,47 @@
             background-color: rgb(60, 60, 60, 0.4);
             transition: 0s
         }
+
+        p.md {
+            color: mediumblue;
+            text-decoration: underline;
+            text-decoration-color: mediumblue;
+            display: inline
+        }
+
+        @keyframes white {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes genshin {
+            0% {
+                opacity: 0;
+            }
+
+            87.5% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        img#white {
+            opacity: 0;
+            animation: white 7s forwards;
+        }
+
+        img#genshin {
+            opacity: 0;
+            animation: genshin 8s forwards;
+        }
     </style>
     <script>
         function index() {
@@ -73,12 +114,54 @@
             window.location.assign("./log.html");
         }
         function index4() {
-            window.location.assign("./test.html");
+            var userAgent = navigator.userAgent;
+            var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+            var audio = document.createElement('embed');
+            audio.src = 'audio/genshin.mp3';
+            audio.width = 0;
+            audio.height = 0;
+            document.getElementById("body").appendChild(audio);
+            var white = document.createElement("img");
+            white.style.position = 'fixed';
+            white.style.display = 'block';
+            white.style.zIndex = 100;
+            white.style.top = 0;
+            white.style.left = 0;
+            white.src = "img/white.png";
+            white.width = window.screen.width;
+            white.height = window.screen.height;
+            white.id = 'white';
+            document.getElementById("body").appendChild(white);
+            var genshin = document.createElement("img");
+            genshin.style.position = 'fixed';
+            genshin.style.display = 'block';
+            genshin.style.zIndex = 101;
+            genshin.src = "img/genshin.png";
+            if (isMobile) {
+                genshin.width = window.screen.height;
+                genshin.height = window.screen.width;
+                genshin.style.top = (genshin.width - genshin.height) / 2 + 'px';
+                genshin.style.left = (genshin.height - genshin.width) / 2 + 'px';
+                genshin.style.transform = 'rotate(90deg)';
+            } else {
+                genshin.width = window.screen.width;
+                genshin.height = window.screen.height;
+                genshin.style.top = 0;
+                genshin.style.left = 0;
+            }
+            genshin.id = 'genshin'
+            document.getElementById("body").appendChild(genshin);
+            setTimeout(function () { removeall() }, 7000);
+        }
+        function removeall() {
+            while (document.getElementById('body').children.length > 3) {
+                document.getElementById('body').removeChild(document.getElementById('body').children[0]);
+            }
         }
     </script>
 </head>
 
-<body style="margin: 0px;">
+<body id="body" style="margin: 0px;">
     <div
         style="display: flex; flex-direction: row-reverse; height: 50px;background-color: #393d49;background: url(img/back1.png) no-repeat;background-size:100% 100px;">
         <p onclick="index()"
@@ -86,15 +169,16 @@
         <button style="z-index: 10;">1<span onclick="index1()">自制游戏</span></button>
         <button style="z-index: 9;">2<span onclick="index2()">参考</span></button>
         <button style="z-index: 8;">3<span onclick="index3()">日志</span></button>
-        <button style="z-index: 7;">4<span onclick="index4()">内容</span></button>
+        <button style="z-index: 7;">4<span id="genshin" onclick="index4()">元气</span></button>
     </div>
+    <script>document.getElementById('genshin').addEventListener('click', function () { document.documentElement.requestFullscreen() })</script>
     <script>sk - cGzB0UqLQ3wiT4bw27C1T3BlbkFJtw3VrfVKYMQyQWoLvOvncd</script>
 
-    <head>很多东西你可能看不懂，但我只是纯粹把这里当记事本了(</head><br><br><br>
+    <p>很多东西你可能看不懂，但我只是纯粹把这里当记事本了(</p><br><br><br>
     <p>同一角色只可上场一个。每个人物、地块可以在除了技能目标选择时之外的任何时间被选中，并查看属性、技能。但只有在自己回合内才可移动、使用技能。</p>
     <p>生成模块(x,y)</p>
     <p>选择模块(id)</p>
-    <p>受击模块(id,减少血量,减少最大血量,减少移动,减少最大移动,减少反应,伤害类型 物0真1,0索敌/1索地,来源目标,来源位置x,来源位置y,)<br>//成功造成伤害返回1</p>
+    <p>受击模块(id,减少血量,减少最大血量,减少移动,减少最大移动,减少反应,伤害类型 物0真1,0索敌/1索地,来源目标,来源位置x,来源位置y,)</p>
     <p>移动模块(id,方向01234无上右下左,格数,类型0主动1被动,来源目标,来源位置x,来源位置y)</p>
     <p>被动移动时若方向为0，则自动判定为朝来源方向移动，格数大于0推，小于0拉。格数绝对值若大于1，则一格一格进行，也就是最多只能在九宫格内移动。推拉会先检测当前位置的相对方向的位置是否阻挡，然后预测最终位置，判断位置是否阻挡。若方向不为0，则视为传送，无论格数绝对值是否为1，都一次执行，并且只探测目标位置是否阻挡。
     </p>
@@ -121,12 +205,49 @@
     <p>active_movement：初始0</p>
     <p>active_id：初始为id+1</p>
     <p>acted_fixedid:数组</p>
-    <p>ai：寻路：可抵达，则选择需走格数最少的路线，若因障碍物无法抵达，则寻找需攻击伤害最少的路线</p>
+    <p>ai：先索敌，判断是否攻击，再根据敌人定位，再寻路移动，每移动都判断一次是否攻击。</p>
+    <p>索敌：就近：就近敌人。算计：计算寻路最优的敌人。斩首：血量最低的人物。</p>
+    <p class="md" onclick="alert('索敌模块：选择就近敌人')">就近
+    </p>
+    <p class="md" onclick="alert('索敌模块：计算选择寻路最优的敌人')">算计
+    </p>
+    <p class="md" onclick="alert('索敌模块：选择血量最低的人物（非召唤物）')">斩首
+    </p>
+    <p>定位：近战：超敌人靠近。远战：控制敌人在攻击边缘。场外：远离敌人</p>
+    <p class="md" onclick="alert('定位模块：超敌人靠近')">近战
+    </p>
+    <p class="md" onclick="alert('定位模块：让敌人处于自己攻击边缘')">远战</p>
+    <p class="md" onclick="alert('定位模块：远离敌人')">场外
+    </p>
+    <p>寻路：懦弱：能抵达总是绕路，避开陷阱。演算：计算走格数+移动*所需攻击次数最小值，避开陷阱。莽撞：摧毁路上一切可摧毁障碍，不避开陷阱。</p>
+    <p class="md" onclick="alert('寻路模块：能直接抵达时总是绕路，避开陷阱。不能直接抵达则寻找所需攻击最少的路劲')">懦弱
+    </p>
+    <p class="md" onclick="alert('寻路模块：计算需要走格数+移动*所需停下攻击次数 最小的路劲，避开陷阱')">演算
+    </p>
+    <p class="md" onclick="alert('寻路模块：摧毁路上一切可摧毁障碍，不会绕路，不避开陷阱')">莽撞
+    </p>
+    <p>性格：暴虐：可攻击队友。团结：不可攻击队友</p>
+    <p class="md" onclick="alert('性格模块：可攻击队友）')">暴虐
+    </p>
+    <p class="md" onclick="alert('性格模块：不可攻击队友')">团结
+    </p>
+    <p>随机：随性50%。失心20%。马虎10%。清醒5%。严明0%。</p>
+    <p class="md" onclick="alert('随机模块：在决定是否移动/移动方向/是否攻击时 有50%可能不按照计划行动')">随性
+    </p>
+    <p class="md" onclick="alert('随机模块：在决定是否移动/移动方向/是否攻击时 有20%可能不按照计划行动')">失心
+    </p>
+    <p class="md" onclick="alert('随机模块：在决定是否移动/移动方向/是否攻击时 有10%可能不按照计划行动')">马虎
+    </p>
+    <p class="md" onclick="alert('随机模块：在决定是否移动/移动方向/是否攻击时 有5%可能不按照计划行动')">清醒
+    </p>
+    <p class="md" onclick="alert('随机模块：在决定是否移动/移动方向/是否攻击时 有0%可能不按照计划行动')">严明
+    </p>
     <p>全屏显示可能不全，但实际是全屏</p>
     <p>地板不能有主动技能，因为地板没有行动回合。</p>
     <p>需要有一个特殊状态数组，记录人物是否处于特殊状态。因为某些被动技能不应该在眩晕等状态停止，所以更改反应会出现诸多问题。</p>
     <p>技能若是因为条件不符无法发动，则不刷新技能页面，也就是保留选择</p>
     <p>初始特殊地形：祭坛：每三回合全屏一点伤害/每回合周围一点伤害。每两回合全屏拉三格。每回合推一格。多龙卷风拉+伤。占塔回血。占塔伤害。占塔小兵。地刺。</p>
+    <p>因为图层不能有小数负数，所以地块0~100,人物105,动画粒子等120+</p>
     <p></p>
     <p>人物设计：</p>
     <p>累计伤害</p>

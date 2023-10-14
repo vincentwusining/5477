@@ -9,8 +9,8 @@ function chess1001(x, y) {//障碍物
     chess.fixedid = 1001;//1~1000人物1001~2000召唤物2001~3000地块
     chess.img = "./img/chess1001.png";
     chess.name = "障碍物";
-    chess.max_health = 1;//1~30 20
-    chess.health = 1;
+    chess.max_health = 1000;//1~30 20
+    chess.health = 1000;
     chess.max_movement = 0;//1~20 5
     chess.movement = 0;
     chess.reflect = -1;//1~20 5   -1不可行动
@@ -33,8 +33,10 @@ function chess1001(x, y) {//障碍物
     }
     chess.resist = 1;//1阻挡0不阻挡
     chess.class = 1;//0地块,1人物,2召唤物
-    chess.style.zIndex = 5;//地块0,人物5,动画粒子等20+
+    chess.style.zIndex = 105;//地块0~100,人物105,动画粒子等120+
     chess.data = new Array(1000);//数据
+    chess.enemy = 0;
+    chess.trap = 0;
     //tag
 
     chess.attack_add = 0;
@@ -55,7 +57,7 @@ function chess1001(x, y) {//障碍物
     chess.style.backgroundImage = "url(" + chess.img + ")";
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
-    chess.setAttribute("onclick", "selector(id)")
+    chess.setAttribute("onclick", "selector(id,0)")
     if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
     id++;
     overall_skill();

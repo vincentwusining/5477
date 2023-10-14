@@ -38,7 +38,7 @@ function chess2008(x, y) {//地刺
             if (dir == 2) { if (chess.direction == 2) { if (detect_resist(chess.x + 1, chess.y) == 0 && chess.movement >= 1) { chess.x += 1; chess.movement -= 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
             if (dir == 3) { if (chess.direction == 3) { if (detect_resist(chess.x, chess.y - 1) == 0 && chess.movement >= 1) { chess.y -= 1; chess.movement -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
             if (dir == 4) { if (chess.direction == 4) { if (detect_resist(chess.x - 1, chess.y) == 0 && chess.movement >= 1) { chess.x -= 1; chess.movement -= 1 } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
-            selector(id);
+            selector(id, 1);
         }
         else if (form == 1) {//推拉\传送
             if (dir == 0) {//推拉
@@ -111,9 +111,11 @@ function chess2008(x, y) {//地刺
     }
     chess.resist = 0;//1阻挡0不阻挡
     chess.class = 0;//0地块,1人物,2召唤物
-    chess.style.zIndex = 0;//地块0,人物5,动画粒子等20+
+    chess.style.zIndex = 1;//地块0~100,人物105,动画粒子等120+
     chess.data = new Array(1000);//数据
     chess.data[1] = 0;//回合
+    chess.enemy = 0;
+    chess.trap = 1;
     //tag
 
     chess.attack_add = 0;
@@ -134,7 +136,7 @@ function chess2008(x, y) {//地刺
     chess.style.backgroundImage = "url(" + chess.img + ")";
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
-    chess.setAttribute("onclick", "selector(id)")
+    chess.setAttribute("onclick", "selector(id,0)")
     document.getElementById("board").appendChild(chess);
     id++;
     overall_skill();

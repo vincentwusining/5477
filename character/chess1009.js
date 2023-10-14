@@ -69,8 +69,10 @@ function chess1009(x, y) {//沙袋
     }
     chess.resist = 1;//1阻挡0不阻挡
     chess.class = 2;//0地块,1人物,2召唤物
-    chess.style.zIndex = 5;//地块0,人物5,动画粒子等20+
+    chess.style.zIndex = 105;//地块0~100,人物105,动画粒子等120+
     chess.data = new Array(1000);//数据
+    chess.enemy = 0;
+    chess.trap = 0;
     //tag
 
     chess.attack_add = 0;
@@ -91,7 +93,7 @@ function chess1009(x, y) {//沙袋
     chess.style.backgroundImage = "url(" + chess.img + ")";
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
-    chess.setAttribute("onclick", "selector(id)")
+    chess.setAttribute("onclick", "selector(id,0)")
     if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
     id++;
     overall_skill();
