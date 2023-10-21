@@ -97,10 +97,10 @@
             window.location.assign("./game.html");
         }
         function index2() {
-            window.location.assign("./reference.html");
+            window.location.assign("./tool.html");
         }
         function index3() {
-            window.location.assign("./log.html");
+            window.location.assign("./document.html");
         }
         function index4() {
             var userAgent = navigator.userAgent;
@@ -164,8 +164,8 @@
             style="cursor: pointer;margin: 5px;font-size: 30px;position: absolute;left: 0px; color: wheat">
             540</p>
         <button style="z-index: 10;">1<span onclick="index1()">自制游戏</span></button>
-        <button style="z-index: 9;">2<span onclick="index2()">参考</span></button>
-        <button style="z-index: 8;">3<span onclick="index3()">日志</span></button>
+        <button style="z-index: 9;">2<span onclick="index2()">奇妙工具</span></button>
+        <button style="z-index: 8;">3<span onclick="index3()">文档</span></button>
         <button style="z-index: 7;">4<span id="genshin" onclick="index4()">元气</span></button>
     </div>
     <script>document.getElementById('genshin').addEventListener('click', function () { document.documentElement.requestFullscreen() })</script>
@@ -173,6 +173,8 @@
     <div style="display: flex; flex-direction: column;align-items: center;">
         <p>日志：</p>
         <p></p>
+        <p>2023.10.21：更新索引‘测试，日志，参考，自制游戏’为‘元气，文档，奇妙工具，自制游戏’，更新随机起名</p>
+        <p>2023.10.14：更新原神启动</p>
         <p>2023.7.21：更改选择机制，点击同一个人可以选择下层人物，地块可叠加。</p>
         <p>2023.7.9：完成基础寻路，增加是否为陷阱属性，是否为敌方属性</p>
         <p>2023.7.5：完成AI的部分设定，添加史莱姆</p>

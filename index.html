@@ -97,10 +97,10 @@
       window.location.assign("./game.html");
     }
     function index2() {
-      window.location.assign("./reference.html");
+      window.location.assign("./tool.html");
     }
     function index3() {
-      window.location.assign("./log.html");
+      window.location.assign("./document.html");
     }
     function index4() {
       var userAgent = navigator.userAgent;
@@ -163,8 +163,8 @@
     <p onclick="index()" style="cursor: pointer;margin: 5px;font-size: 30px;position: absolute;left: 0px; color: wheat">
       540</p>
     <button style="z-index: 10;">1<span onclick="index1()">自制游戏</span></button>
-    <button style="z-index: 9;">2<span onclick="index2()">参考</span></button>
-    <button style="z-index: 8;">3<span onclick="index3()">日志</span></button>
+    <button style="z-index: 9;">2<span onclick="index2()">奇妙工具</span></button>
+    <button style="z-index: 8;">3<span onclick="index3()">文档</span></button>
     <button style="z-index: 7;">4<span id="genshin" onclick="index4()">元气</span></button>
   </div>
   <script>document.getElementById('genshin').addEventListener('click', function () { document.documentElement.requestFullscreen() })</script>
@@ -172,6 +172,7 @@
   <div style="display: flex; flex-direction: column;">
     <h2 style="margin: 15px;">最近更新了什么？</h2>
     <p style="margin: 15px;margin-bottom: 0px;"> &bull;更新元气</p>
+    <p style="margin: 15px;margin-bottom: 0px;"> &bull;更新随机起名</p>
     <p style="margin: 15px;margin-bottom: 0px;"> &bull;什么也没更新</p>
     <!-- <p style="margin: 15px;margin-bottom: 0px;"> &bull;开放PVE模式，可通过人物“选择模式”的技能进入PVE模式</p>
     <p style="margin: 15px;margin-bottom: 0px;"> &bull;可通过操作员在开局移动人物位置、放置障碍物</p>-->
@@ -181,7 +182,6 @@
     <p style="margin: 15px;margin-bottom: 0px;"> &bull;反应——决定人物行动顺序，反应越高，越先行动</p>
     <p style="margin: 15px;margin-bottom: 0px;"> &bull;移动——决定人物每回合移动格数</p>-->
     <h2 style="margin: 15px;">入口</h2>
-    <p style="margin: 15px;margin-bottom: 0px;"> &bull;点击右上角1自制游戏 或 <a href="./game.html">点击此处</a></p>
     <p style="margin: 15px;margin-bottom: 0px;"> &bull;点击右上角1自制游戏 或 <a href="./game.html">点击此处</a></p>
   </div>
 </body>
