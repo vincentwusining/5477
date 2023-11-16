@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img {
+            position: absolute;
+            width: 80px;
+            height: 100px;
+            border: 1px solid grey;
+        }
+    </style>
+    <script>
+        function place(money, oil, gold, food, clothes, smartphone) {
+            for (var i = 0; i < money; i++) {
+                var img = document.createElement("img");
+                img.src = "img/money.png"
+                img.style.height = 30 + 'px';
+                img.style.width = 30 + 'px';
+                img.style.border = 1 + 'px';
+                img.style.left = i * 1 + 'px';
+                img.style.bottom = i * 1 + 'px';
+                document.getElementById("money").appendChild(img);
+            }
+            for (var i = 0; i < oil; i++) {
+                var img = document.createElement("img");
+                img.src = "img/oil.png"
+                img.style.left = i * 6 + 'px';
+                img.style.bottom = i * 6 + 'px';
+                document.getElementById("oil").appendChild(img);
+            }
+            for (var i = 0; i < gold; i++) {
+                var img = document.createElement("img");
+                img.src = "img/gold.png"
+                img.style.left = i * 6 + 'px';
+                img.style.bottom = i * 6 + 'px';
+                img.innerHTML = img.left;
+                document.getElementById("gold").appendChild(img);
+            }
+            for (var i = 0; i < food; i++) {
+                var img = document.createElement("img");
+                img.src = "img/food.png"
+                img.style.left = i * 6 + 'px';
+                img.style.bottom = i * 6 + 'px';
+                img.innerHTML = img.left;
+                document.getElementById("food").appendChild(img);
+            }
+            for (var i = 0; i < clothes; i++) {
+                var img = document.createElement("img");
+                img.src = "img/clothes.png"
+                img.style.left = i * 6 + 'px';
+                img.style.bottom = i * 6 + 'px';
+                img.innerHTML = img.left;
+                document.getElementById("clothes").appendChild(img);
+            }
+            for (var i = 0; i < smartphone; i++) {
+                var img = document.createElement("img");
+                img.src = "img/smartphone.png"
+                img.style.left = i * 6 + 'px';
+                img.style.bottom = i * 6 + 'px';
+                img.innerHTML = img.left;
+                document.getElementById("smartphone").appendChild(img);
+            }
+        }
+        var a = 12;
+    </script>
+</head>
+
+<body style="background-color: rgb(233, 209, 181);">
+    <button id="team1"
+        style="position: absolute;top: 50px;left: 10px;width: 30px;height: 40px;font-size: 22px;">1</button>
+    <button id="team2"
+        style="position: absolute;top: 50px;left: 50px;width: 30px;height: 40px;font-size: 22px;">2</button>
+    <button id="team3"
+        style="position: absolute;top: 100px;left: 10px;width: 30px;height: 40px;font-size: 22px;">3</button>
+    <button id="team4"
+        style="position: absolute;top: 100px;left: 50px;width: 30px;height: 40px;font-size: 22px;">4</button>
+    <div id="money"
+        style="border: 2px dashed gray;position: absolute;top: 30px;right: 30px;width:30px;height: 30px;border-radius: 50%;">
+    </div>
+    <div id="oil"
+        style="border: 2px dashed gray;position: absolute;top: 250px;left: calc(33% - 40px);width:80px;height: 100px;">
+    </div>
+    <div id="gold"
+        style="border: 2px dashed gray;position: absolute;top: 250px;left:calc(66% - 40px);width:80px;height: 100px;">
+    </div>
+    <div id="food"
+        style="border: 2px dashed gray;position: absolute;top: 400px;left:calc(50% - 40px);width:80px;height: 100px;">
+    </div>
+    <div id="clothes"
+        style="border: 2px dashed gray;position: absolute;top: 400px;left:calc(25% - 40px);width:80px;height: 100px;">
+    </div>
+    <div id="smartphone"
+        style="border: 2px dashed gray;position: absolute;top: 400px;left:calc(75% - 40px);width:80px;height: 100px;">
+    </div>
+    <script>place(20, 4, 3, 2, 1, 5)</script>
+</body>
+
+</html>
