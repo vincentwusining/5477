@@ -10,11 +10,11 @@ function chess4(x, y) {//狂刀
     chess.fixedid = 4;//1~1000人物1001~2000召唤物2001~3000地块
     chess.img = "./img/chess4.png";
     chess.name = "狂刀";
-    chess.max_health = 20;//1~30 20
-    chess.health = 20;
+    chess.max_health = 10;//1~30 20
+    chess.health = 10;
     chess.max_movement = 7;//1~20 5
     chess.movement = 7;
-    chess.reflect = 5;//1~20 5   -1不可行动
+    chess.reflect = 7;//1~20 5   -1不可行动
     skill1.innerHTML = '选择一个目标<img height="25px" width="25px" id="input4_1_1" onclick="input(1,id,16)">若之间无障碍且移动足够，消耗对应移动冲刺至目标前，造成3点伤害，并击退1格<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
     skill2.innerHTML = '消耗7点移动，使下回合额外增加3点移动、冲锋伤害增加1点<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
     skill3.innerHTML = '受伤时，若移动足够，消耗3点移动抵挡1点伤害并对攻击者造成1点伤害';

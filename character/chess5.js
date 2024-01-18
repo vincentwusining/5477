@@ -9,11 +9,11 @@ function chess5(x, y) {//无人飞只因操作员
     chess.fixedid = 5;//1~1000人物1001~2000召唤物2001~3000地块
     chess.img = "./img/chess5.png";
     chess.name = "无人只因操控员";
-    chess.max_health = 17;
-    chess.health = 17;
+    chess.max_health = 7;
+    chess.health = 7;
     chess.max_movement = 4;
     chess.movement = 4;
-    chess.reflect = 7;
+    chess.reflect = 4;
     skill1.innerHTML = '选择位置<img height="25px" width="25px" id="input5_1_1" onclick="input(2,id,2)">生成一个战斗无人机<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
     skill2.innerHTML = '选择位置<img height="25px" width="25px" id="input5_2_1" onclick="input(2,id,2)">生成一个救治无人机<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
     skill3.innerHTML = '选择最多五个目标<img height="25px" width="25px" id="input5_3_1" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_2" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_3" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_4" onclick="input(1,id,12)"><img height="25px" width="25px" id="input5_3_5" onclick="input(1,id,12)">使其中的无人机进入暴走状态，持续两回合。两回合后对所有无人机造成100点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
@@ -96,13 +96,13 @@ function chess5(x, y) {//无人飞只因操作员
     chess.skill1_class = 1;//1主动0被动
     chess.skill2_src = "./img/skill5.2.png";//skill2
     chess.skill2_name = "救治只因";
-    chess.skill2_max_cooling = 5;
-    chess.skill2_cooling = 3;
+    chess.skill2_max_cooling = 4;
+    chess.skill2_cooling = 2;
     chess.skill2_class = 1;
     chess.skill3_src = "./img/skill-2.png";//skill3
     chess.skill3_name = "暴走";
     chess.skill3_max_cooling = 6;
-    chess.skill3_cooling = 6;
+    chess.skill3_cooling = 3;
     chess.skill3_class = 1;
     chess.movefunction = function (id, dir, count, form, source, x, y) {//form1主动0被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送
         var chess = document.getElementById(id);

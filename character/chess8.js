@@ -9,11 +9,11 @@ function chess8(x, y) {//拳击手
     chess.fixedid = 8;//1~1000人物1001~2000召唤物2001~3000地块
     chess.img = "./img/chess8.png";
     chess.name = "拳击手";
-    chess.max_health = 20;//1~30 20
-    chess.health = 20;
-    chess.max_movement = 5;//1~20 5
-    chess.movement = 5;
-    chess.reflect = 5;//1~20 5   -1不可行动
+    chess.max_health = 11;//1~30 20
+    chess.health = 11;
+    chess.max_movement = 6;//1~20 5
+    chess.movement = 6;
+    chess.reflect = 6;//1~20 5   -1不可行动
     skill1.innerHTML = '选择一个目标<img height="25px" width="25px" id="input8_1_1" onclick="input(1,id,1)">造成1点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
     skill2.innerHTML = '选择一个目标<img height="25px" width="25px" id="input8_2_1" onclick="input(1,id,1)">造成1点伤害并击退1格<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
     skill3.innerHTML = '选择一个目标<img height="25px" width="25px" id="input8_3_1" onclick="input(1,id,15)">造成1点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';

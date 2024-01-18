@@ -8,13 +8,13 @@ function chess1(x, y) {//忍者
     chess.fixedid = 1;
     chess.img = "./img/chess1.png";
     chess.name = "忍者";
-    chess.max_health = 2;
+    chess.max_health = 8;
     chess.health = 2;
-    chess.max_movement = 20;
-    chess.movement = 20;
-    chess.reflect = 20;
-    skill1.innerHTML = '选择周围四格内目标<img height="25px" width="25px" id="input1_1_1" onclick="input(1,id,1)">造成5点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-    skill2.innerHTML = '选择曼哈顿距离小于7的目标<img height="25px" width="25px" id="input1_2_1" onclick="input(1,id,7)">造成2点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    chess.max_movement = 5;
+    chess.movement = 5;
+    chess.reflect = 5;
+    skill1.innerHTML = '选择周围四格内目标<img height="25px" width="25px" id="input1_1_1" onclick="input(1,id,1)">造成2点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    skill2.innerHTML = '选择曼哈顿距离小于7的目标<img height="25px" width="25px" id="input1_2_1" onclick="input(1,id,7)">造成1点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
     skill3.innerHTML = '选择全屏目标<img height="25px" width="25px" id="input1_3_1" onclick="input(1,id,2)">(选填)将其推动3格。选择全屏目标<img height="25px" width="25px" id="input1_3_2" onclick="input(1,id,2)">(选填))将其拉动2格<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
@@ -63,7 +63,7 @@ function chess1(x, y) {//忍者
     chess.skill1_cooling = 0;
     chess.skill1_class = 1;
     chess.skill2_src = "./img/skill1.2.png";//skill2
-    chess.skill2_name = "远程攻击";
+    chess.skill2_name = "飞镖";
     chess.skill2_max_cooling = 2;
     chess.skill2_cooling = 0;
     chess.skill2_class = 1;
