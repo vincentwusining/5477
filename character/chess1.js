@@ -1,4 +1,4 @@
-function chess1(x, y) {//勇者
+function chess1(x, y) {//忍者
     var chess = document.createElement("chess0");
     var skill1 = document.createElement("skill");
     var skill2 = document.createElement("skill");
@@ -7,7 +7,7 @@ function chess1(x, y) {//勇者
 
     chess.fixedid = 1;
     chess.img = "./img/chess1.png";
-    chess.name = "勇士";
+    chess.name = "忍者";
     chess.max_health = 2;
     chess.health = 2;
     chess.max_movement = 20;
