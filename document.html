@@ -94,7 +94,7 @@
             window.location.assign("./index.html");
         }
         function index1() {
-            window.location.assign("./game.html");
+            window.location.assign("./gamehub.html");
         }
         function index2() {
             window.location.assign("./tool.html");
@@ -169,18 +169,10 @@
         <button style="z-index: 7;">4<span id="genshin" onclick="index4()">元气</span></button>
     </div>
     <script>document.getElementById('genshin').addEventListener('click', function () { document.documentElement.requestFullscreen() })</script>
-    <p class="p"
-        style="position:relative;left:100px;background-color:#3861dc;display:block;height: 40px;width:60px;font-size: 30px;border:3px solid darkblue"
+    <p style="position:relative;left:calc(50% - 30px);background-color:#3861dc;display:block;height: 40px;width:60px;font-size: 30px;border:3px solid darkblue"
         onclick="window.location.assign('./reference.html')">参考</p>
-    <p class="p"
-        style="position:relative;left:100px;background-color:#3861dc;display:block;height: 40px;width:60px;font-size: 30px;border:3px solid darkblue"
+    <p style="position:relative;left:calc(50% - 30px);background-color:#3861dc;display:block;height: 40px;width:60px;font-size: 30px;border:3px solid darkblue"
         onclick="window.location.assign('./log.html')">日志</p>
-    <script>
-        var p = document.getElementsByClassName('p');
-        for (var i = 0; i < p.length; i++) {
-            p[i].style.left = window.screen.width / 2 - 30 + "px";
-        }
-    </script>
 </body>
 
 </html>

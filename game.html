@@ -10,13 +10,15 @@
         var round = 0;
         var id = 1;/*动态id*/
         var pid = 10000;/*特效动态id*/
-        var state = 0;/*0正常选择,1等待输入对象人物,2等待输入坐标,3范围演示*/;
+        var state = 0;/*0正常选择,1等待输入对象人物,2等待输入坐标,3范围演示，4生人物*/;
         var selectid = 0;/*选择目标*/
         var control = 1;/*控制区状态*/
         var range = 0;//选择范围
         var active_fixedid = 2;
         var last_reflect = 9999;
         var acted_fixedid = new Array(10000);
+        var setting = [0, 0, 0]//空 地板0随机1基础2石质3草地，地图0随机，
+        var creation = 0;//生成人物
 
         function next_act() {//下一行动
             if (round == 0) {
@@ -111,7 +113,7 @@
             }
         }
 
-        function input(form, id, r) {//1人物2坐标
+        function input(form, id, r) {//1人物2坐标3范围演示
             var chess = document.getElementById(selectid);
             if (chess.fixedid == active_fixedid || form == 3) {
                 if (state == 0) {
@@ -193,6 +195,16 @@
                 return 0;
             } else if (r === 12) { // 全屏
                 return 1;
+            } else if (r === 15) { // 周围8格
+                if (Math.abs(x1 - x0) <= 1 && Math.abs(y1 - y0) <= 1) {
+                    return 1;
+                }
+                return 0;
+            } else if (r == 16) {
+                if ((x0 === x1 || y0 === y1) && abs_diff >= 4) {
+                    return 1;
+                }
+                return 0;
             }
         }
         function route(x1, y1, x2, y2, move, damage, hurt, cha) {//计算路劲 起始xy 目标xy 移动 伤害 是否攻击友方(性格) 寻路模块
@@ -243,7 +255,7 @@
             return ([boardsum[x2][y2][0], boardsum[x2][y2][1], boardsum[x2][y2][2], boardsum[x2][y2][3], boardsum[x2][y2][4]]);//返回方向[0]所需步数[1]第一步方向[2]攻击次数[3]攻击停留回合数[4]陷阱数
         }
 
-        function selector(id, force) {//选择器，id 是否强制选择
+        function selector(id, force) {//选择器，id 是否强制选择(强制为了防止选到下面一层去)
             if (id == 0) {//选择器0
                 document.getElementById("img").src = "./img/void.png";
                 document.getElementById("name").innerHTML = "";
@@ -370,6 +382,19 @@
                         range_display(0);
                     }
                 }
+                if (state == 4) {//生人
+                    var x = chess.x;
+                    var y = chess.y;
+                    if (creation == 1) { chess1(x, y); }
+                    if (creation == 2) { chess2(x, y); }
+                    if (creation == 4) { chess4(x, y); }
+                    if (creation == 5) { chess5(x, y); }
+                    if (creation == 6) { chess6(x, y); }
+                    if (creation == 7) { chess7(x, y); }
+                    if (creation == 8) { chess8(x, y); }
+                    if (creation == 9) { chess9(x, y); }
+                    state = 0;
+                }
             }
         }
         function controller(page) {/*控制器*/
@@ -477,6 +502,114 @@
                     if (document.getElementById(selectid).skill3_class == 1) {
                         page.childNodes[5].childNodes[1].innerHTML = "主动";
                     }
+                }
+            }
+        }
+
+        function set(x, n) {
+            if (x == 0) {//启动
+                document.getElementById('setting').classList.add('active');
+                document.getElementById('setting_1_0').style.backgroundColor = 'grey';
+                document.getElementById('setting_1_1').style.backgroundColor = 'grey';
+                document.getElementById('setting_1_2').style.backgroundColor = 'grey';
+                document.getElementById('setting_1_3').style.backgroundColor = 'grey';
+                var name1 = 'setting' + '_' + '1' + '_' + setting[1];
+                document.getElementById(name1).style.backgroundColor = 'aqua'
+                document.getElementById('setting_2_0').style.backgroundColor = 'grey';
+                document.getElementById('setting_2_1').style.backgroundColor = 'grey';
+                document.getElementById('setting_2_2').style.backgroundColor = 'grey';
+                var name2 = 'setting' + '_' + '2' + '_' + setting[2];
+                document.getElementById(name2).style.backgroundColor = 'orangered'
+            }
+            else if (x == -1) {//退出
+                document.getElementById('setting').classList.remove('active');
+            }
+            else {
+                setting[x] = n;
+                document.getElementById('setting_1_0').style.backgroundColor = 'grey';
+                document.getElementById('setting_1_1').style.backgroundColor = 'grey';
+                document.getElementById('setting_1_2').style.backgroundColor = 'grey';
+                document.getElementById('setting_1_3').style.backgroundColor = 'grey';
+                var name1 = 'setting' + '_' + '1' + '_' + setting[1];
+                document.getElementById(name1).style.backgroundColor = 'aqua'
+                document.getElementById('setting_2_0').style.backgroundColor = 'grey';
+                document.getElementById('setting_2_1').style.backgroundColor = 'grey';
+                document.getElementById('setting_2_2').style.backgroundColor = 'grey';
+                var name2 = 'setting' + '_' + '2' + '_' + setting[2];
+                document.getElementById(name2).style.backgroundColor = 'orangered'
+
+            }
+        }
+        function generate() {
+            while (document.getElementById('board').children.length > 0) {
+                document.getElementById('board').removeChild(document.getElementById('board').children[0]);
+            }
+            //生成地块
+            if (setting[1] == 0) {
+                var r = Math.ceil(Math.random() * 3);
+            } else if (setting[1] == 1) {
+                var r = 1;
+            } else if (setting[1] == 2) {
+                var r = 2;
+            } else if (setting[1] == 3) {
+                var r = 3;
+            }
+            if (r == 1) {//基础地块
+                for (var i = 1; i <= 16; i++) {
+                    for (var j = 1; j <= 16; j++) {
+                        chess2001(i, j);
+                    }
+                }
+            }
+            else if (r == 2) {//石质地块
+                for (var i = 1; i <= 16; i++) {
+                    for (var j = 1; j <= 16; j++) {
+                        var k = Math.ceil(Math.random() * 3);
+                        if (k == 1) {
+                            chess2002(i, j);
+                        }
+                        if (k == 2) {
+                            chess2003(i, j);
+                        }
+                        if (k == 3) {
+                            chess2004(i, j);
+                        }
+                    }
+                }
+            }
+            else if (r == 3) {//草地
+                for (var i = 1; i <= 16; i++) {
+                    for (var j = 1; j <= 16; j++) {
+                        var k = Math.ceil(Math.random() * 1);
+                        if (k == 1) {
+                            chess2005(i, j);
+                        }
+                        if (k == 2) {
+                            chess2007(i, j);
+                        }
+                    }
+                }
+            }
+            //生成建筑
+            if (setting[2] == 0) {
+                var r = Math.ceil(Math.random() * 2);
+            }
+            else if (setting[2] == 1) {
+                var r = 1;
+            }
+            else if (setting[2] == 2) {
+                var r = 2;
+            }
+            if (r == 1) {
+                var list = [[4, 1], [4, 2], [5, 3], [1, 5], [2, 5], [3, 5], [3, 12], [1, 9], [2, 9], [3, 9], [1, 13], [2, 13], [3, 13], [5, 16], [5, 15], [6, 14], [8, 1], [8, 2], [8, 3], [12, 1], [12, 2], [12, 3], [14, 3], [15, 4], [16, 4], [13, 11], [9, 16], [9, 15], [9, 14], [13, 16], [13, 15], [13, 14], [14, 8], [15, 8], [16, 8], [14, 12], [15, 12], [16, 12], [5, 12], [5, 11], [5, 10], [6, 8], [7, 8], [9, 8], [10, 8], [11, 9], [9, 11], [10, 6], [9, 12]]
+                for (var i = 0; i < list.length; i++) {
+                    chess1001(list[i][0], list[i][1]);
+                }
+            }
+            else if (r == 2) {
+                var list = [[1, 7], [1, 15], [1, 16], [2, 5], [2, 7], [2, 13], [2, 16], [3, 3], [3, 7], [3, 10], [3, 14], [4, 2], [4, 10], [4, 11], [5, 2], [5, 4], [5, 5], [5, 11], [6, 7], [6, 8], [6, 11], [6, 12], [6, 15], [7, 3], [7, 6], [7, 7], [8, 1], [8, 5], [8, 6], [8, 9], [8, 15], [8, 16], [9, 1], [9, 2], [9, 8], [9, 11], [9, 12], [9, 16], [10, 10], [10, 11], [10, 14], [11, 2], [11, 5], [11, 6], [11, 9], [11, 10], [12, 6], [12, 12], [12, 13], [12, 15], [13, 6], [13, 7], [13, 15], [14, 3], [14, 7], [14, 10], [14, 14], [15, 1], [15, 4], [15, 10], [15, 12], [16, 1], [16, 2], [16, 10]]
+                for (var i = 0; i < list.length; i++) {
+                    chess1001(list[i][0], list[i][1]);
                 }
             }
         }
@@ -734,14 +867,14 @@
             overall_skill();
         }
     </script>
-    <script src="./character/chess1.js">//勇者</script>
+    <script src="./character/chess1.js">//忍者</script>
     <script src="./character/chess2.js">//操作员</script>
     <script src="./character/chess3.js">//</script>
-    <script src="./character/chess4.js">//</script>
+    <script src="./character/chess4.js">//狂刀</script>
     <script src="./character/chess5.js">//无人机操控者</script>
     <script src="./character/chess6.js">//红王</script>
     <script src="./character/chess7.js">//军火商</script>
-    <script src="./character/chess8.js">//</script>
+    <script src="./character/chess8.js">//拳击手</script>
     <script src="./character/chess9.js">//定神游</script>
     <script src="./character/chess10.js">//</script>
     <script src="./character/chess1001.js">//障碍物</script>
@@ -787,13 +920,21 @@
             text-decoration-color: rgb(212, 108, 28);
             display: inline
         }
+
+        #setting:not(.active) {
+            display: none;
+        }
+
+        #setting.active {
+            display: block;
+        }
     </style>
 </head>
 
 <body style="margin:0px">
     <div
         style="display: flex; flex-direction: row; height: 50px;background-color: #393d49;background: url(img/back1.png) no-repeat;background-size:100% 100px;">
-        <p style="background-color: black;color: white;width: 200px;font-size:30px;padding: 5px;">回合: <b
+        <p style="background-color:black;color: white;width: 200px;font-size:30px;padding: 5px;">回合: <b
                 id="round">0</br></p>
         <p id="next"
             style="position: absolute;right: 0px;height: 50px;width: 50px;cursor: pointer;background-color: white;color: rgb(1,1,1,0.5);"
@@ -805,65 +946,9 @@
 
     </div>
     <div hidden id="overall_skill"></div>
-    <script>//生成地块
-        var r = Math.ceil(Math.random() * 3);
-        if (r == 1) {//基础地块
-            for (var i = 1; i <= 16; i++) {
-                for (var j = 1; j <= 16; j++) {
-                    chess2001(i, j);
-                }
-            }
-        }
-        else if (r == 2) {//石质地块
-            for (var i = 1; i <= 16; i++) {
-                for (var j = 1; j <= 16; j++) {
-                    var k = Math.ceil(Math.random() * 3);
-                    if (k == 1) {
-                        chess2002(i, j);
-                    }
-                    if (k == 2) {
-                        chess2003(i, j);
-                    }
-                    if (k == 3) {
-                        chess2004(i, j);
-                    }
-                }
-            }
-        }
-        else if (r == 3) {//草地
-            for (var i = 1; i <= 16; i++) {
-                for (var j = 1; j <= 16; j++) {
-                    var k = Math.ceil(Math.random() * 1);
-                    if (k == 1) {
-                        chess2005(i, j);
-                    }
-                    if (k == 2) {
-                        chess2007(i, j);
-                    }
-                }
-            }
-        }
-    </script>
-    <script>//随机事件
-        var r = Math.ceil(Math.random() * 1);
-        if (r == 1) {
-            var board = document.getElementById("board").children;
-            for (var i = 1; i <= 16; i++) {
-                var x1 = Math.ceil(Math.random() * 16);
-                var y1 = Math.ceil(Math.random() * 16);
-                chess2008(x1, y1);
-            }
-        }
-        else if (r == 2) { }
-        else if (r == 3) { }
-        else if (r == 4) { }
-        else if (r == 5) { }
-        else if (r == 6) { }
-        else if (r == 7) { }
-        else if (r == 8) { }
-    </script>
+    <script>generate()</script>
     <script>//测试
-    //document.getElementById(2).innerHTML = route(1, 1, 5, 5, 0, 0, 0, 0, 0)[0];
+        //document.getElementById(2).innerHTML = route(1, 1, 5, 5, 0, 0, 0, 0, 0)[0];
     </script>
     <div style="display: flex;">
         <!--目标选择器-->
@@ -897,7 +982,7 @@
         </div>
         <div style="display: flex;flex-direction: column;">
             <!--控制区索引-->
-            <div style="display: flex;flex-direction: row;height:30px;background-color: #393d49;width:212.5px;">
+            <div style="display: flex;flex-direction: row;height:30px;background-color: #393d49;width:200px;">
                 <button id="controller_button1" onclick="controller(1)"
                     style="background-color: #393d49;border-radius: 0px;height:30px;width:30px;border: 0px;">生</button>
                 <button id="controller_button2" onclick="controller(2)"
@@ -909,16 +994,19 @@
             <div style="background-color: aqua;height:170px;position: relative;">
                 <!--1生-->
                 <div id="controller_page1" hidden>
-                    <!--<button onclick="chess1(16,1)">勇者</button>
-                    <button onclick="chess2001(5,5)">地块</button>
-                    <button onclick="chess3(1,1)">小道行者</button>-->
-                    <button onclick="chess2(8,8)"
+                    <!--<button onclick="chess3(1,1)">小道行者</button>-->
+                    <button onclick="state=4;creation=2;"
                         style="border-radius: 5px;border-width: 1px;background-color: purple;">操作员</button>
-                    <button onclick="chess5(16,16)" style="border-radius: 5px;border-width: 1px;">无人机操控者</button>
-                    <button onclick="chess6(1,16)" style="border-radius: 5px;border-width: 1px;">红王</button>
-                    <button onclick="chess7(1,1)" style="border-radius: 5px;border-width: 1px;">军火商</button>
-                    <button onclick="chess9(2,1)" style="border-radius: 5px;border-width: 1px;">定神游</button>
-                    <button onclick="chess1010(2,1)" style="border-radius: 5px;border-width: 1px;">史莱姆</button>
+                    <button onclick="state=4;creation=1;" style="border-radius: 5px;border-width: 1px;">忍者</button>
+                    <button onclick="state=4;creation=4;" style="border-radius: 5px;border-width: 1px;">狂刀</button>
+                    <button onclick="state=4;creation=5;" style="border-radius: 5px;border-width: 1px;">无人机操控者</button>
+                    <button onclick="state=4;creation=6;" style="border-radius: 5px;border-width: 1px;">红王</button>
+                    <button onclick="state=4;creation=7;" style="border-radius: 5px;border-width: 1px;">军火商</button>
+                    <button onclick="state=4;creation=8;" style="border-radius: 5px;border-width: 1px;">拳击手</button>
+                    <button onclick="state=4;creation=9;" style="border-radius: 5px;border-width: 1px;">定神游</button>
+                    <button onclick="state=4;creation=1010;" style="border-radius: 5px;border-width: 1px;">史莱姆</button>
+                    <button onclick="set(0)"
+                        style="background-image:url('./img/setting.png');background-color: aqua;background-size: 50px 50px;width: 50px;height: 50px;border: 0px;position: absolute;bottom: 0px;right: 0px;"></button>
                 </div>
                 <!--2移-->
                 <div id="controller_page2" hidden
@@ -945,6 +1033,35 @@
                 </div>
             </div>
         </div>
+        <div id="setting" onclick="set(-1)"
+            style="z-index:490;height: 100%;width: 100%;background-color: rgb(0,0,0,0.5);position: fixed;top: 0px;left: 0px;">
+            <div id="setting_1"
+                style="width: 200px;height: 300px;background-color: white;position: fixed;top: 130px;left: calc(50% - 100px);z-index: 501;border-radius: 5px;">
+                <div>
+                    <button onclick="set(1,0)" id="setting_1_0"
+                        style="position: absolute;left: 20px;top: 20px;background-color: grey;border-radius: 5px;">随机地板</button>
+                    <button onclick="set(1,1)" id="setting_1_1"
+                        style="position: absolute;left: 110px;top: 20px;background-color: grey;border-radius: 5px;">基础地板</button>
+                    <button onclick="set(1,2)" id="setting_1_2"
+                        style="position: absolute;left: 20px;top: 80px;background-color: grey;border-radius: 5px;">石质地板</button>
+                    <button onclick="set(1,3)" id="setting_1_3"
+                        style="position: absolute;left: 110px;top: 80px;background-color: grey;border-radius: 5px;">草地地板</button>
+                </div>
+                <div>
+                    <button onclick="set(2,0)" id="setting_2_0"
+                        style="position: absolute;left: 20px;top: 140px;background-color: grey;border-radius: 5px;">随机地图</button>
+                    <button onclick="set(2,1)" id="setting_2_1"
+                        style="position: absolute;left: 110px;top: 140px;background-color: grey;border-radius: 5px;">一堆房间</button>
+                    <button onclick="set(2,2)" id="setting_2_2"
+                        style="position: absolute;left: 20px;top: 200px;background-color: grey;border-radius: 5px;">错综复杂</button>
+                </div>
+                <button onclick="generate()"
+                    style="width: 100px;height: 25px;position: absolute;bottom: 5px;right: 5px;">重新生成</button>
+            </div>
+        </div>
+        <script>
+            document.getElementById('setting_1').onclick = function (event) { event.stopPropagation(); }
+        </script>
     </div>
 </body>
 
