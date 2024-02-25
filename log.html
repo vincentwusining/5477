@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>log</title>
+    <style>
+        button {
+            display: flex;
+            color: white;
+            background-color: rgb(0, 0, 0, 0);
+            padding: 0px;
+            margin: 0px;
+            width: 50px;
+            height: 50px;
+            font-size: large;
+            transition: 0.5s;
+            align-items: center;
+            justify-content: center;
+            background: url(img/back.png) no-repeat;
+            background-size: 426px 50px;
+            border-right: 0px;
+            border-top: 0px;
+            border-bottom: 0px;
+        }
+
+        button:hover {
+            width: 150px;
+        }
+
+        button>span {
+            display: flex;
+            position: relative;
+            left: 25px;
+            color: white;
+            border: 0px;
+            margin: 0px;
+            padding: 0px;
+            height: 50px;
+            width: 0px;
+            opacity: 1;
+            align-items: center;
+            white-space: nowrap;
+            transition: all 0.5s;
+        }
+
+        button:hover>span {
+            width: 100px;
+        }
+
+        button:hover>span:active {
+            background-color: rgb(60, 60, 60, 0.4);
+            transition: 0s
+        }
+
+        @keyframes white {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes genshin {
+            0% {
+                opacity: 0;
+            }
+
+            87.5% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        img#white {
+            opacity: 0;
+            animation: white 7s forwards;
+        }
+
+        img#genshin {
+            opacity: 0;
+            animation: genshin 8s forwards;
+        }
+    </style>
+    <script>
+        function index() {
+            window.location.assign("./index.html");
+        }
+        function index1() {
+            window.location.assign("./gamehub.html");
+        }
+        function index2() {
+            window.location.assign("./tool.html");
+        }
+        function index3() {
+            window.location.assign("./document.html");
+        }
+        function index4() {
+            var userAgent = navigator.userAgent;
+            var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+            var audio = document.createElement('embed');
+            audio.src = 'audio/genshin.mp3';
+            audio.width = 0;
+            audio.height = 0;
+            document.getElementById("body").appendChild(audio);
+            var white = document.createElement("img");
+            white.style.position = 'fixed';
+            white.style.display = 'block';
+            white.style.zIndex = 100;
+            white.src = "img/white.png"; if (isMobile && window.orientation == 0) {
+                white.width = window.screen.height;
+                white.height = window.screen.width;
+                white.style.top = (white.width - white.height) / 2 + 'px';
+                white.style.left = (white.height - white.width) / 2 + 'px';
+                white.style.transform = 'rotate(90deg)';
+            } else {
+                white.style.width = '100vw';
+                white.style.height = '100vh';
+                white.style.top = 0;
+                white.style.left = 0;
+            }
+            white.id = 'white';
+            document.getElementById("body").appendChild(white);
+            var genshin = document.createElement("img");
+            genshin.style.position = 'fixed';
+            genshin.style.display = 'block';
+            genshin.style.zIndex = 101;
+            genshin.src = "img/genshin.png";
+            if (isMobile && window.orientation == 0) {
+                genshin.width = window.screen.height;
+                genshin.height = window.screen.width;
+                genshin.style.top = (genshin.width - genshin.height) / 2 + 'px';
+                genshin.style.left = (genshin.height - genshin.width) / 2 + 'px';
+                genshin.style.transform = 'rotate(90deg)';
+            } else {
+                genshin.style.width = '100vw';
+                genshin.style.height = '100vh';
+                genshin.style.top = 0;
+                genshin.style.left = 0;
+            }
+            genshin.id = 'genshin'
+            document.getElementById("body").appendChild(genshin);
+            setTimeout(function () { removeall() }, 7000);
+        }
+        function removeall() {
+            while (document.getElementById('body').children.length > 3) {
+                document.getElementById('body').removeChild(document.getElementById('body').children[0]);
+            }
+        }
+    </script>
+</head>
+
+<body id="body" style="display: flex; flex-direction: column; margin: 0px;background-color:#abfffc;">
+    <div
+        style="display: flex; flex-direction: row-reverse; height: 50px;background-color: #393d49;background: url(img/back1.png) no-repeat;background-size:100% 100px;">
+        <p onclick="index()"
+            style="cursor: pointer;margin: 5px;font-size: 30px;position: absolute;left: 0px; color: wheat">
+            540</p>
+        <button style="z-index: 10;">1<span onclick="index1()">自制游戏</span></button>
+        <button style="z-index: 9;">2<span onclick="index2()">奇妙工具</span></button>
+        <button style="z-index: 8;">3<span onclick="index3()">文档</span></button>
+        <button style="z-index: 7;">4<span id="genshin" onclick="index4()">元气</span></button>
+    </div>
+    <script>document.getElementById('genshin').addEventListener('click', function () { document.documentElement.requestFullscreen() })</script>
+
+    <div style="display: flex; flex-direction: column;align-items: center;">
+        <p>日志：</p>
+        <p>接下来需要制作各种障碍物和远程的定位模块。还有特殊状态效果。还有受击变红动画。还有刷新人物、敌人的地块</p>
+        <p>2024.2.25：才学会使用git，修复网站图片加载不出来的bug，感谢某大佬指出问题，相对路径和绝对路径错误。</p>
+        <p>2024.2.24：开始制作特殊效果，暂定18个效果，完成施加效果函数，完成效果更新，更改最初的设想，所有的效果持续时间还是根据施法者施法的时间刷新，将大部分效果的能力写入代码，理论上除了属性更改都能用了，但是没有对应的人物不能测试。因为人物可以定位生成了，所以移除操作者。更换outdated文件夹位置。统一了一下以前写的注释，将model作为标准。修复远古时期bug，chess1的移动模块多出来一行，如果传送的话会传送两倍。因为攻击狂刀后刀反会造成伤害，所有给所有技能结束加了个刷新选择器。
+        </p>
+        <p>2024.2.14：真无语了，一个==打成赋值符号找了两个小时bug，折磨死了。略微优化寻路函数，减少不必要的重复计算。更新寻路函数，现在AI能把障碍物的血量换算成移动来进行更优的路线选择。AI能够攻击障碍物了。删减寻路模块，现在所有敌人寻路都是最优。接下来需要制作各种障碍物和远程的定位模块。还有特殊状态效果。发现bug，如果挡在AI前面的是自己人，AI会调用skill1（）和input（），然后出现攻击范围显示，就像威胁对方一样，已修复。修复了人物走路后停顿长达600ms的小问题。
+        </p>
+        <p>2024.2.12：AI能更改方向锁定，能自动判断无行动后进入下一回合。发现方向键挡住了技能按钮，已修改。发现全局技能当时写的时候有个bug，多次嵌套后不能调用chess.class，但是误打误撞反而能正常运行，已修改(修改个der，以前写的就是对的，因为嵌套之后可能改变环境，导致无法调用element.skillfunction()所以用class来筛一遍。可能会出现问题，但可能性不大，决定摆烂)。回合开始结束动画从1s改为0.8s。第一次开着控制台打架，发现每秒几百下报错，是动画效果setinterval一直在运行，当时根本没有写clearinterval。不过也不是不能改成css自带的动画，因为每个粒子的位置不一样，不能直接改style.bottom，但可以在外面框一个div，有空改（已改）。修改昨天next_act中将一个=打成==。能走，会打人了，但是多个史莱姆发现两个特别奇怪的bug。两个应该都是因为overall_skill（）多线运行了，所以我把AI部分写成函数，全局技能只会在第一次激活AI，然后就是AI自己循环。大抵只剩下最后一个bug了，人物被围住后就不知道去干嘛了，就卡住了。
+        </p>
+        <p>2024.2.12：nnd崩溃了，半年前寻路写不出来的bug找到了，x1写成了x2，搞了我半年，nnd。开始制作AI，目前能正常移动。更改障碍物class为3。删除就近寻路，寻路全部为最优解。发现bug，当AI在回合开始第一个行动，那回合开始特效会消失
+        </p>
+        <p>2024.2.5：天，在最上面的回合显示，有个b标签，被我打成了(b)(/br),至少大半年了，这个bug一直在这，我在浏览器中看到莫名其妙出现的两个b标签才找到这个bug。尝试实现拖拽地图，最后发现触摸屏不能使用，于是决定摆烂，16*16也不小，大不了再往下延伸16格
+        </p>
+        <p>2024.1.31：完成回合开始结束动画，完成自动跳过空行动。准备优化移动系统。</p>
+        <p>2024.1.30：完成生人物的按钮颜色显示，完成切换行动人物图片动画，准备增加回合结束动画。对了，今天是域名购买一周年纪念日，意思就是，域名过期了，价格还翻了10倍，第一年5元第二年50。</p>
+        <p>2024.1.19：感谢lyh发现的2个bug：刀反杀人后选择器会卡住不动，因为state没有调回来；同时拉两个人会导致人物叠起来。前一个bug已修复。</p>
+        <p>2024.1.18：增加重新生成地形,生成人可以控制位置。发现人物技能id不需要那么复杂，似乎可以简化，不必每个人物都修改id，但未实施。更新两个人物拳击手、狂刀，用时不到三四个小时。感觉解析几何做多了，编程时脑子也清明不少。更改基础数据，加快游戏速度。
+        </p>
+        <p>2024.1.17：增加设置，增加一种地图</p>
+        <p>2024.1.15：我恍然大悟，困难在于地板太难搞了，所以我删除了地板类型，包括原本计划的地刺、毒地、火焰痕迹等。遇到困难，避开它！</p>
+        <p>2023.10.21：更新索引‘测试，日志，参考，自制游戏’为‘元气，文档，奇妙工具，自制游戏’，更新随机起名</p>
+        <p>2023.10.14：更新原神启动</p>
+        <p>2023.7.21：更改选择机制，点击同一个人可以选择下层人物，地块可叠加。</p>
+        <p>2023.7.9：完成基础寻路，增加是否为陷阱属性，是否为敌方属性</p>
+        <p>2023.7.5：完成AI的部分设定，添加史莱姆</p>
+        <p>2023.6.29：完成操作员、障碍物、地刺</p>
+        <p>2023.6.22：增加定神游切换形态的不同贴图。修改定神游机制。增加定神游二技能位置判定。增加范围演示，可在任意回合点击，无法选择人物或地块。增加随机地形。加大按钮。</p>
+        <p>2023.6.20：修复定神游印记重复的bug，加大技能释放按钮，修复了定神游三技能类似红王的判定错误。</p>
+        <p>2023.6.14：更新完成定神游，三小时内从设想到完全实现，暂未发现bug。</p>
+        <p>2023.5.20：完成沙袋。完成军火商，为所有军火商召唤的武器添加拆除以防卡死自己。为机枪攻击添加特效。修复了id打成class导致的机枪不能越过沙包攻击的bug。修复忘记打.导致的bug。修复大炮和红王一样群攻遍历不到敌人导致无法群攻的bug
+        </p>
+        <p>2023.5.19：修复无人机能生成在非空地块上的bug。完成机枪大炮。</p>
+        <p>2023.5.14：更新技能空点时显示的内容。添加下一行动时，若可行动角色数量为1，自动选择角色。遇到困难怎么办？绕开它，所以近期不制作眩晕飞行等特殊状态。更新红王三技能为撞墙后额外造成一点伤害。修复红王三技能直接将人打死无冷却的bug。
+        </p>
+        <p>2023.4.8：增加红王一技能攻击范围，修复因没有延迟检测导致的三技能不减冷却的bug，发现了贴墙撞墙会连续撞墙三次导致无法醒来的bug，通过检测bool修复。发现并修复复制粘贴后忘记改检测坐标位置的弱智bug。修复红王三技能直接把人打死无冷却的bug。发现操控员眩晕时无人机不爆炸的bug，未修复。
+        </p>
+        <p>2023.4.7：修复了救治无人机技能图片错误，将操控者三技能从全部无人机暴走
+            改为选择至多五个无人机暴走。减少红王一技能冷却从3至2。更新反应为-1时无法技能选择、移动、放技能。制作红王三技能。发现问题：当眩晕人的人被眩晕，他不会被选中，眩晕无法解除；预解决方案：将眩晕从reflect=-1改为特殊的效果值。发现并修复了全局技能模块中用id寻找人物错写为selectid的bug。为防止无限眩晕，将红王三技能改为没有眩晕则技能冷却-1。完成第二个正式人物。仍存问题：眩晕效果，死后全局技能
+        </p>
+        <p>2023.4.4：优化技能描述；修改了勇者三技能的bug；删除了傻逼；更新了地块，删除了其受击、移动模块。更新了生成区，删除了无效的按钮。点击地块不再跳转至移动。制作红王一二技能，并发现如果在攻击时敌人死亡人物移出棋盘，会导致下一个人物顶替了其位置，从而循环不到那个人物。
+        </p>
+        <p>2023.4.2：发现第一个生成的id为0的地块无法被选中，原因是初始动态id为0，而选择器0被认为是重置选择器。将初始动态id改为1解决此bug。在制作无人机操作员的位置判定时发现如果用chess.class判断物体是否为动画会导致地块被误认为动画（class为0）所以修改了3.26修改的bug，改为chess.class+1。更新人物无人机操控员和两个召唤物，仍需添加人物死后无人机死亡。发现循环死后的全局技能模块时仍是循环棋盘内元素，但没有加是否为人物的判定，导致再一次将动画误判成人物，又折磨了一个小时（而实际之前chess.class并没有太大的问题（仍需修复））。太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了。完成释放无人机和无人机暴走，以及无人机攻击治疗自毁，其中人物死亡后无人机一起死亡还未完成，遇到把1006打成1005的弱智bug，又折磨了半天。tnnd
+        </p>
+        <p>2023.3.32：利用233.gay网站提供的chatgpt帮助改善更新了范围检测，检测范围1~10检测曼哈顿距离</p>
+        <p>2023.3.31：添加检测阻挡时检测目标位置是否有地块，使人物不能走出地块。修复了伤害粒子特效中7.5打成5.7而导致粒子位置偏左的弱智bug。增加了死亡动画。合并了input</p>
+        <p>2023.3.26：太离谱了，找了三个小时的bug发现是动画被误认成人物，然后找不到它的属性，程序就卡住暴毙了。有用settimeinterval和if检测两种方法，最后选择了不给动画加class，并检测其class是否存在。因为在以往循环board内子元素后都有if检测某些条件，而全局技能模块没有条件，所以将动画误判。找bug时增加了选择器id和fixedid（已隐藏）,意外发现了控制器中hidden被打成了hiddden（那么久居然没发现）。太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了太折磨了。优化了受击特效，增加受击、回血粒子效果。发现了同时推拉，拉无效的bug，原因为推时清空了skill面板导致拉的数据丢失，然后就不拉了。后将skill（3）增加10ms延迟解决此bug。换用了外源js文件，html干净多了，原游戏代码从1177行减到500行，人物信息全储存在外源js。
+        </p>
+        <p>2023.3.25：确定全局技能模块形式为任何操作后运行一次，制作了小道行者第三个技能窒息，并发现了无法在元素的函数中调用元素属性，但可以在元素属性值中调用元素属性。期间出现把造成伤害打成回血造成程序暴毙、无法选中本人（通过给人物skillfunction加一个输入值id解决）、移动/下一回合会无线循环把人瞬间炸死（通过修改
+            修改data值的位置解决）。随后再次发现了勇士一技能无冷却的bug，初步判定是因为运行全局技能模块时有人物没有此模块导致嵌套循环无法运行而冷却没有被加，仍需进一步确认。</p>
+        <p>2023.3.18：因为显示全屏攻击范围时，此前用scale放大贴图导致贴图偏移的bug更加严重，所以修复了此bug，直接生成625*625的图片。修改攻击范围贴图大小至3100*3100,以此显示全屏攻击的攻击范围。下一回合重置移动和冷却。显示冷却/最大冷却。将技能冷却实用。将勇士的攻击延迟，让动画更加合理。增加控制区0
+        </p>
+        <p>2023.3.12：增加移动消耗移动值，显示移动/最大移动，基本完成被移动判定（推、拉、传送）,代码基础比较牢固，所以写起来问题不是很多，阻挡判定也并不困难。增加勇者第三个技能推拉。发现推拉bug：宏观上同时推拉两人，两人理应相互阻挡，而实际上是两个人有推拉先后顺序，导致前者会阻挡后者，后者不会阻挡前者。解决方案：在确定prex和prey后，延迟输入至chess的xy，来确保所有人物都能在延迟时间内完成阻挡检测。仍存bug：斜对角两人物同时推拉，会直接让两人物重合。并不打算解决此bug。每个人物代码超100行。修复了因复制粘贴代码后忘记将x改成y而造成的弱智判定bug（因为测试位置固定，每次测试时代码都能错误得输出正确判定，所以此bug是在部署后许久才发现）
+        </p>
+        <p>2023.3.11：完成第一个技能范围显示，但此前地块转向会导致贴图位置偏移的bug
+            在此处放大贴图时也会导致贴图位置偏移，而且在浏览器中运行时浏览器的缩放倍率也会影响其相对位置。总之，未知bug，原理不清除，目前仅是手动将其偏移了5px，不清除是否适配所有设备以及未来会不会产生其他问题。完成回合制度、增加顶部结束行动按钮和回合现实、完成行动顺序、完成人物在非自身回合无法行动、完成结束行动后各区域数据及显示的变化。
+        </p>
+        <p>2023.3.10；修复了潜在的小bug：选择器三个技能的onclick函数位置不一样，一个在img上，两个在div上。具体体现为一个只能点图片触发，另两个可以点击下方文字触发。统一修改至img。修复了受击动画播放完后，不透明度为0的img仍留在原地导致无法选中其下人物的bug。完成第一个攻击动画，从发起者出发朝向受击者，在0.15秒内更新15次飞至受击者。同时为了测试，制作了勇士的第二个技能和第二个检测范围
+        </p>
+        <p>2023.3.6：改进动画，受击动画从css自带动画关键帧转为
+            以js计时事件为基础的延迟更改不透明度opacity。从而实现动画无冷却，可多线互不干扰播放。增加技能最大冷却，人物技能数据属性。模板人物基本完成。修复了由于受击模块hit_health参数写成hit.health而导致受击失效的弱智bug。新加入三个人物（只有图片），于是代码达到975行
+        </p>
+        <p>2023.3.5：感谢LH工作室艺术部成员荧提供的数张的像素画</p>
+        <p>2023.3.4：添加受击/攻击倍率/增加，修复了切换技能后冷却、类型仍残留的显示bug。添加技能内人物/地块选择、技能模块、技能发动、技能范围侦测、技能特效（皆为第一个）</p>
+        <p>2023.3.2：初步完成地块实体化，添加技能冷却类型、人物类型等,添加、检测空白技能，确定人物、召唤物、地块id，确定图层。代码超300行。出现本游戏历史上第一个真正意义上的bug：傻逼反方向移动不检测阻挡</p>
+        <p>2023.3.1：用github，许多人都说要梯子才能上，又因为梯子寄了，找遍国内外所有提供静态网站的地方，没一个能用。点名批评gitee、腾讯云还要实名认证，阿里云的人类没法用。</p>
+        <p>2023.2.28：完成方向、移动阻挡检测</p>
+        <p>2023.2.25：完成目标选择器、移动模块、控制区移动生成技能、人物技能图像显示、人物基本模块化,实现可用外源js。加入参考页面，加入历史页面</p>
+        <p>2023.2.18：确定游戏界面划分、游戏机制、生成对象</p>
+        <p>2023.2.10：完成索引界面</p>
+        <p>2023.2.4：部署网站</p>
+        <p>2023.1.30：购买域名</p>
+        <p>特别鸣谢：康文昌、czq、ywt、lyh、成员荧、明日方舟、某像素画软件、小电视</p>
+        <p>点名批评：腾讯</p>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <p>没了，你还期望有多少</p>
+    </div>
+    </script>
+</body>
+
+</html>

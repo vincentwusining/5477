@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pixel Art Generator</title>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="64" height="64"></canvas>
+    <button onclick="generate()">Generate</button>
+    <a id="downloadLink" href="#" download="pixel_art.png">Download</a>
+    <script>
+        function generate() {
+            var canvas = document.getElementById("myCanvas");
+            var ctx = canvas.getContext("2d");
+
+            // 绘制像素画
+            ctx.fillStyle = "#ffffff"; // 白色
+            ctx.fillRect(0, 0, 8, 8);
+            ctx.fillStyle = "#ff0000"; // 红色
+            ctx.fillRect(1, 1, 6, 6);
+            ctx.fillStyle = "#00ff00"; // 绿色
+            ctx.fillRect(2, 2, 4, 4);
+            ctx.fillStyle = "#0000ff"; // 蓝色
+            ctx.fillRect(3, 3, 2, 2);
+
+            // 将像素画转换为 PNG 图片数据
+            var pngData = canvas.toDataURL("image/png");
+
+            // 创建 Image 对象并在网页上显示 PNG 图片
+            /*var img = new Image();
+            img.src = pngData;
+            document.body.appendChild(img);
+            document.write(pngData)*/
+
+            // 创建下载链接并点击下载
+            var downloadLink = document.getElementById("downloadLink");
+            downloadLink.href = pngData;
+            downloadLink.click();
+        }
+    </script>
+</body>
+
+</html> function route(x1, y1, x2, y2, move, damage, hurt, cha) {//计算路劲 起始xy 目标xy 移动 伤害 是否攻击友方(性格) 寻路模块
+var queue = new Array(300);
+var qindex = 1;
+var boardsum = new Array(17);
+for (var i = 1; i <= 290; i++) { queue[i]=[0, 0]; } for (var i=1; i <=16; i++) { boardsum[i]=new Array(17); for (var
+    j=1; j <=16; j++) { boardsum[i][j]=[9999, 0, 0];//boardsum[i][j][0]所需步数[1]第一步方向[2]停留数 } } queue[1]=[x1, y1];
+    boardsum[x1][y1]=[0, 0, 0]; while (1) { var x=queue[1][0];//取出 var y=queue[1][1]; for (var i=1; i < qindex; i++) {
+    queue[i]=queue[i + 1]; } if (boardsum[x][y][2]==0) { qindex--; } else { boardsum[x][y][2]--; queue[qindex]=[x, y];
+    continue; } if (x==x2 && y==y2) {//到终点 break; } var next=[[0, 1, 1], [1, 0, 2], [0, -1, 3], [-1, 0, 4]]; for (var
+    i=0; i <=3; i++) {//走四个方向 var nx=x + next[i][0]; var ny=y + next[i][1]; if (detect_resist(nx, ny)==1) { continue; }
+    if (boardsum[nx][ny][0]=9999) {//更新//实际上没什么用，只要=9999就行 boardsum[nx][ny][0]=boardsum[x][y][0] + 1; if (x==x1 &&
+    y==y1) {//是出发点 boardsum[nx][ny][1]=next[i][2]//确定方向 } else {//不是出发点 boardsum[nx][ny][1]=boardsum[x][y][1];//继承方向 }
+    queue[qindex + 1]=[nx, ny]; qindex++; } } } return ([boardsum[x2][y2][0], boardsum[x2][y2][1]]);//返回[0]所需步数[1]第一步方向
+    }

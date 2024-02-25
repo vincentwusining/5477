@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>log</title>
+    <style>
+        button {
+            display: flex;
+            color: white;
+            background-color: rgb(0, 0, 0, 0);
+            padding: 0px;
+            margin: 0px;
+            width: 50px;
+            height: 50px;
+            font-size: large;
+            transition: 0.5s;
+            align-items: center;
+            justify-content: center;
+            background: url(img/back.png) no-repeat;
+            background-size: 426px 50px;
+            border-right: 0px;
+            border-top: 0px;
+            border-bottom: 0px;
+        }
+
+        button:hover {
+            width: 150px;
+        }
+
+        button>span {
+            display: flex;
+            position: relative;
+            left: 25px;
+            color: white;
+            border: 0px;
+            margin: 0px;
+            padding: 0px;
+            height: 50px;
+            width: 0px;
+            opacity: 1;
+            align-items: center;
+            white-space: nowrap;
+            transition: all 0.5s;
+        }
+
+        button:hover>span {
+            width: 100px;
+        }
+
+        button:hover>span:active {
+            background-color: rgb(60, 60, 60, 0.4);
+            transition: 0s
+        }
+
+        @keyframes white {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes genshin {
+            0% {
+                opacity: 0;
+            }
+
+            87.5% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        img#white {
+            opacity: 0;
+            animation: white 7s forwards;
+        }
+
+        img#genshin {
+            opacity: 0;
+            animation: genshin 8s forwards;
+        }
+    </style>
+    <script>
+        function index() {
+            window.location.assign("./index.html");
+        }
+        function index1() {
+            window.location.assign("./gamehub.html");
+        }
+        function index2() {
+            window.location.assign("./tool.html");
+        }
+        function index3() {
+            window.location.assign("./document.html");
+        }
+        function index4() {
+            var userAgent = navigator.userAgent;
+            var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+            var audio = document.createElement('embed');
+            audio.src = 'audio/genshin.mp3';
+            audio.width = 0;
+            audio.height = 0;
+            document.getElementById("body").appendChild(audio);
+            var white = document.createElement("img");
+            white.style.position = 'fixed';
+            white.style.display = 'block';
+            white.style.zIndex = 100;
+            white.src = "img/white.png"; if (isMobile && window.orientation == 0) {
+                white.width = window.screen.height;
+                white.height = window.screen.width;
+                white.style.top = (white.width - white.height) / 2 + 'px';
+                white.style.left = (white.height - white.width) / 2 + 'px';
+                white.style.transform = 'rotate(90deg)';
+            } else {
+                white.style.width = '100vw';
+                white.style.height = '100vh';
+                white.style.top = 0;
+                white.style.left = 0;
+            }
+            white.id = 'white';
+            document.getElementById("body").appendChild(white);
+            var genshin = document.createElement("img");
+            genshin.style.position = 'fixed';
+            genshin.style.display = 'block';
+            genshin.style.zIndex = 101;
+            genshin.src = "img/genshin.png";
+            if (isMobile && window.orientation == 0) {
+                genshin.width = window.screen.height;
+                genshin.height = window.screen.width;
+                genshin.style.top = (genshin.width - genshin.height) / 2 + 'px';
+                genshin.style.left = (genshin.height - genshin.width) / 2 + 'px';
+                genshin.style.transform = 'rotate(90deg)';
+            } else {
+                genshin.style.width = '100vw';
+                genshin.style.height = '100vh';
+                genshin.style.top = 0;
+                genshin.style.left = 0;
+            }
+            genshin.id = 'genshin'
+            document.getElementById("body").appendChild(genshin);
+            setTimeout(function () { removeall() }, 7000);
+        }
+        function removeall() {
+            while (document.getElementById('body').children.length > 3) {
+                document.getElementById('body').removeChild(document.getElementById('body').children[0]);
+            }
+        }
+    </script>
+</head>
+
+<body id="body" style="display: flex; flex-direction: column; margin: 0px;background-color:#abfffc;">
+    <div
+        style="display: flex; flex-direction: row-reverse; height: 50px;background-color: #393d49;background: url(img/back1.png) no-repeat;background-size:100% 100px;">
+        <p onclick="index()"
+            style="cursor: pointer;margin: 5px;font-size: 30px;position: absolute;left: 0px; color: wheat">
+            540</p>
+        <button style="z-index: 10;">1<span onclick="index1()">自制游戏</span></button>
+        <button style="z-index: 9;">2<span onclick="index2()">奇妙工具</span></button>
+        <button style="z-index: 8;">3<span onclick="index3()">文档</span></button>
+        <button style="z-index: 7;">4<span id="genshin" onclick="index4()">元气</span></button>
+    </div>
+    <script>document.getElementById('genshin').addEventListener('click', function () { document.documentElement.requestFullscreen() })</script>
+    <p style="position:relative;left:calc(50% - 60px);background-color:#3861dc;display:block;height: 40px;width:120px;font-size: 30px;border:3px solid darkblue"
+        onclick="window.location.assign('./randomName.html')">随机起名</p>
+</body>
+
+</html>
