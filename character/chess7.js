@@ -27,6 +27,8 @@ function chess7(x, y) {//军火商
                 selector(selectid, 1); skill(1);
                 overall_skill();
             }
+        } else if (chess.skill1_cooling > 0) {
+            alert('技能尚未冷却!');
         }
     }
     chess.skill2_launch = function () {
@@ -39,6 +41,8 @@ function chess7(x, y) {//军火商
                 selector(selectid, 1); skill(2);
                 overall_skill();
             }
+        } else if (chess.skill1_cooling > 0) {
+            alert('技能尚未冷却!');
         }
     }
     chess.skill3_launch = function () {
@@ -55,6 +59,8 @@ function chess7(x, y) {//军火商
                 selector(selectid, 1); skill(3);
                 overall_skill();
             }
+        } else if (chess.skill1_cooling > 0) {
+            alert('技能尚未冷却!');
         }
     }
     chess.skill1_src = "./img/skill-2.png";//skill1

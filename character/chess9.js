@@ -10,7 +10,7 @@ function chess9(x, y) {//定神游
     chess.img = "./img/chess9.png";
     chess.name = "定神游";
     chess.max_health = 8;//1~30 20
-    chess.health = 1;
+    chess.health = 8;
     chess.max_movement = 5;//1~20 5
     chess.movement = 5;
     chess.reflect = 6;//1~20 5   -1不可行动
