@@ -280,7 +280,7 @@ function chess7(x, y) {//军火商
     chess.style.left = (chess.x - 1) * 25 + "px";
     chess.style.bottom = (chess.y - 1) * 25 + "px";
     chess.setAttribute("onclick", "selector(id,0)")
-    if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
+    //if (detect_resist(x, y) == 0) { document.getElementById("board").appendChild(chess); }
     id++;
     overall_skill();
 }
