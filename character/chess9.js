@@ -15,7 +15,7 @@ function chess9(x, y) {//定神游
     chess.movement = 5;
     chess.reflect = 6;//1~20 5   -1不可行动
     skill1.innerHTML = '移动归0，进入神游状态：最大移动+5，行动结束后立刻回到原位，受击额外受到一点伤害。（神游状态下发动 退出神游状态并回到原位）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-    skill2.innerHTML = '选择一个目标<img height="25px" width="25px" id="input9_2_1" onclick="input(1,id,3)">造成1一点伤害并施加神游印记。（神游状态下发动 传送至前方第三格并对周围8格造成1点伤害）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill2.innerHTML = '选择一个目标<img height="16px" width="16px" id="input9_2_1" onclick="input(1,id,3)">造成1一点伤害并施加神游印记。（神游状态下发动 传送至前方第三格并对周围8格造成1点伤害）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
     skill3.innerHTML = '击退范围内所有敌人两格（神游状态下发动 对范围内的敌人造成1点伤害，但对神游印记标记的敌人造成3点伤害并消除神游印记）范围演示：<img height="25px" width="25px" id="input9_3_1" onclick="input(3,id,13)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
@@ -44,6 +44,10 @@ function chess9(x, y) {//定神游
             selector(selectid, 1);
             selector(selectid, 1); skill(1);
             overall_skill();
+        } else if (chess.fixedid != active_fixedid) {
+            alert('无法行动：非此角色的行动回合');
+        } else if (chess.skill1_cooling > 0) {
+            alert('技能尚未冷却!');
         }
     }
     chess.skill2_launch = function () {
@@ -51,7 +55,7 @@ function chess9(x, y) {//定神游
         if (chess.fixedid == active_fixedid && chess.skill2_cooling <= 0) {
             var input1 = document.getElementById("controller_page3").querySelector("#input9_2_1").value;
             if (chess.data[1] == 0) {//非神游
-                document.getElementById(input1).hitfunction(input1, -1, 0, selectid, chess.x, chess.y);
+                hit(input1, -1, 0, selectid, chess.x, chess.y);
                 for (var i = 1; i <= 100; i++) {
                     if (chess.data[2][i] == input1) {
                         break;
@@ -84,13 +88,17 @@ function chess9(x, y) {//定神游
                         }
                     }
                     for (var i = 0; i < num; i++) {
-                        document.getElementById(target[i]).hitfunction(target[i], -1, 0, selectid, chess.x, chess.y);
+                        hit(target[i], -1, 0, selectid, chess.x, chess.y);
                     }
                     chess.skill2_cooling = chess.skill2_max_cooling;
                     selector(selectid, 1); skill(2);
                     overall_skill();
                 }
             }
+        } else if (chess.fixedid != active_fixedid) {
+            alert('无法行动：非此角色的行动回合');
+        } else if (chess.skill2_cooling > 0) {
+            alert('技能尚未冷却!');
         }
     }
     chess.skill3_launch = function () {
@@ -148,16 +156,20 @@ function chess9(x, y) {//定神游
                 }
                 for (var i = 0; i < num; i += 2) {
                     if (target[i + 1] == 1) {
-                        document.getElementById(target[i]).hitfunction(target[i], -3, 0, selectid, chess.x, chess.y);
+                        hit(target[i], -3, 0, selectid, chess.x, chess.y);
                     }
                     if (target[i + 1] == 0) {
-                        document.getElementById(target[i]).hitfunction(target[i], -1, 0, selectid, chess.x, chess.y);
+                        hit(target[i], -1, 0, selectid, chess.x, chess.y);
                     }
                 }
             }
             chess.skill3_cooling = chess.skill3_max_cooling;
             selector(selectid, 1); skill(3);
             overall_skill();
+        } else if (chess.fixedid != active_fixedid) {
+            alert('无法行动：非此角色的行动回合');
+        } else if (chess.skill3_cooling > 0) {
+            alert('技能尚未冷却!');
         }
     }
     chess.skill1_src = "./img/skill-2.png";//skill1
@@ -177,30 +189,36 @@ function chess9(x, y) {//定神游
     chess.skill3_class = 1;
     chess.movefunction = function (id, dir, count, form, source, x, y) {//form0主动1被动，主动dir==0视为推拉，自动检测方向，dir不为0则是传送,dir5为定点传送
         var chess = document.getElementById(id);
-        if (form == 0 && chess.fixedid == active_fixedid) {//走路
-            if (dir == 1) { if (chess.direction == 1 || turn == 0) { if (detect_resist(chess.x, chess.y + 1) == 0 && chess.movement >= 1) { chess.y += 1; chess.movement -= 1 } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
-            if (dir == 2) { if (chess.direction == 2 || turn == 0) { if (detect_resist(chess.x + 1, chess.y) == 0 && chess.movement >= 1) { chess.x += 1; chess.movement -= 1 } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
-            if (dir == 3) { if (chess.direction == 3 || turn == 0) { if (detect_resist(chess.x, chess.y - 1) == 0 && chess.movement >= 1) { chess.y -= 1; chess.movement -= 1 } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
-            if (dir == 4) { if (chess.direction == 4 || turn == 0) { if (detect_resist(chess.x - 1, chess.y) == 0 && chess.movement >= 1) { chess.x -= 1; chess.movement -= 1 } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
+        if (state != 0) {
+            input(3);
+        }
+        if (form == 0 && chess.fixedid == active_fixedid && chess.effect_sum[2] == 0) {//走路
+            var move_decrease = 1 + chess.effect_sum[4];
+            if (dir == 1) { if (chess.direction == 1 || turn == 0) { if (detect_resist(chess.x, chess.y + 1) == 0 && chess.movement >= move_decrease && chess.effect_sum[3] == 0) { chess.y += 1; chess.movement -= move_decrease } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
+            if (dir == 2) { if (chess.direction == 2 || turn == 0) { if (detect_resist(chess.x + 1, chess.y) == 0 && chess.movement >= move_decrease && chess.effect_sum[3] == 0) { chess.x += 1; chess.movement -= move_decrease } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
+            if (dir == 3) { if (chess.direction == 3 || turn == 0) { if (detect_resist(chess.x, chess.y - 1) == 0 && chess.movement >= move_decrease && chess.effect_sum[3] == 0) { chess.y -= 1; chess.movement -= move_decrease } } else { chess.direction = 3; chess.style.transform = "rotate(180deg)"; } }
+            if (dir == 4) { if (chess.direction == 4 || turn == 0) { if (detect_resist(chess.x - 1, chess.y) == 0 && chess.movement >= move_decrease && chess.effect_sum[3] == 0) { chess.x -= 1; chess.movement -= move_decrease } } else { chess.direction = 4; chess.style.transform = "rotate(270deg)"; } }
             selector(id, 1);
         }
         else if (form == 1) {//推拉\传送
             if (dir == 0) {//推拉
-                var prex = chess.x;
-                var prey = chess.y;
-                if (count > 0) {//推
-                    if (x > chess.x && detect_resist(chess.x - 1, chess.y) == 0) { prex -= 1; }
-                    if (x < chess.x && detect_resist(chess.x + 1, chess.y) == 0) { prex += 1; }
-                    if (y > chess.y && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
-                    if (y < chess.y && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
-                    if (detect_resist(prex, prey) == 0) { setTimeout(function () { chess.x = prex; chess.y = prey; chess.style.left = (chess.x - 1) * 25 + "px"; chess.style.bottom = (chess.y - 1) * 25 + "px"; }, 100) }
-                }
-                else if (count < 0) {//拉
-                    if (x > chess.x && detect_resist(chess.x + 1, chess.y) == 0) { prex += 1; }
-                    if (x < chess.x && detect_resist(chess.x - 1, chess.y) == 0) { prex -= 1; }
-                    if (y > chess.y && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
-                    if (y < chess.y && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
-                    if (detect_resist(prex, prey) == 0) { setTimeout(function () { chess.x = prex; chess.y = prey; chess.style.left = (chess.x - 1) * 25 + "px"; chess.style.bottom = (chess.y - 1) * 25 + "px"; }, 100) }
+                if (chess.effect_sum[6] == 0) {
+                    var prex = chess.x;
+                    var prey = chess.y;
+                    if (count > 0) {//推
+                        if (x > chess.x && detect_resist(chess.x - 1, chess.y) == 0) { prex -= 1; }
+                        if (x < chess.x && detect_resist(chess.x + 1, chess.y) == 0) { prex += 1; }
+                        if (y > chess.y && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
+                        if (y < chess.y && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
+                        if (detect_resist(prex, prey) == 0) { setTimeout(function () { chess.x = prex; chess.y = prey; chess.style.left = (chess.x - 1) * 25 + "px"; chess.style.bottom = (chess.y - 1) * 25 + "px"; }, 100) }
+                    }
+                    else if (count < 0) {//拉
+                        if (x > chess.x && detect_resist(chess.x + 1, chess.y) == 0) { prex += 1; }
+                        if (x < chess.x && detect_resist(chess.x - 1, chess.y) == 0) { prex -= 1; }
+                        if (y > chess.y && detect_resist(chess.x, chess.y + 1) == 0) { prey += 1; }
+                        if (y < chess.y && detect_resist(chess.x, chess.y - 1) == 0) { prey -= 1; }
+                        if (detect_resist(prex, prey) == 0) { setTimeout(function () { chess.x = prex; chess.y = prey; chess.style.left = (chess.x - 1) * 25 + "px"; chess.style.bottom = (chess.y - 1) * 25 + "px"; }, 100) }
+                    }
                 }
             }
             else {//传送
@@ -253,9 +271,15 @@ function chess9(x, y) {//定神游
                     chess.effect[0]++;
                 }
             }
-            else if (x[0] == 11) {
+            else if (x[0] == 19) {
+                if (chess.effect_sum[20] == 0) {
+                    chess.effect[chess.effect[0]] = x;
+                    chess.effect[0]++;
+                }
+            }
+            else if (x[0] == 4) {
                 for (var j = 1; j < chess.effect[0]; j++) {
-                    if (chess.effect[j][0] == 2) {
+                    if (chess.effect[j][0] == 3) {
                         chess.effect[0]--;
                         for (var k = j; k < chess.effect[0]; k++) {
                             chess.effect[k] = chess.effect[k + 1];
@@ -264,9 +288,20 @@ function chess9(x, y) {//定神游
                     }
                 }
             }
-            else if (x[0] == 12) {
+            else if (x[0] == 6) {
                 for (var j = 1; j < chess.effect[0]; j++) {
-                    if (chess.effect[j][0] == 3) {
+                    if (chess.effect[j][0] == 5) {
+                        chess.effect[0]--;
+                        for (var k = j; k < chess.effect[0]; k++) {
+                            chess.effect[k] = chess.effect[k + 1];
+                        }
+                        j--;
+                    }
+                }
+            }
+            else if (x[0] == 20) {
+                for (var j = 1; j < chess.effect[0]; j++) {
+                    if (chess.effect[j][0] == 19) {
                         chess.effect[0]--;
                         for (var k = j; k < chess.effect[0]; k++) {
                             chess.effect[k] = chess.effect[k + 1];
@@ -285,56 +320,44 @@ function chess9(x, y) {//定神游
                 chess.effect_sum[j] = 0;
             }
             for (var j = 1; j < chess.effect[0]; j++) {
-                if (chess.effect[j][0] == 1) {
-                    chess.effect_sum[1] -= chess.effect[j][1];
-                }
-                else if (chess.effect[j][0] == 2) {
-                    chess.effect_sum[1] += chess.effect[j][1];
-                }
-                else if (chess.effect[j][0] == 3) {
-                    chess.effect_sum[2] = 1;
-                }
-                else if (chess.effect[j][0] == 5) {
-                    chess.effect_sum[3] = 1;
-                }
-                else if (chess.effect[j][0] == 7) {
-                    chess.effect_sum[4] += chess.effect[j][1];
-                }
-                else if (chess.effect[j][0] == 8) {
-                    chess.effect_sum[5] += chess.effect[j][1];
-                }
-                else if (chess.effect[j][0] == 9) {
-                    chess.effect_sum[6] = 1;
-                }
-                else if (chess.effect[j][0] == 11) {
-                    chess.effect_sum[7] += chess.effect[j][1];
-                }
-                else if (chess.effect[j][0] == 12) {
-                    chess.effect_sum[7] -= chess.effect[j][1];
-                }
-                else if (chess.effect[j][0] == 13) {
-                    chess.effect_sum[8] += chess.effect[j][1];
-                }
-                else if (chess.effect[j][0] == 14) {
-                    chess.effect_sum[8] -= chess.effect[j][1];
-                }
-                else if (chess.effect[j][0] == 15) {
-                    chess.effect_sum[9] += chess.effect[j][1];
-                }
-                else if (chess.effect[j][0] == 16) {
-                    chess.effect_sum[9] -= chess.effect[j][1];
-                }
-                else if (chess.effect[j][0] == 17) {
-                    chess.effect_sum[10] += chess.effect[j][1];
-                }
-                else if (chess.effect[j][0] == 18) {
-                    chess.effect_sum[10] -= chess.effect[j][1];
-                }
-                else if (chess.effect[j][0] == 4) {
-                    chess.effect_sum[11] = 1;
-                }
-                else if (chess.effect[j][0] == 6) {
-                    chess.effect_sum[12] = 1;
+                if (chess[i].effect[j][0] == 1) {
+                    chess[i].effect_sum[1] -= chess[i].effect[j][1];
+                } else if (chess[i].effect[j][0] == 2) {
+                    chess[i].effect_sum[1] += chess[i].effect[j][1];
+                } else if (chess[i].effect[j][0] == 3) {
+                    chess[i].effect_sum[2] = 1;
+                } else if (chess[i].effect[j][0] == 5) {
+                    chess[i].effect_sum[3] = 1;
+                } else if (chess[i].effect[j][0] == 7) {
+                    chess[i].effect_sum[4] += chess[i].effect[j][1];
+                } else if (chess[i].effect[j][0] == 8) {
+                    chess[i].effect_sum[5] += chess[i].effect[j][1];
+                } else if (chess[i].effect[j][0] == 9) {
+                    chess[i].effect_sum[6] = 1;
+                } else if (chess[i].effect[j][0] == 11) {
+                    chess[i].effect_sum[7] += chess[i].effect[j][1];
+                } else if (chess[i].effect[j][0] == 12) {
+                    chess[i].effect_sum[7] -= chess[i].effect[j][1];
+                } else if (chess[i].effect[j][0] == 13) {
+                    chess[i].effect_sum[8] += chess[i].effect[j][1];
+                } else if (chess[i].effect[j][0] == 14) {
+                    chess[i].effect_sum[8] -= chess[i].effect[j][1];
+                } else if (chess[i].effect[j][0] == 15) {
+                    chess[i].effect_sum[9] += chess[i].effect[j][1];
+                } else if (chess[i].effect[j][0] == 16) {
+                    chess[i].effect_sum[9] -= chess[i].effect[j][1];
+                } else if (chess[i].effect[j][0] == 17) {
+                    chess[i].effect_sum[10] += chess[i].effect[j][1];
+                } else if (chess[i].effect[j][0] == 18) {
+                    chess[i].effect_sum[10] -= chess[i].effect[j][1];
+                } else if (chess[i].effect[j][0] == 4) {
+                    chess[i].effect_sum[11] = 1;
+                } else if (chess[i].effect[j][0] == 6) {
+                    chess[i].effect_sum[12] = 1;
+                } else if (chess[i].effect[j][0] == 19) {
+                    chess[i].effect_sum[13] = 1;
+                } else if (chess[i].effect[j][0] == 20) {
+                    chess[i].effect_sum[15] = 1;
                 }
             }
         }
@@ -369,8 +392,8 @@ function chess9(x, y) {//定神游
     chess.data[5] = 0; //记录y
     chess.enemy = 0;
     chess.trap = 0;
-    chess.effect = new Array(300);//0为index索引。特殊效果 ：1防御、2脆弱、3昏厥、4坚毅（无法被眩晕）、5束缚、6大型（无法被束缚）、7泥沼（移动耗费增加）、8火毒（持续掉血）、9超重（无法被推拉）、10免疫（免疫所有特殊效果）、11攻击+、12攻击-、13反应+、14反应-、15移动+、16移动- 、17最大生命+、18最大生命-
-    chess.effect_sum = new Array(30);//1受伤改动2昏厥3束缚4泥沼5火毒6超重7攻击改动8反应改动9移动改动10最大生命改动11坚毅12大型14免疫
+    chess.effect = new Array(300);//0为index索引。特殊效果 ：1防御、2脆弱、3昏厥、4坚毅（无法被眩晕）、5束缚、6大型（无法被束缚）、7泥沼（移动耗费增加）、8火毒（持续掉血）、9超重（无法被推拉）、10免疫（免疫所有特殊效果）、11攻击+、12攻击-、13反应+、14反应-、15移动+、16移动- 、17最大生命+、18最大生命-、19缴械、20武装（无法被缴械）
+    chess.effect_sum = new Array(30);//1受伤改动2昏厥3束缚4泥沼5火毒6超重7攻击改动8反应改动9移动改动10最大生命改动11坚毅12大型13缴械14免疫15武装
     chess.effect[0] = 1;
     //tag
 
