@@ -24,6 +24,8 @@ function model(x, y) {//名称
             chess.skill1_cooling = chess.skill1_max_cooling;
             selector(selectid, 1); skill(1);
             overall_skill();
+        } else if (chess.skill1_cooling > 0) {
+            alert('技能尚未冷却!');
         }
     }
     chess.skill2_launch = function () {
@@ -33,6 +35,8 @@ function model(x, y) {//名称
             chess.skill2_cooling = chess.skill2_max_cooling;
             selector(selectid, 1); skill(2);
             overall_skill();
+        } else if (chess.skill1_cooling > 0) {
+            alert('技能尚未冷却!');
         }
     }
     chess.skill3_launch = function () {
@@ -42,6 +46,8 @@ function model(x, y) {//名称
             chess.skill3_cooling = chess.skill3_max_cooling;
             selector(selectid, 1); skill(3);
             overall_skill();
+        } else if (chess.skill1_cooling > 0) {
+            alert('技能尚未冷却!');
         }
     }
     chess.skill1_src = "./img/skill0.png";//skill1
