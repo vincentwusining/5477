@@ -260,164 +260,164 @@ function chess1010(x, y) {//草史莱姆
             if (bool) {//行动   
                 chess.data[0] = -1;
                 AI();
-                function AI(end) {
-                    var next = 0;
-                    selector(id, 1);
-                    if (chess.data[1] == 1) {//就近 
-                        var num = 9999;//步数
-                        var dir = 0;//第一步方向  
-                        var bool = 0;
-                        for (var h = 0; h < board.length; h++) {//找人 
-                            if (board[h].enemy == 0 && (board[h].class == 1 || board[h].class == 2)) {//找人 
-                                for (var i = 1; i <= 16; i++) {//找地
-                                    for (var j = 1; j <= 16; j++) { //找地
-                                        for (var k = 0; k < board.length; k++) {//找地
-                                            if (board[k].x == i && board[k].y == j) {
-                                                if (detect_range(1, board[h].id, board[k].id) == 1) {//改攻击范围   
-                                                    var r = route(chess.x, chess.y, board[k].x, board[k].y, chess.max_movement, 1)// 改每回合伤害
-                                                    if (r[0] < num) {
-                                                        num = r[0];
-                                                        dir = r[1];
-                                                    }
-                                                }
-                                                break;
+            }
+        }
+        function AI(end) {
+            var next = 0;
+            selector(id, 1);
+            if (chess.data[1] == 1) {//就近 
+                var num = 9999;//步数
+                var dir = 0;//第一步方向  
+                var bool = 0;
+                for (var h = 0; h < board.length; h++) {//找人 
+                    if (board[h].enemy == 0 && (board[h].class == 1 || board[h].class == 2)) {//找人 
+                        for (var i = 1; i <= 16; i++) {//找地
+                            for (var j = 1; j <= 16; j++) { //找地
+                                for (var k = 0; k < board.length; k++) {//找地
+                                    if (board[k].x == i && board[k].y == j) {
+                                        if (detect_range(1, board[h].id, board[k].id) == 1) {//改攻击范围   
+                                            var r = route(chess.x, chess.y, board[k].x, board[k].y, chess.max_movement, 1)// 改每回合伤害
+                                            if (r[0] < num) {
+                                                num = r[0];
+                                                dir = r[1];
                                             }
                                         }
-                                    }
-                                }
-                            }
-                        }
-                        if (num == 0) {//打人
-                            if (chess.skill1_cooling == 0) {
-                                setTimeout(function () { skill(1); }, 200);
-                                setTimeout(function () { input(1, "input1010_1_1", 1) }, 400);
-                                for (var i = 0; i < board.length; i++) {
-                                    if (detect_range(1, id, board[i].id) == 1 && board[i].enemy == 0 && (board[i].class == 1 || board[i].class == 2)) {//改范围
-                                        setTimeout(function (x) { selector(x) }, 600, board[i].id);
                                         break;
                                     }
                                 }
-                                setTimeout(function () { chess.skill1_launch() }, 800);
-                                next = 1;
                             }
                         }
-                        else { //打障碍物
-                            var next_p = [[0], [0, 1, 1], [1, 0, 2], [0, -1, 3], [-1, 0, 4]];
-                            var x = chess.x + next_p[dir][0];
-                            var y = chess.y + next_p[dir][1];
-                            if (detect_resist(x, y) == 1) {
-                                if (chess.skill1_cooling == 0) {
-                                    for (var i = 0; i < board.length; i++) {
-                                        if (board[i].x == x && board[i].y == y && board[i].enemy == 0 && board[i].class == 3) {//改性格，是否打自己人
-                                            setTimeout(function () { skill(1); }, 200);
-                                            setTimeout(function () { input(1, "input1010_1_1", 1) }, 400);
-                                            setTimeout(function (xx) { selector(xx) }, 600, board[i].id);
-                                            setTimeout(function () { chess.skill1_launch() }, 800);
-                                            next = 1;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            else if (chess.movement > 0) {//走路
-                                controller(2);
-                                if (turn == 1) {
-                                    var x = $(".turn")[0]; x.innerHTML = '转向 否'; x.style.backgroundColor = 'red'; turn = 0;
-                                }
-                                setTimeout(function () { chess.movefunction(id, dir, 1, 0, 0, 0, 0) }, 200);
-                                next = 2;
-                            }
-                        }
-                        var target_id = 0;
-                        var tid = 0;//tempid
-                        var tdistance = 9999;//tempdistance
-                        for (var i = 0; i < board.length; i++) {
-                            if (board[i].class != 0 && board[i].enemy != 1 && Math.abs(board[i].x - chess.x) + Math.abs(board[i].y - chess.y) < tdistance) {
-                                tid = board[i].id;
-                                tdistance = Math.abs(board[i].x - chess.x) + Math.abs(board[i].y - chess.y);
-                            }
-                        }
-                        target_id = tid;
-                    }
-                    else if (chess.data[1] == 2) {//算计
-
-                    }
-                    else if (chess.data[1] == 3) {//斩首
-                        var tid = 0;//tempid
-                        var thealth = 9999;//temphealth
-                        for (var i = 0; i < board.length; i++) {
-                            if (board[i].class == 1 && chess.enemy != 1 && board[i].health < thealth) {
-                                tid = board[i].id;
-                                thealth = board[i].health;
-                            }
-                        }
-                        target_id = tid;
-                    }
-                    var target = document.getElementById(target_id);//以上确定目标
-                    /*  alert(5)
-                      if (chess.data[2] == 1) {
-                          var next = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-                          var road = [99999, 0, 99999, 999999, 99999]//步数 方向 攻击 攻击停留 陷阱
-                          for (var i = 0; i <= 3; i++) {//走四个方向
-                              //  alert(chess.x); alert(chess.y); alert(target.x + next[i][0]); alert(target.y + next[i][1]); alert(chess.max_movement); alert(chess.data[4] - 1); alert(chess.data[3]);
-                              var temproad = route(chess.x, chess.y, target.x + next[i][0], target.y + next[i][1], chess.max_movement, 1, chess.data[4] - 1, chess.data[3]);
-                              if (chess.data[3] == 1) {//懦弱
-                                  if (temproad[3] < road[3]) {
-                                      road = temproad;
-                                  }
-                                  else if (temproad[5] < road[5]) {
-                                      road = temproad;
-                                  }
-                                  else if (temproad[1] < road[1]) {
-                                      road = temproad;
-                                  }
-                              }
-                              if (chess.data[3] == 2) { }
-                              if (chess.data[3] == 3) { }
-                          }
-                      }
-                      else if (chess.data[2] == 2) { }
-                      else if (chess.data[2] == 3) { }
-                      var dir = road[1];//以上确定下一步方向
-                      var next = [[0, 0], [0, 1], [1, 0], [0, -1], [-1, 0]];
-                      var bool = 0;//是否为障碍
-                      alert(4)
-                      for (var i = 0; i < board.length; i++) {
-                          if (board[i].x == chess.x + next[dir][0] && board[i].y == chess.y + next[dir][1] && board[i].class != 0) {
-                              bool = 1;
-                          }
-                      }
-                      alert(3)
-                      if (bool == 1) {
-                          alert(2)
-                      }
-                      else {
-                          alert(1)
-                          controller(2);
-                          document.getElementById(selectid).movefunction(selectid, dir, 1, 0, 0, 0, 0)
-                      }*/
-                    if (next == 0) {//结束行动 
-                        chess.data[0] = 1;
-                        var bool = 1;
-                        for (var i = 0; i < board.length; i++) {//进下一回合
-                            if (board[i].fixedid == chess.fixedid && board[i].id > chess.id && board[i].data[0] == 0) {//如果有人行动未完成
-                                bool = 0;
-                            }
-                        }
-                        if (bool) {//下一个人物行动
-                            next_act();
-                        } else if (end == 1) {//下一个自己行动
-                            setTimeout(function () { overall_skill(); }, 0);
-                        } else if (end == 2) {//下一个自己行动
-                            setTimeout(function () { overall_skill(); }, 0);
-                        }
-                    }//继续行动 
-                    else if (next == 1) {//打人
-                        setTimeout(function () { AI(1); }, 800);
-                    } else if (next == 2) {//走路
-                        setTimeout(function () { AI(2); }, 200);
                     }
                 }
+                if (num == 0) {//打人
+                    if (chess.skill1_cooling == 0) {
+                        setTimeout(function () { skill(1); }, 200);
+                        setTimeout(function () { input(1, "input1010_1_1", 1) }, 400);
+                        for (var i = 0; i < board.length; i++) {
+                            if (detect_range(1, id, board[i].id) == 1 && board[i].enemy == 0 && (board[i].class == 1 || board[i].class == 2)) {//改范围
+                                setTimeout(function (x) { selector(x) }, 600, board[i].id);
+                                break;
+                            }
+                        }
+                        setTimeout(function () { chess.skill1_launch() }, 800);
+                        next = 1;
+                    }
+                }
+                else { //打障碍物
+                    var next_p = [[0], [0, 1, 1], [1, 0, 2], [0, -1, 3], [-1, 0, 4]];
+                    var x = chess.x + next_p[dir][0];
+                    var y = chess.y + next_p[dir][1];
+                    if (detect_resist(x, y) == 1) {
+                        if (chess.skill1_cooling == 0) {
+                            for (var i = 0; i < board.length; i++) {
+                                if (board[i].x == x && board[i].y == y && board[i].enemy == 0 && board[i].class == 3) {//改性格，是否打自己人
+                                    setTimeout(function () { skill(1); }, 200);
+                                    setTimeout(function () { input(1, "input1010_1_1", 1) }, 400);
+                                    setTimeout(function (xx) { selector(xx) }, 600, board[i].id);
+                                    setTimeout(function () { chess.skill1_launch() }, 800);
+                                    next = 1;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else if (chess.movement > 0) {//走路
+                        controller(2);
+                        if (turn == 1) {
+                            var x = $(".turn")[0]; x.innerHTML = '转向 否'; x.style.backgroundColor = 'red'; turn = 0;
+                        }
+                        setTimeout(function () { chess.movefunction(id, dir, 1, 0, 0, 0, 0) }, 200);
+                        next = 2;
+                    }
+                }
+                var target_id = 0;
+                var tid = 0;//tempid
+                var tdistance = 9999;//tempdistance
+                for (var i = 0; i < board.length; i++) {
+                    if (board[i].class != 0 && board[i].enemy != 1 && Math.abs(board[i].x - chess.x) + Math.abs(board[i].y - chess.y) < tdistance) {
+                        tid = board[i].id;
+                        tdistance = Math.abs(board[i].x - chess.x) + Math.abs(board[i].y - chess.y);
+                    }
+                }
+                target_id = tid;
+            }
+            else if (chess.data[1] == 2) {//算计
+
+            }
+            else if (chess.data[1] == 3) {//斩首
+                var tid = 0;//tempid
+                var thealth = 9999;//temphealth
+                for (var i = 0; i < board.length; i++) {
+                    if (board[i].class == 1 && chess.enemy != 1 && board[i].health < thealth) {
+                        tid = board[i].id;
+                        thealth = board[i].health;
+                    }
+                }
+                target_id = tid;
+            }
+            var target = document.getElementById(target_id);//以上确定目标
+            /*  alert(5)
+              if (chess.data[2] == 1) {
+                  var next = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+                  var road = [99999, 0, 99999, 999999, 99999]//步数 方向 攻击 攻击停留 陷阱
+                  for (var i = 0; i <= 3; i++) {//走四个方向
+                      //  alert(chess.x); alert(chess.y); alert(target.x + next[i][0]); alert(target.y + next[i][1]); alert(chess.max_movement); alert(chess.data[4] - 1); alert(chess.data[3]);
+                      var temproad = route(chess.x, chess.y, target.x + next[i][0], target.y + next[i][1], chess.max_movement, 1, chess.data[4] - 1, chess.data[3]);
+                      if (chess.data[3] == 1) {//懦弱
+                          if (temproad[3] < road[3]) {
+                              road = temproad;
+                          }
+                          else if (temproad[5] < road[5]) {
+                              road = temproad;
+                          }
+                          else if (temproad[1] < road[1]) {
+                              road = temproad;
+                          }
+                      }
+                      if (chess.data[3] == 2) { }
+                      if (chess.data[3] == 3) { }
+                  }
+              }
+              else if (chess.data[2] == 2) { }
+              else if (chess.data[2] == 3) { }
+              var dir = road[1];//以上确定下一步方向
+              var next = [[0, 0], [0, 1], [1, 0], [0, -1], [-1, 0]];
+              var bool = 0;//是否为障碍
+              alert(4)
+              for (var i = 0; i < board.length; i++) {
+                  if (board[i].x == chess.x + next[dir][0] && board[i].y == chess.y + next[dir][1] && board[i].class != 0) {
+                      bool = 1;
+                  }
+              }
+              alert(3)
+              if (bool == 1) {
+                  alert(2)
+              }
+              else {
+                  alert(1)
+                  controller(2);
+                  document.getElementById(selectid).movefunction(selectid, dir, 1, 0, 0, 0, 0)
+              }*/
+            if (next == 0 || chess.fixedid != active_fixedid) {//结束行动 
+                chess.data[0] = 1;
+                var bool = 1;
+                for (var i = 0; i < board.length; i++) {//进下一回合
+                    if (board[i].fixedid == chess.fixedid && board[i].id > chess.id && board[i].data[0] == 0) {//如果有人行动未完成
+                        bool = 0;
+                    }
+                }
+                if (bool) {//下一个人物行动
+                    next_act();
+                } else if (end == 1) {//下一个自己行动
+                    setTimeout(function () { overall_skill(); }, 0);
+                } else if (end == 2) {//下一个自己行动
+                    setTimeout(function () { overall_skill(); }, 0);
+                }
+            }//继续行动 
+            else if (next == 1) {//打人
+                setTimeout(function () { AI(1); }, 800);
+            } else if (next == 2) {//走路
+                setTimeout(function () { AI(2); }, 200);
             }
         }
     }
