@@ -14,7 +14,7 @@ function chess1010(x, y) {//草史莱姆
     chess.max_movement = 4;//1~20 5
     chess.movement = 4;
     chess.reflect = 5;//1~20 5   -1不可行动
-    skill1.innerHTML = '选择一个目标<img height="25px" width="25px" id="input1010_1_1" onclick="input(1,id,1)">造成一点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    skill1.innerHTML = '选择一个目标<img height="25px" width="25px" src="./img/choose.png" id="input1010_1_1" onclick="input(1,id,1)">造成一点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
     skill2.innerHTML = '每三回合回一点血';
     skill3.innerHTML = '配备<p  class="md" onclick="alert(\'索敌模块：选择就近敌人\') ">就近 </p><p class="md" onclick="alert(\'定位模块：超敌人靠近\')">近战 </p><p class="md" onclick="alert(\'寻路模块：能直接抵达时总是绕路，避开陷阱。不能直接抵达则寻找所需攻击最少的路劲\')">懦弱 </p><p class="md" onclick="alert(\'性格模块：不可攻击队友\')">团结 </p><p class="md" onclick="alert(\'随机模块：在决定是否移动/移动方向/是否攻击时 有5%可能不按照计划行动\')">清醒 </p>';
     chess.skill1_launch = function () {

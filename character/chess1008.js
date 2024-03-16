@@ -15,7 +15,7 @@ function chess1008(x, y) {//大炮
     chess.movement = 0;
     chess.reflect = -1;//1~20 5   -1不可行动
     skill1.innerHTML = '无法行动，无法移动，无法被移动。';
-    skill2.innerHTML = '若军火商在周围四格，则对反方向范围内所有敌人造成3点范围伤害。范围演示：<img height="25px" width="25px" id="input1008_1_1" onclick="input(3,id,14)">（需在军火商行动回合行动）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill2.innerHTML = '若军火商在周围四格，则对反方向范围内所有敌人造成3点范围伤害。范围演示：<img height="25px" width="25px" src="./img/choose.png" id="input1008_1_1" onclick="input(3,id,14)">（需在军火商行动回合行动）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
     skill3.innerHTML = '若军火商在周围四格，则对自身造成10点伤害。（需在军火商行动回合行动）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill2_launch = function () {
         var chess = document.getElementById(selectid);
