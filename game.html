@@ -395,6 +395,8 @@
                 document.getElementById("movement").innerHTML = "";
                 document.getElementById("max_movement").innerHTML = "";
                 document.getElementById("health_modification").innerHTML = "";
+                document.getElementById("movement_modification").innerHTML = "";
+                document.getElementById("reflect_modification").innerHTML = "";
                 document.getElementById("reflect").innerHTML = "";
                 document.getElementById("skill1").childNodes[1].src = "./img/void.png";
                 document.getElementById("skill1").childNodes[3].innerHTML = "";
@@ -402,6 +404,7 @@
                 document.getElementById("skill2").childNodes[3].innerHTML = "";
                 document.getElementById("skill3").childNodes[1].src = "./img/void.png";
                 document.getElementById("skill3").childNodes[3].innerHTML = "";
+                document.getElementById('effect_board').innerHTML = "";
                 selectid = id;
                 range_display(0);
                 state = 0;
@@ -409,6 +412,7 @@
             }
             else {
                 var chess = document.getElementById(id);
+                var effect_intro = [0, '防御：受到的伤害减少', '脆弱：受到的伤害增加', '昏厥：无法行动', '坚毅：无法被昏厥', '束缚：无法移动', '大型：无法被束缚', '泥沼：移动时消耗的移动增加', '火毒：每回合结束受到', '超重：无法被推拉', '免疫：免疫其余所有特殊效果', '攻击+：攻击增加', '攻击-：攻击减少', '反应+：反应增加', '反应-：反应减少', '移动+：最大移动增加', '移动-：最大移动减少', '生命+:最大生命增加', '生命-：最大生命', '缴械：无法释放技能', '武装：无法被缴械'];
                 if (state == 0) {//选择
                     if (selectid == 0 || force == 1 || !document.getElementById(selectid)) {//强制选择或前人物找不到（已死亡）
                         document.getElementById("img").src = chess.img;
@@ -416,13 +420,29 @@
                         document.getElementById("max_health").innerHTML = chess.max_health;
                         if (chess.effect_sum[10] > 0) {
                             document.getElementById("health_modification").innerHTML = '+' + chess.effect_sum[10];
+                            document.getElementById("health_modification").style.color = '#00cc00';
                         } else if (chess.effect_sum[10] < 0) {
                             document.getElementById("health_modification").innerHTML = chess.effect_sum[10];
+                            document.getElementById("health_modification").style.color = 'red';
                         } else { document.getElementById("health_modification").innerHTML = "" }
                         document.getElementById("health").innerHTML = chess.health;
                         document.getElementById("movement").innerHTML = chess.movement;
                         document.getElementById("max_movement").innerHTML = chess.max_movement;
+                        if (chess.effect_sum[9] > 0) {
+                            document.getElementById("movement_modification").innerHTML = '+' + chess.effect_sum[9];
+                            document.getElementById("movement_modification").style.color = '#00cc00';
+                        } else if (chess.effect_sum[9] < 0) {
+                            document.getElementById("movement_modification").innerHTML = chess.effect_sum[9];
+                            document.getElementById("movement_modification").style.color = 'red';
+                        } else { document.getElementById("movement_modification").innerHTML = "" }
                         document.getElementById("reflect").innerHTML = chess.reflect;
+                        if (chess.effect_sum[8] > 0) {
+                            document.getElementById("reflect_modification").innerHTML = '(+' + chess.effect_sum[8] + ')';
+                            document.getElementById("reflect_modification").style.color = '#00cc00';
+                        } else if (chess.effect_sum[8] < 0) {
+                            document.getElementById("reflect_modification").innerHTML = '(' + chess.effect_sum[8] + ')';
+                            document.getElementById("reflect_modification").style.color = 'red';
+                        } else { document.getElementById("reflect_modification").innerHTML = "" }
                         //document.getElementById("iid").innerHTML = chess.id;
                         //document.getElementById("fixedid").innerHTML = chess.fixedid;
                         document.getElementById("skill1").childNodes[1].src = chess.skill1_src;
@@ -431,6 +451,31 @@
                         document.getElementById("skill2").childNodes[3].innerHTML = chess.skill2_name;
                         document.getElementById("skill3").childNodes[1].src = chess.skill3_src;
                         document.getElementById("skill3").childNodes[3].innerHTML = chess.skill3_name;
+                        document.getElementById('effect_board').innerHTML = "";
+                        if (chess.effect[0] > 1) {
+                            for (var i = 1; i < chess.effect[0]; i++) {
+                                var div = document.createElement('div');
+                                var img = document.createElement('img');
+                                var p = document.createElement('p');
+                                var kind = chess.effect[i][0];
+                                var src = './img/effect' + kind + '.png';
+                                img.src = src;
+                                img.style.width = '25px';
+                                img.style.height = '25px';
+                                img.style.opacity = 0.7;
+                                p.innerHTML = effect_intro[chess.effect[i][0]];
+                                if (kind == 1 || kind == 2 || kind == 7 || kind == 8 || kind == 11 || kind == 12 || kind == 13 || kind == 14 || kind == 15 || kind == 16 || kind == 17 || kind == 18) {
+                                    p.innerHTML += chess.effect[i][1];
+                                }
+                                if (kind == 8) { p.innerHTML += '点伤害' }
+                                p.innerHTML += ",持续" + chess.effect[i][2] + '回合';
+                                p.style.opacity = 0.7;
+                                div.style.display = 'flex';
+                                div.appendChild(img);
+                                div.appendChild(p);
+                                document.getElementById('effect_board').appendChild(div);
+                            }
+                        }
                         selectid = id;
                         if (chess.class != 0) { controller(2); }
                     }
@@ -446,53 +491,10 @@
                             }
                         }
                         if (next != 0) { id = next; }
-                        var chess = document.getElementById(id);
-                        document.getElementById("img").src = chess.img;
-                        document.getElementById("name").innerHTML = chess.name;
-                        document.getElementById("max_health").innerHTML = chess.max_health;
-                        if (chess.effect_sum[10] > 0) {
-                            document.getElementById("health_modification").innerHTML = '+' + chess.effect_sum[10];
-                        } else if (chess.effect_sum[10] < 0) {
-                            document.getElementById("health_modification").innerHTML = chess.effect_sum[10];
-                        } else { document.getElementById("health_modification").innerHTML = "" }
-                        document.getElementById("health").innerHTML = chess.health;
-                        document.getElementById("movement").innerHTML = chess.movement;
-                        document.getElementById("max_movement").innerHTML = chess.max_movement;
-                        document.getElementById("reflect").innerHTML = chess.reflect;
-                        //document.getElementById("iid").innerHTML = chess.id;
-                        //document.getElementById("fixedid").innerHTML = chess.fixedid;
-                        document.getElementById("skill1").childNodes[1].src = chess.skill1_src;
-                        document.getElementById("skill1").childNodes[3].innerHTML = chess.skill1_name;
-                        document.getElementById("skill2").childNodes[1].src = chess.skill2_src;
-                        document.getElementById("skill2").childNodes[3].innerHTML = chess.skill2_name;
-                        document.getElementById("skill3").childNodes[1].src = chess.skill3_src;
-                        document.getElementById("skill3").childNodes[3].innerHTML = chess.skill3_name;
-                        selectid = id;
-                        if (chess.class != 0) { controller(2); }
+                        selector(id, 1);
                     }
                     else {//选择与已选坐标不同
-                        document.getElementById("img").src = chess.img;
-                        document.getElementById("name").innerHTML = chess.name;
-                        document.getElementById("max_health").innerHTML = chess.max_health;
-                        if (chess.effect_sum[10] > 0) {
-                            document.getElementById("health_modification").innerHTML = '+' + chess.effect_sum[10];
-                        } else if (chess.effect_sum[10] < 0) {
-                            document.getElementById("health_modification").innerHTML = chess.effect_sum[10];
-                        } else { document.getElementById("health_modification").innerHTML = "" }
-                        document.getElementById("health").innerHTML = chess.health;
-                        document.getElementById("movement").innerHTML = chess.movement;
-                        document.getElementById("max_movement").innerHTML = chess.max_movement;
-                        document.getElementById("reflect").innerHTML = chess.reflect;
-                        //document.getElementById("iid").innerHTML = chess.id;
-                        //document.getElementById("fixedid").innerHTML = chess.fixedid;
-                        document.getElementById("skill1").childNodes[1].src = chess.skill1_src;
-                        document.getElementById("skill1").childNodes[3].innerHTML = chess.skill1_name;
-                        document.getElementById("skill2").childNodes[1].src = chess.skill2_src;
-                        document.getElementById("skill2").childNodes[3].innerHTML = chess.skill2_name;
-                        document.getElementById("skill3").childNodes[1].src = chess.skill3_src;
-                        document.getElementById("skill3").childNodes[3].innerHTML = chess.skill3_name;
-                        selectid = id;
-                        if (chess.class != 0) { controller(2); }
+                        selector(id, 1);
                     }
                 }
                 if (state == 1) {//技能选人
@@ -806,7 +808,11 @@
             }
         }
         function hit(id, hit_health, hit_class, source, x, y) {
-            document.getElementById(id).hitfunction(id, hit_health - document.getElementById(source).effect_sum[7], hit_class, source, x, y)
+            if (document.getElementById(source)) {
+                document.getElementById(id).hitfunction(id, hit_health - document.getElementById(source).effect_sum[7], hit_class, source, x, y)
+            } else {
+                document.getElementById(id).hitfunction(id, hit_health, hit_class, source, x, y)
+            }
         }
         function next_music(x) {
             var music_list = ['./audio/Aflame_Avenue.mp3', './audio/ALIVE.ogg', './audio/Boiling_Blood.ogg', './audio/CONFRONT-伟伟-161637492-128.mp3', './audio/Curtain_Call-伟伟-161637491-128.mp3', './audio/El_Brillo_Solitario-伟伟-161637489-128.mp3', './audio/Evolutionary_Mechanization-伟伟-161637459-128.mp3', './audio/genshin.mp3', './audio/Lily_of_the_Valley-伟伟-161637485-128.mp3', './audio/LITHOS-伟伟-161638250-128.mp3', './audio/Lullabye-伟伟-161638256-100.ogg', './audio/Not_Your_Business_Part_2-伟伟-161638243-128.mp3', './audio/Ready_？-伟伟-161638228-100.ogg', './audio/Reconnection-伟伟-161638190-128.mp3', './audio/Renegade-伟伟-161638241-100.ogg', './audio/Requiem-伟伟-161638193-100.ogg', './audio/Reversed_Time-伟伟-161638232-100.ogg', './audio/Rock_the_Night_Away-伟伟-161638212-128.mp3', './audio/Sparkling_Hydraulics-伟伟-161638224-128.mp3', './audio/Speed_of_Light_(Inst_)-伟伟-161638196-100.ogg', './audio/Stay_Gold-伟伟-161638188-128.mp3', './audio/Synthetech-伟伟-161638189-128.mp3', './audio/Till_the_Bell_Tolls-伟伟-161638187-100.ogg', './audio/Tipsy-伟伟-161638180-100.ogg', './audio/Untitled_world-伟伟-161638181-100.ogg', './audio/Zone_10⁻⁸-伟伟-161638182-128.mp3', './audio/УраУра-伟伟-161638186-128.mp3', './audio/人性-伟伟-161637046-128.mp3', './audio/从那高地上远眺-伟伟-161638184-128.mp3', './audio/冬涤- 伟伟-161637103-128.mp3', './audio/夏浪-伟伟-161637047-128.mp3', './audio/大柏墟-伟伟-161637087-128.mp3', './audio/执棋者之骨-伟伟-161637036-128.mp3', './audio/故乡的风-伟伟-161637064-128.mp3', './audio/旅途前方-伟伟-161637089-128.mp3', './audio/春弦-伟伟-161638183-100.ogg', './audio/永冻症- 伟伟-161637048-128.mp3', './audio/泛用型自动化解决方案0_3_2_9f2-伟伟-161637099-128.mp3', './audio/独行长路-伟伟-161637122-128.mp3', './audio/生命 流-伟伟-161637040-100.ogg', './audio/短兵相接-伟伟-161637053-128.mp3', './audio/示岁-伟伟-161637043-128.mp3', './audio/秋绪-伟伟-161637041-100.ogg', './audio/终局抵抗者-伟伟-161637042-128.mp3', './audio/血液-伟伟-161637037-128.mp3', './audio/逃亡_part2-伟伟-161637044-128.mp3'];
@@ -1071,15 +1077,20 @@
             *结束<br>行动*</p>
     </div>
     <!--棋盘-->
-    <div id="p_board" style="position: absolute; width: 400px;height: 400px;"></div>
+    <div id="p_board" style="position: absolute; width: 400px;height: 400px;top: 50px;pointer-events: none;"></div>
     <div id="board" style="position:relative;height:400px;"></div>
+    <div id="effect_board"
+        style="position: absolute; width: 400px;height: 400px;top: 50px;display: flex;flex-direction: column-reverse;justify-content: flex-start;pointer-events: none;">
+    </div>
     <div hidden id="overall_skill"></div>
     <script>generate();</script>
     <script>//测试
         //document.getElementById(2).innerHTML = route(1, 1, 5, 5, 0, 0, 0, 0, 0)[0]; 
     </script>
     <div style="display: flex;">
+
         <!--目标选择器-->
+
         <div id="selector" style="background-image:url(img/back2.png) ;width:200px;height: 200px; ">
             <img id="img" src="./img/void.png" width="100px" height="100px" alt=" "
                 style="position: absolute;left: 100px;">
@@ -1087,8 +1098,9 @@
             <p style="display: inline;">血量:</p><b id="health" style="display: inline"></b><b>/</b><b id="max_health"
                 style="display: inline"></b><b id="health_modification"></b><br>
             <p style="display: inline;">移动:</p><b id="movement" style="display: inline"></b><b>/</b><b id="max_movement"
-                style="display: inline"></b><br>
-            <p style="display: inline;">反应:</p><b id="reflect" style="display: inline"></b><br>
+                style="display: inline"></b><b id="movement_modification"></b><br>
+            <p style="display: inline;">反应:</p><b id="reflect" style="display: inline"></b><b
+                id="reflect_modification"></b><br>
             <!--<p style="display: inline;">id:</p><b id="iid" style="display: inline"></b><br>
             <p style="display: inline;">fixedid:</p><b id="fixedid" style="display: inline"></b><br>-->
             <!--skill-->
@@ -1109,7 +1121,9 @@
             </div>
         </div>
         <div style="display: flex;flex-direction: column;">
+
             <!--控制区索引-->
+
             <div style="display: flex;flex-direction: row;height:30px;background-color: #555b6d;width:200px;">
                 <button id="controller_button1" onclick="controller(1)"
                     style="background-color: #555b6d;border-radius: 0px;height:30px;width:30px;border: 0px;">生</button>
@@ -1118,9 +1132,13 @@
                 <button id="controller_button3" onclick="controller(3)"
                     style="background-color: #555b6d;border-radius: 0px;height:30px;width:30px;border: 0px;">技</button>
             </div>
+
             <!--控制区-->
+
             <div style="background-color: aqua;height:170px;position: relative ;">
+
                 <!--1生-->
+
                 <div id="controller_page1" hidden>
                     <!--<button onclick="chess3(1,1)">小道行者</button>-->
                     <button onclick="born(this,1);" style="border-radius: 5px; ">忍者</button>
@@ -1134,7 +1152,9 @@
                     <button onclick="set(0)"
                         style="background-image:url('./img/setting.png');background-color: aqua;background-size: 50px 50px;width: 50px;height: 50px;border: 0px;position: absolute;bottom: 0px;right: 0px;"></button>
                 </div>
+
                 <!--2移-->
+
                 <div id="controller_page2" hidden
                     style="position: absolute ;height: 60px;width:60px;left:70px;top: 56px; ">
                     <p class="turn"
@@ -1154,7 +1174,9 @@
                         onclick="document.getElementById(selectid).movefunction(selectid,4,1,0,0,0,0)"
                         style="transform: rotate(270deg)  ;position: absolute;left:-54px;top:5px;cursor: pointer;">
                 </div>
+
                 <!--3技-->
+
                 <div id="controller_page3" hidden>
                     <skill></skill>
                     <p style="position: absolute;bottom: 20px;">冷却：<b></b>/<b></b>(回合)</p>
