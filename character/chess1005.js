@@ -19,7 +19,7 @@ function chess1005(x, y) {//战斗无人机
     skill3.innerHTML = '';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
-        if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0) {
+        if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0 && (chess.effect_sum[15] == 1 || chess.effect_sum[13] == 0) && chess.effect_sum[2] == 0) {
             var input1 = document.getElementById("controller_page3").querySelector("#input1005_1_1").value;
             if (chess.data[1] == 0) {
                 hit(input1, -1, 0, chess.id, chess.x, chess.y);
@@ -56,7 +56,7 @@ function chess1005(x, y) {//战斗无人机
         if (state != 0) {
             input(3);
         }
-        if (form == 0 && chess.fixedid == active_fixedid && chess.effect_sum[2] == 0) {//走路
+        if (form == 0 && chess.fixedid == active_fixedid && chess.effect_sum[2] == 0 && chess.effect_sum[3] == 0) {//走路
             var move_decrease = 1 + chess.effect_sum[4];
             if (dir == 1) { if (chess.direction == 1 || turn == 0) { if (detect_resist(chess.x, chess.y + 1) == 0 && chess.movement >= move_decrease && chess.effect_sum[3] == 0) { chess.y += 1; chess.movement -= move_decrease } } else { chess.direction = 1; chess.style.transform = "rotate(0deg)"; } }
             if (dir == 2) { if (chess.direction == 2 || turn == 0) { if (detect_resist(chess.x + 1, chess.y) == 0 && chess.movement >= move_decrease && chess.effect_sum[3] == 0) { chess.x += 1; chess.movement -= move_decrease } } else { chess.direction = 2; chess.style.transform = "rotate(90deg)"; } }
@@ -111,7 +111,7 @@ function chess1005(x, y) {//战斗无人机
         else if (hit_health > 0) {
             anim3(chess.x, chess.y, hit_health);
         }
-        if (chess.health > chess.max_health) { chess.health = chess.max_health; }
+        if (chess.health > chess.max_health + chess.effect_sum[10]) { chess.health = chess.max_health + chess.effect_sum[10]; }
         if (chess.health <= 0) { anim5(chess.x, chess.y); document.getElementById("board").removeChild(chess); }
         overall_skill();
     }
@@ -184,44 +184,44 @@ function chess1005(x, y) {//战斗无人机
                 chess.effect_sum[j] = 0;
             }
             for (var j = 1; j < chess.effect[0]; j++) {
-                if (chess[i].effect[j][0] == 1) {
-                    chess[i].effect_sum[1] -= chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 2) {
-                    chess[i].effect_sum[1] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 3) {
-                    chess[i].effect_sum[2] = 1;
-                } else if (chess[i].effect[j][0] == 5) {
-                    chess[i].effect_sum[3] = 1;
-                } else if (chess[i].effect[j][0] == 7) {
-                    chess[i].effect_sum[4] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 8) {
-                    chess[i].effect_sum[5] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 9) {
-                    chess[i].effect_sum[6] = 1;
-                } else if (chess[i].effect[j][0] == 11) {
-                    chess[i].effect_sum[7] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 12) {
-                    chess[i].effect_sum[7] -= chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 13) {
-                    chess[i].effect_sum[8] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 14) {
-                    chess[i].effect_sum[8] -= chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 15) {
-                    chess[i].effect_sum[9] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 16) {
-                    chess[i].effect_sum[9] -= chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 17) {
-                    chess[i].effect_sum[10] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 18) {
-                    chess[i].effect_sum[10] -= chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 4) {
-                    chess[i].effect_sum[11] = 1;
-                } else if (chess[i].effect[j][0] == 6) {
-                    chess[i].effect_sum[12] = 1;
-                } else if (chess[i].effect[j][0] == 19) {
-                    chess[i].effect_sum[13] = 1;
-                } else if (chess[i].effect[j][0] == 20) {
-                    chess[i].effect_sum[15] = 1;
+                if (chess.effect[j][0] == 1) {
+                    chess.effect_sum[1] -= chess.effect[j][1];
+                } else if (chess.effect[j][0] == 2) {
+                    chess.effect_sum[1] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 3) {
+                    chess.effect_sum[2] = 1;
+                } else if (chess.effect[j][0] == 5) {
+                    chess.effect_sum[3] = 1;
+                } else if (chess.effect[j][0] == 7) {
+                    chess.effect_sum[4] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 8) {
+                    chess.effect_sum[5] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 9) {
+                    chess.effect_sum[6] = 1;
+                } else if (chess.effect[j][0] == 11) {
+                    chess.effect_sum[7] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 12) {
+                    chess.effect_sum[7] -= chess.effect[j][1];
+                } else if (chess.effect[j][0] == 13) {
+                    chess.effect_sum[8] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 14) {
+                    chess.effect_sum[8] -= chess.effect[j][1];
+                } else if (chess.effect[j][0] == 15) {
+                    chess.effect_sum[9] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 16) {
+                    chess.effect_sum[9] -= chess.effect[j][1];
+                } else if (chess.effect[j][0] == 17) {
+                    chess.effect_sum[10] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 18) {
+                    chess.effect_sum[10] -= chess.effect[j][1];
+                } else if (chess.effect[j][0] == 4) {
+                    chess.effect_sum[11] = 1;
+                } else if (chess.effect[j][0] == 6) {
+                    chess.effect_sum[12] = 1;
+                } else if (chess.effect[j][0] == 19) {
+                    chess.effect_sum[13] = 1;
+                } else if (chess.effect[j][0] == 20) {
+                    chess.effect_sum[15] = 1;
                 }
             }
         }

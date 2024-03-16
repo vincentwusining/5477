@@ -101,44 +101,44 @@ function chess2004(x, y) {//苔石砖
                 chess.effect_sum[j] = 0;
             }
             for (var j = 1; j < chess.effect[0]; j++) {
-                if (chess[i].effect[j][0] == 1) {
-                    chess[i].effect_sum[1] -= chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 2) {
-                    chess[i].effect_sum[1] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 3) {
-                    chess[i].effect_sum[2] = 1;
-                } else if (chess[i].effect[j][0] == 5) {
-                    chess[i].effect_sum[3] = 1;
-                } else if (chess[i].effect[j][0] == 7) {
-                    chess[i].effect_sum[4] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 8) {
-                    chess[i].effect_sum[5] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 9) {
-                    chess[i].effect_sum[6] = 1;
-                } else if (chess[i].effect[j][0] == 11) {
-                    chess[i].effect_sum[7] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 12) {
-                    chess[i].effect_sum[7] -= chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 13) {
-                    chess[i].effect_sum[8] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 14) {
-                    chess[i].effect_sum[8] -= chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 15) {
-                    chess[i].effect_sum[9] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 16) {
-                    chess[i].effect_sum[9] -= chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 17) {
-                    chess[i].effect_sum[10] += chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 18) {
-                    chess[i].effect_sum[10] -= chess[i].effect[j][1];
-                } else if (chess[i].effect[j][0] == 4) {
-                    chess[i].effect_sum[11] = 1;
-                } else if (chess[i].effect[j][0] == 6) {
-                    chess[i].effect_sum[12] = 1;
-                } else if (chess[i].effect[j][0] == 19) {
-                    chess[i].effect_sum[13] = 1;
-                } else if (chess[i].effect[j][0] == 20) {
-                    chess[i].effect_sum[15] = 1;
+                if (chess.effect[j][0] == 1) {
+                    chess.effect_sum[1] -= chess.effect[j][1];
+                } else if (chess.effect[j][0] == 2) {
+                    chess.effect_sum[1] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 3) {
+                    chess.effect_sum[2] = 1;
+                } else if (chess.effect[j][0] == 5) {
+                    chess.effect_sum[3] = 1;
+                } else if (chess.effect[j][0] == 7) {
+                    chess.effect_sum[4] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 8) {
+                    chess.effect_sum[5] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 9) {
+                    chess.effect_sum[6] = 1;
+                } else if (chess.effect[j][0] == 11) {
+                    chess.effect_sum[7] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 12) {
+                    chess.effect_sum[7] -= chess.effect[j][1];
+                } else if (chess.effect[j][0] == 13) {
+                    chess.effect_sum[8] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 14) {
+                    chess.effect_sum[8] -= chess.effect[j][1];
+                } else if (chess.effect[j][0] == 15) {
+                    chess.effect_sum[9] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 16) {
+                    chess.effect_sum[9] -= chess.effect[j][1];
+                } else if (chess.effect[j][0] == 17) {
+                    chess.effect_sum[10] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 18) {
+                    chess.effect_sum[10] -= chess.effect[j][1];
+                } else if (chess.effect[j][0] == 4) {
+                    chess.effect_sum[11] = 1;
+                } else if (chess.effect[j][0] == 6) {
+                    chess.effect_sum[12] = 1;
+                } else if (chess.effect[j][0] == 19) {
+                    chess.effect_sum[13] = 1;
+                } else if (chess.effect[j][0] == 20) {
+                    chess.effect_sum[15] = 1;
                 }
             }
         }
