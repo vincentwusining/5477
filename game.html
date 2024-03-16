@@ -19,9 +19,10 @@
         var active_fixedid = 2;
         var last_reflect = 9999;
         var acted_fixedid = new Array(10000);
-        var setting = [0, 0, 0]//空 地板0随机1基础2石质3草地，地图0随机，
+        var setting = [0, 0, 0, 1, 1]//0空 1地板0随机1基础2石质3草地  2地图0随机  3背景音乐  4游戏音效
         var creation = 0;//生成人物
         var turn = 0;//是否转向
+        var music_on = 0;//用来初始化音乐
 
         function next_act() {//下一行动
             if (round == 0) {
@@ -666,9 +667,30 @@
             }
             else if (x == -1) {//退出
                 document.getElementById('setting').classList.remove('active');
+                if (setting[3] == 1 && music_on == 0) {
+                    var audio = document.createElement('audio');
+                    audio.src = './audio/genshin.mp3';
+                    audio.setAttribute('autoplay', 'autoplay')
+                    music_on = 1;
+                    alert(music_on);
+                }
             }
-            else {
+            else if (x == 1 || x == 2) {
                 setting[x] = n;
+            }
+            else if (x == 3 || x == 4) {
+                if (setting[x] == 1) {
+                    setting[x] = 0;
+                    var name1 = 'setting' + '_' + x + '_' + 1;
+                    document.getElementById(name1).style.backgroundColor = 'grey';
+                    document.getElementById(name1).style.textDecoration = 'line-through'
+                }
+                else {
+                    setting[x] = 1;
+                    var name1 = 'setting' + '_' + x + '_' + 1;
+                    document.getElementById(name1).style.backgroundColor = '#00cc00';
+                    document.getElementById(name1).style.textDecoration = ''
+                }
             }
             document.getElementById('setting_1_0').style.backgroundColor = 'rgb(49, 103, 105)';
             document.getElementById('setting_1_1').style.backgroundColor = 'rgb(49, 103, 105)';
@@ -1277,7 +1299,7 @@
     </style>
 </head>
 
-<body style="margin:0px">
+<body style="margin:0px" id="body">
     <div
         style="display: flex; flex-direction: row; height: 50px;background-color: #555b6d;background: url(img/back1.png) no-repeat;background-size:100% 100px;">
         <p style="background-color:black;color: white;width: 200px;font-size:30px;padding: 5px;">回合:
@@ -1291,11 +1313,9 @@
     </div>
     <!--棋盘-->
     <div id="p_board" style="position: absolute; width: 400px;height: 400px;"></div>
-    <div id="board" style="position:relative;height:400px;">
-
-    </div>
+    <div id="board" style="position:relative;height:400px;"></div>
     <div hidden id="overall_skill"></div>
-    <script>generate()</script>
+    <script>generate();</script>
     <script>//测试
         //document.getElementById(2).innerHTML = route(1, 1, 5, 5, 0, 0, 0, 0, 0)[0]; 
     </script>
@@ -1388,27 +1408,27 @@
     <div id="setting" onclick="set(-1)"
         style="z-index:490;height: 100%;width: 100%;background-color: rgb(0,0,0,0.5);position: fixed;top: 0px;left: 0px;">
         <div id="setting_1"
-            style="width: 200px;height: 300px;overflow: auto;background-color: white;position: fixed;top: 130px;left: calc(50% - 100px);z-index: 501;border-radius: 5px;">
-            <div>
-                <button onclick="set(1,0)" id="setting_1_0"
-                    style="position: absolute;left: 20px;top: 20px;background-color: grey;border-radius: 5px;">随机地板</button>
-                <button onclick="set(1,1)" id="setting_1_1"
-                    style="position: absolute;left: 110px;top: 20px;background-color: grey;border-radius: 5px;">基础地板</button>
-                <button onclick="set(1,2)" id="setting_1_2"
-                    style="position: absolute;left: 20px;top: 80px;background-color: grey;border-radius: 5px;">石质地板</button>
-                <button onclick="set(1,3)" id="setting_1_3"
-                    style="position: absolute;left: 110px;top: 80px;background-color: grey;border-radius: 5px;">草地地板</button>
-            </div>
-            <div>
-                <button onclick="set(2,0)" id="setting_2_0"
-                    style="position: absolute;left: 20px;top: 140px;background-color: grey;border-radius: 5px;">随机地图</button>
-                <button onclick="set(2,1)" id="setting_2_1"
-                    style="position: absolute;left: 110px;top: 140px;background-color: grey;border-radius: 5px;">一堆房间</button>
-                <button onclick="set(2,2)" id="setting_2_2"
-                    style="position: absolute;left: 20px;top: 200px;background-color: grey;border-radius: 5px;">错综复杂</button>
-            </div>
+            style="width: 235px;height: 300px;overflow:auto;background-color: white;position: fixed;top: 130px;left: calc(50% - 100px);z-index: 501;border-radius: 5px;">
+            <button onclick="set(3,1)" id="setting_3_1"
+                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: #00cc00;border-radius: 5px;">背景音乐</button>
+            <button onclick="set(4,1)" id="setting_4_1"
+                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: #00cc00;border-radius: 5px;">游戏音效</button>
+            <button onclick="set(1,0)" id="setting_1_0"
+                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">随机地板</button>
+            <button onclick="set(1,1)" id="setting_1_1"
+                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">基础地板</button>
+            <button onclick="set(1,2)" id="setting_1_2"
+                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">石质地板</button>
+            <button onclick="set(1,3)" id="setting_1_3"
+                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">草地地板</button>
+            <button onclick="set(2,0)" id="setting_2_0"
+                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">随机地图</button>
+            <button onclick="set(2,1)" id="setting_2_1"
+                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">一堆房间</button>
+            <button onclick="set(2,2)" id="setting_2_2"
+                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">错综复杂</button>
             <button onclick="generate()"
-                style="width: 100px;height: 25px;position: absolute;bottom: 5px;right: 5px;">重新生成</button>
+                style="position: relative;margin: 20px;height: 30px;margin-bottom: 0px;">重新加载</button>
         </div>
     </div>
     <div id="round_over" class="round_fade"
@@ -1422,6 +1442,7 @@
         <p id="round_start_p" style="position: absolute;color: aliceblue;">123</p>
     </div>
     <script>
+        set(0);
         document.getElementById('setting_1').onclick = function (event) { event.stopPropagation(); }
         document.addEventListener('keypress', function (event) {
             var k = event.key;
