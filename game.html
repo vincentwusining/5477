@@ -668,11 +668,8 @@
             else if (x == -1) {//退出
                 document.getElementById('setting').classList.remove('active');
                 if (setting[3] == 1 && music_on == 0) {
-                    var audio = document.createElement('audio');
-                    audio.src = './audio/genshin.mp3';
-                    audio.setAttribute('autoplay', 'autoplay')
                     music_on = 1;
-                    alert(music_on);
+                    next_music();
                 }
             }
             else if (x == 1 || x == 2) {
@@ -681,12 +678,14 @@
             else if (x == 3 || x == 4) {
                 if (setting[x] == 1) {
                     setting[x] = 0;
+                    if (x == 3) { document.getElementById('music').pause(); }
                     var name1 = 'setting' + '_' + x + '_' + 1;
                     document.getElementById(name1).style.backgroundColor = 'grey';
                     document.getElementById(name1).style.textDecoration = 'line-through'
                 }
                 else {
                     setting[x] = 1;
+                    if (x == 3) { document.getElementById('music').play(); }
                     var name1 = 'setting' + '_' + x + '_' + 1;
                     document.getElementById(name1).style.backgroundColor = '#00cc00';
                     document.getElementById(name1).style.textDecoration = ''
@@ -811,6 +810,17 @@
         function hit(id, hit_health, hit_class, source, x, y) {
             document.getElementById(id).hitfunction(id, hit_health - document.getElementById(source).effect_sum[7], hit_class, source, x, y)
         }
+        function next_music(x) {
+            var music_list = ['./audio/Aflame_Avenue.mp3', './audio/ALIVE.ogg', './audio/Boiling_Blood.ogg', './audio/CONFRONT-伟伟-161637492-128.mp3', './audio/Curtain_Call-伟伟-161637491-128.mp3', './audio/El_Brillo_Solitario-伟伟-161637489-128.mp3', './audio/Evolutionary_Mechanization-伟伟-161637459-128.mp3', './audio/genshin.mp3', './audio/Lily_of_the_Valley-伟伟-161637485-128.mp3', './audio/LITHOS-伟伟-161638250-128.mp3', './audio/Lullabye-伟伟-161638256-100.ogg', './audio/Not_Your_Business_Part_2-伟伟-161638243-128.mp3', './audio/Ready_？-伟伟-161638228-100.ogg', './audio/Reconnection-伟伟-161638190-128.mp3', './audio/Renegade-伟伟-161638241-100.ogg', './audio/Requiem-伟伟-161638193-100.ogg', './audio/Reversed_Time-伟伟-161638232-100.ogg', './audio/Rock_the_Night_Away-伟伟-161638212-128.mp3', './audio/Sparkling_Hydraulics-伟伟-161638224-128.mp3', './audio/Speed_of_Light_(Inst_)-伟伟-161638196-100.ogg', './audio/Stay_Gold-伟伟-161638188-128.mp3', './audio/Synthetech-伟伟-161638189-128.mp3', './audio/Till_the_Bell_Tolls-伟伟-161638187-100.ogg', './audio/Tipsy-伟伟-161638180-100.ogg', './audio/Untitled_world-伟伟-161638181-100.ogg', './audio/Zone_10⁻⁸-伟伟-161638182-128.mp3', './audio/УраУра-伟伟-161638186-128.mp3', './audio/人性-伟伟-161637046-128.mp3', './audio/从那高地上远眺-伟伟-161638184-128.mp3', './audio/冬涤- 伟伟-161637103-128.mp3', './audio/夏浪-伟伟-161637047-128.mp3', './audio/大柏墟-伟伟-161637087-128.mp3', './audio/执棋者之骨-伟伟-161637036-128.mp3', './audio/故乡的风-伟伟-161637064-128.mp3', './audio/旅途前方-伟伟-161637089-128.mp3', './audio/春弦-伟伟-161638183-100.ogg', './audio/永冻症- 伟伟-161637048-128.mp3', './audio/泛用型自动化解决方案0_3_2_9f2-伟伟-161637099-128.mp3', './audio/独行长路-伟伟-161637122-128.mp3', './audio/生命 流-伟伟-161637040-100.ogg', './audio/短兵相接-伟伟-161637053-128.mp3', './audio/示岁-伟伟-161637043-128.mp3', './audio/秋绪-伟伟-161637041-100.ogg', './audio/终局抵抗者-伟伟-161637042-128.mp3', './audio/血液-伟伟-161637037-128.mp3', './audio/逃亡_part2-伟伟-161637044-128.mp3'];
+            var audio = document.createElement('audio');
+            audio.src = music_list[Math.ceil(Math.random() * 46)];
+            audio.setAttribute('autoplay', 'autoplay')
+            audio.id = 'music';
+            audio.addEventListener('ended', function () { next_music(this) })
+            document.getElementById("body").appendChild(audio);
+            document.getElementById('body').removeChild(x);
+        }
+
         function anim1(x, y) {//受击动画300ms
             var opa = 0;
             var p1 = document.createElement("img");
@@ -1296,6 +1306,10 @@
         .turn_inactive {
             background-color: rgb(255, 0, 0);
         }
+
+        * {
+            scrollbar-width: none;
+        }
     </style>
 </head>
 
@@ -1408,27 +1422,30 @@
     <div id="setting" onclick="set(-1)"
         style="z-index:490;height: 100%;width: 100%;background-color: rgb(0,0,0,0.5);position: fixed;top: 0px;left: 0px;">
         <div id="setting_1"
-            style="width: 235px;height: 300px;overflow:auto;background-color: white;position: fixed;top: 130px;left: calc(50% - 100px);z-index: 501;border-radius: 5px;">
+            style="width: 200px;height: 300px;overflow:auto;background-color: white;position: fixed;top: 130px;left: calc(50% - 100px);z-index: 501;border-radius: 5px;">
             <button onclick="set(3,1)" id="setting_3_1"
-                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: #00cc00;border-radius: 5px;">背景音乐</button>
+                style="position: relative;margin: 20px;margin-bottom: 0px;margin-right: 0px;background-color: #00cc00;border-radius: 5px;">背景音乐</button>
             <button onclick="set(4,1)" id="setting_4_1"
-                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: #00cc00;border-radius: 5px;">游戏音效</button>
+                style="position: relative;margin: 20px;margin-bottom: 0px;margin-right: 0px;background-color: #00cc00;border-radius: 5px;">游戏音效</button>
+            <p style="width: 200px;height: 1px;background-color: black;position: relative;top: 10px;"></p>
             <button onclick="set(1,0)" id="setting_1_0"
-                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">随机地板</button>
+                style="position: relative;margin: 20px;margin-bottom: 0px;margin-right: 0px;background-color: grey;border-radius: 5px;">随机地板</button>
             <button onclick="set(1,1)" id="setting_1_1"
-                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">基础地板</button>
+                style="position: relative;margin: 20px;margin-bottom: 0px;margin-right: 0px;background-color: grey;border-radius: 5px;">基础地板</button>
             <button onclick="set(1,2)" id="setting_1_2"
-                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">石质地板</button>
+                style="position: relative;margin: 20px;margin-bottom: 0px;margin-right: 0px;background-color: grey;border-radius: 5px;">石质地板</button>
             <button onclick="set(1,3)" id="setting_1_3"
-                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">草地地板</button>
+                style="position: relative;margin: 20px;margin-bottom: 0px;margin-right: 0px;background-color: grey;border-radius: 5px;">草地地板</button>
+            <p style="width: 200px;height: 1px;background-color: black;position: relative;top: 10px;"></p>
             <button onclick="set(2,0)" id="setting_2_0"
-                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">随机地图</button>
+                style="position: relative;margin: 20px;margin-bottom: 0px;margin-right: 0px;background-color: grey;border-radius: 5px;">随机地图</button>
             <button onclick="set(2,1)" id="setting_2_1"
-                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">一堆房间</button>
+                style="position: relative;margin: 20px;margin-bottom: 0px;margin-right: 0px;background-color: grey;border-radius: 5px;">一堆房间</button>
             <button onclick="set(2,2)" id="setting_2_2"
-                style="position: relative;margin: 20px;margin-bottom: 0px;background-color: grey;border-radius: 5px;">错综复杂</button>
+                style="position: relative;margin: 20px;margin-bottom: 0px;margin-right: 0px;background-color: grey;border-radius: 5px;">错综复杂</button>
+            <p style="width: 200px;height: 1px;background-color: black;position: relative;top: 10px;"></p>
             <button onclick="generate()"
-                style="position: relative;margin: 20px;height: 30px;margin-bottom: 0px;">重新加载</button>
+                style="position: relative;margin: 20px;height: 30px;margin-bottom: 0px;margin-right: 0px;">重新加载</button>
         </div>
     </div>
     <div id="round_over" class="round_fade"
