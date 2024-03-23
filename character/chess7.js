@@ -142,7 +142,10 @@ function chess7(x, y) {//军火商
             }
         }
         else if (hit_health > 0) {
-            anim3(chess.x, chess.y, hit_health);
+            if (chess.effect_sum[16] == 0) {
+                chess.health += hit_health;
+                anim3(chess.x, chess.y, hit_health);
+            }
         }
         if (chess.health > chess.max_health + chess.effect_sum[10]) { chess.health = chess.max_health + chess.effect_sum[10]; }
         if (chess.health <= 0) { anim5(chess.x, chess.y); document.getElementById("board").removeChild(chess); }
@@ -218,9 +221,9 @@ function chess7(x, y) {//军火商
             }
             for (var j = 1; j < chess.effect[0]; j++) {
                 if (chess.effect[j][0] == 1) {
-                    chess.effect_sum[1] -= chess.effect[j][1];
-                } else if (chess.effect[j][0] == 2) {
                     chess.effect_sum[1] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 2) {
+                    chess.effect_sum[1] -= chess.effect[j][1];
                 } else if (chess.effect[j][0] == 3) {
                     chess.effect_sum[2] = 1;
                 } else if (chess.effect[j][0] == 5) {
@@ -255,6 +258,8 @@ function chess7(x, y) {//军火商
                     chess.effect_sum[13] = 1;
                 } else if (chess.effect[j][0] == 20) {
                     chess.effect_sum[15] = 1;
+                } else if (chess.effect[j][0] == 21) {
+                    chess.effect_sum[16] = 1;
                 }
             }
         }
@@ -274,8 +279,8 @@ function chess7(x, y) {//军火商
     chess.data[2] = 0;
     chess.enemy = 0;
     chess.trap = 0;
-    chess.effect = new Array(300);//0为index索引。特殊效果 ：1防御、2脆弱、3昏厥、4坚毅（无法被眩晕）、5束缚、6大型（无法被束缚）、7泥沼（移动耗费增加）、8火毒（持续掉血）、9超重（无法被推拉）、10免疫（免疫所有特殊效果）、11攻击+、12攻击-、13反应+、14反应-、15移动+、16移动- 、17最大生命+、18最大生命-、19缴械、20武装（无法被缴械）
-    chess.effect_sum = new Array(30);//1受伤改动2昏厥3束缚4泥沼5火毒6超重7攻击改动8反应改动9移动改动10最大生命改动11坚毅12大型13缴械14免疫15武装
+    chess.effect = new Array(300);//0为index索引。特殊效果 ：1防御、2脆弱、3昏厥、4坚毅（无法被眩晕）、5束缚、6大型（无法被束缚）、7泥沼（移动耗费增加）、8火毒（持续掉血）、9超重（无法被推拉）、10免疫（免疫所有特殊效果）、11攻击+、12攻击-、13反应+、14反应-、15移动+、16移动- 、17最大生命+、18最大生命-、19缴械、20武装（无法被缴械）、21禁疗
+    chess.effect_sum = new Array(30);//1受伤改动2昏厥3束缚4泥沼5火毒6超重7攻击改动8反应改动9移动改动10最大生命改动11坚毅12大型13缴械14免疫15武装16禁疗
     chess.effect[0] = 1;
     //tag
 

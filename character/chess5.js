@@ -60,6 +60,7 @@ function chess5(x, y) {//无人飞只因操作员
                 var target1 = document.getElementById(input1);
                 if (target1.fixedid == 1005 || target1.fixedid == 1006) {
                     target1.data[1] = 1;//暴走
+                    target1.effectfunction(input1, [15, 3, 2, [round, chess.reflect, chess.movement, chess.id, chess.fixedid]])
                 }
             }
             function skill3_2() {
@@ -67,6 +68,7 @@ function chess5(x, y) {//无人飞只因操作员
                 var target2 = document.getElementById(input2);
                 if (target2.fixedid == 1005 || target2.fixedid == 1006) {
                     target2.data[1] = 1;//暴走
+                    target2.effectfunction(input2, [15, 3, 2, [round, chess.reflect, chess.movement, chess.id, chess.fixedid]])
                 }
             }
             function skill3_3() {
@@ -74,6 +76,7 @@ function chess5(x, y) {//无人飞只因操作员
                 var target3 = document.getElementById(input3);
                 if (target3.fixedid == 1005 || target3.fixedid == 1006) {
                     target3.data[1] = 1;//暴走
+                    target3.effectfunction(input3, [15, 3, 2, [round, chess.reflect, chess.movement, chess.id, chess.fixedid]])
                 }
             }
             function skill3_4() {
@@ -81,6 +84,7 @@ function chess5(x, y) {//无人飞只因操作员
                 var target4 = document.getElementById(input4);
                 if (target4.fixedid == 1005 || target4.fixedid == 1006) {
                     target4.data[1] = 1;//暴走
+                    target4.effectfunction(input4, [15, 3, 2, [round, chess.reflect, chess.movement, chess.id, chess.fixedid]])
                 }
             }
             function skill3_5() {
@@ -88,6 +92,7 @@ function chess5(x, y) {//无人飞只因操作员
                 var target5 = document.getElementById(input5);
                 if (target5.fixedid == 1005 || target5.fixedid == 1006) {
                     target5.data[1] = 1;//暴走
+                    target5.effectfunction(input5, [15, 3, 2, [round, chess.reflect, chess.movement, chess.id, chess.fixedid]])
                 }
             }
             chess.data[3] = round;
@@ -172,7 +177,10 @@ function chess5(x, y) {//无人飞只因操作员
             }
         }
         else if (hit_health > 0) {
-            anim3(chess.x, chess.y, hit_health);
+            if (chess.effect_sum[16] == 0) {
+                chess.health += hit_health;
+                anim3(chess.x, chess.y, hit_health);
+            }
         }
         if (chess.health > chess.max_health + chess.effect_sum[10]) { chess.health = chess.max_health + chess.effect_sum[10]; }
         if (chess.health <= 0) { anim5(chess.x, chess.y); document.getElementById("board").removeChild(chess); }
@@ -248,9 +256,9 @@ function chess5(x, y) {//无人飞只因操作员
             }
             for (var j = 1; j < chess.effect[0]; j++) {
                 if (chess.effect[j][0] == 1) {
-                    chess.effect_sum[1] -= chess.effect[j][1];
-                } else if (chess.effect[j][0] == 2) {
                     chess.effect_sum[1] += chess.effect[j][1];
+                } else if (chess.effect[j][0] == 2) {
+                    chess.effect_sum[1] -= chess.effect[j][1];
                 } else if (chess.effect[j][0] == 3) {
                     chess.effect_sum[2] = 1;
                 } else if (chess.effect[j][0] == 5) {
@@ -285,6 +293,8 @@ function chess5(x, y) {//无人飞只因操作员
                     chess.effect_sum[13] = 1;
                 } else if (chess.effect[j][0] == 20) {
                     chess.effect_sum[15] = 1;
+                } else if (chess.effect[j][0] == 21) {
+                    chess.effect_sum[16] = 1;
                 }
             }
         }
@@ -294,7 +304,7 @@ function chess5(x, y) {//无人飞只因操作员
         if (round == chess.data[3] + 2 && active_fixedid == chess.fixedid) {
             var board = document.getElementById("board").children
             for (var i = 0; i < board.length; i++) {
-                if ((board[i].fixedid == 1005 || board[i].fixedid == 1006) && (board[i].data[1] == 1) && board[i].class + 1) {
+                if ((board[i].fixedid == 1005 || board[i].fixedid == 1006) && (board[i].data[1] == 1)) {//此处本有个&& board[i].class + 1。但我实在想不起来有什么用，但是依稀记得有用，但是理论上是真的没用，所以删掉了但加一句注释
                     hit(board[i].id, -100, 0, id, chess.x, chess.y)
                 }
             }
@@ -307,8 +317,8 @@ function chess5(x, y) {//无人飞只因操作员
     chess.data[3] = -99;
     chess.enemy = 0;
     chess.trap = 0;
-    chess.effect = new Array(300);//0为index索引。特殊效果 ：1防御、2脆弱、3昏厥、4坚毅（无法被眩晕）、5束缚、6大型（无法被束缚）、7泥沼（移动耗费增加）、8火毒（持续掉血）、9超重（无法被推拉）、10免疫（免疫所有特殊效果）、11攻击+、12攻击-、13反应+、14反应-、15移动+、16移动- 、17最大生命+、18最大生命-、19缴械、20武装（无法被缴械）
-    chess.effect_sum = new Array(30);//1受伤改动2昏厥3束缚4泥沼5火毒6超重7攻击改动8反应改动9移动改动10最大生命改动11坚毅12大型13缴械14免疫15武装
+    chess.effect = new Array(300);//0为index索引。特殊效果 ：1防御、2脆弱、3昏厥、4坚毅（无法被眩晕）、5束缚、6大型（无法被束缚）、7泥沼（移动耗费增加）、8火毒（持续掉血）、9超重（无法被推拉）、10免疫（免疫所有特殊效果）、11攻击+、12攻击-、13反应+、14反应-、15移动+、16移动- 、17最大生命+、18最大生命-、19缴械、20武装（无法被缴械）、21禁疗
+    chess.effect_sum = new Array(30);//1受伤改动2昏厥3束缚4泥沼5火毒6超重7攻击改动8反应改动9移动改动10最大生命改动11坚毅12大型13缴械14免疫15武装16禁疗
     chess.effect[0] = 1;
     //tag
 
