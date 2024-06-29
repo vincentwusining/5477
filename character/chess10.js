@@ -15,8 +15,8 @@ function chess10(x, y) {//选择模式
     chess.movement = 5;
     chess.reflect = -1;//1~20 5   -1不可行动
     skill1.innerHTML = '进入PVE模式，自杀。可在任意回合发动<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-    skill2.innerHTML = '<img height="25px" width="25px" src="./img/choose.png" id="input0_2_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '<img height="25px" width="25px" src="./img/choose.png" id="input0_3_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill2.innerHTML = '<img height="25px" width="25px" src="./img/chooseB.png" id="input0_2_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill3.innerHTML = '<img height="25px" width="25px" src="./img/chooseC.png" id="input0_3_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
         if (chess.skill1_cooling <= 0) {

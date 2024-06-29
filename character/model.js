@@ -14,9 +14,9 @@ function model(x, y) {//名称
     chess.max_movement = 5;//1~20 5
     chess.movement = 5;
     chess.reflect = 5;//1~20 5   -1不可行动
-    skill1.innerHTML = '<img height="25px" width="25px" src="./img/choose.png" id="input0_1_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-    skill2.innerHTML = '<img height="25px" width="25px" src="./img/choose.png" id="input0_2_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '<img height="25px" width="25px" src="./img/choose.png" id="input0_3_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill1.innerHTML = '<img height="25px" width="25px" src="./img/chooseA.png" id="input0_1_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    skill2.innerHTML = '<img height="25px" width="25px" src="./img/chooseB.png" id="input0_2_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill3.innerHTML = '<img height="25px" width="25px" src="./img/chooseC.png" id="input0_3_1" onclick="input(1,id,1)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
         if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0 && (chess.effect_sum[15] == 1 || chess.effect_sum[13] == 0) && chess.effect_sum[2] == 0) {

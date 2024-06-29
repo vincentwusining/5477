@@ -17,6 +17,7 @@
         var selectid = 0;/*选择目标*/
         var control = 1;/*控制区状态*/
         var range = 0;//选择范围
+        var skill_index = 0;//第几技能
         var active_fixedid = 2;
         var last_reflect = 9999;
         var acted_fixedid = new Array(10000);
@@ -94,15 +95,9 @@
                         }
                     }
                     acted_fixedid = new Array(10000);
-                    var x = Math.ceil(Math.random() * 16);
-                    var y = Math.ceil(Math.random() * 16);
-                    chess1010(x, y);
-                    var x = Math.ceil(Math.random() * 16);
-                    var y = Math.ceil(Math.random() * 16);
-                    chess1010(x, y);
-                    var x = Math.ceil(Math.random() * 16);
-                    var y = Math.ceil(Math.random() * 16);
-                    chess1010(x, y);
+                    //var x = Math.ceil(Math.random() * 16);
+                    //var y = Math.ceil(Math.random() * 16);
+                    //chess1010(1, 1);
                     document.getElementById("round").innerHTML = round;
                     //右上角按钮动画
                     document.getElementById("next").classList.add('fade');
@@ -246,7 +241,7 @@
                     var wait = document.getElementsByClassName('waiting');
                     for (var i = 0; i < wait.length; i++) {
                         wait[i].style.backgroundColor = " rgb(0,0,0,0)";
-                        wait[i].src = "./img/choose.png";
+                        wait[i].src = "./img/choose" + skill_index + ".png";
                         wait[i].removeAttribute("class");
                     }
                     range_display(0);
@@ -262,7 +257,7 @@
             if (i == 1) {
                 var rimg = document.createElement("img");
                 var chess = document.getElementById(selectid);
-                rimg.src = "./img/range" + range + ".png";
+                rimg.src = "./img/range" + skill_index + range + ".png";
                 rimg.style.position = "absolute";
                 rimg.style.height = 25 * 31 + "px";
                 rimg.style.width = 25 * 31 + "px";
@@ -325,21 +320,25 @@
             }
         }
         function route(x1, y1, x2, y2, move, damage, hurt, cha) {//计算路劲 起始xy 目标xy 移动 伤害 是否攻击友方(性格) 寻路模块 
+            //宽搜，但不搜完，最先到的就是最优路线
             var queue = new Array(300);
             var qindex = 1;
             var boardsum = new Array(17);
             var board = document.getElementById('board').children;
+            var barrier = -1;
             for (var i = 1; i <= 290; i++) {
                 queue[i] = [0, 0];
             }
             for (var i = 1; i <= 16; i++) {
                 boardsum[i] = new Array(17);
                 for (var j = 1; j <= 16; j++) {
-                    boardsum[i][j] = [9999, 0, 0];//boardsum[i][j][0]所需步数[1]第一步方向[2]停留数 
+                    var b = new Array(100);
+                    b[0] = 1;
+                    boardsum[i][j] = [9999, 0, 0, b];//boardsum[i][j][0]所需步数[1]第一步方向[2]停留数[3]障碍物id,[3][0]充当索引
                 }
             }
             queue[1] = [x1, y1];
-            boardsum[x1][y1] = [0, 0, 0];
+            boardsum[x1][y1][0] = 0;
             while (1) {
                 var x = queue[1][0];//取出
                 var y = queue[1][1];
@@ -348,7 +347,7 @@
                 }
                 if (boardsum[x][y][2] == 0) {
                     qindex--;
-                } else {
+                } else {//留在原地
                     boardsum[x][y][2]--;
                     queue[qindex] = [x, y];
                     continue;
@@ -366,16 +365,36 @@
                     if (boardsum[nx][ny][0] == 9999) {//更新 
                         if (detect_resist(nx, ny) == 0) {//不是障碍
                             boardsum[nx][ny][0] = boardsum[x][y][0] + 1;
+                            boardsum[nx][ny][3] = boardsum[x][y][3];
                         } else {//是障碍
                             for (var j = 1; j < board.length; j++) {
                                 if (board[j].x == nx && board[j].y == ny && board[j].class != 0) {
                                     var health = board[j].health;
+                                    barrier = board[j].id;
                                     break;
                                 }
                             }
-                            var extra_move = Math.ceil(health / damage) * move;
-                            boardsum[nx][ny][0] = boardsum[x][y][0] + extra_move + 1;
-                            boardsum[nx][ny][2] = extra_move;
+                            if (damage != 0) {
+                                var extra_move = Math.ceil(health / damage) * move;
+                                boardsum[nx][ny][0] = boardsum[x][y][0] + extra_move + 1;
+                                boardsum[nx][ny][2] = extra_move;
+                            } else {
+                                boardsum[nx][ny][0] = 9999;
+                                boardsum[nx][ny][2] = 9999;
+                            }
+                            //继承障碍
+                            boardsum[nx][ny][3] = boardsum[x][y][3];
+                            //console.log(nx, ny, boardsum[nx][ny][0], boardsum[nx][ny][3], x1, y1, boardsum[x1][y1][0], boardsum[x1][y1][3])
+                            if (nx == 4 && ny == 4) {
+                                console.log(boardsum[4][4][3], boardsum[1][1][3])
+                                boardsum[4][4][3][1] = '257';
+                                console.log(boardsum[4][4][3], boardsum[1][1][3])
+                                return (0)
+                            } else {
+                                boardsum[nx][ny][3][boardsum[nx][ny][3][0]] = barrier;
+                            }
+                            console.log(nx, ny, boardsum[nx][ny][0], boardsum[nx][ny][3], x1, y1, boardsum[x1][y1][0], boardsum[x1][y1][3])
+                            boardsum[nx][ny][3][0]++;
                         }
                         if (x == x1 && y == y1) {//是出发点
                             boardsum[nx][ny][1] = next[i][2]//确定方向 
@@ -387,7 +406,7 @@
                     }
                 }
             }
-            return ([boardsum[x2][y2][0], boardsum[x2][y2][1]]);//返回[0]所需步数[1]第一步方向
+            return ([boardsum[x2][y2][0], boardsum[x2][y2][1], boardsum[x2][y2][3]]);//返回[0]所需步数[1]第一步方向[2]障碍物id,[2][0]充当索引
         }
         function selector(id, force) {//选择器，id 是否强制选择(强制为了防止选到下面一层去)     
             if (id == 0) {//选择器0
@@ -558,49 +577,61 @@
             }
         }
         function controller(page) {/*控制器*/
-            control = page;
-            if (control == 0) {
+            if (page == 0) {
                 document.getElementById("controller_page1").setAttribute("hidden", "hidden");
                 document.getElementById("controller_page2").setAttribute("hidden", "hidden");
                 document.getElementById("controller_page3").setAttribute("hidden", "hidden");
                 document.getElementById("controller_button1").style.backgroundColor = "#555b6d";
                 document.getElementById("controller_button2").style.backgroundColor = "#555b6d";
                 document.getElementById("controller_button3").style.backgroundColor = "#555b6d";
+                document.getElementById("controller_button3").setAttribute("hidden", "hidden");
                 skill(0);
                 range_display(0);
             }
-            if (control == 1) {
+            if (page == 1) {
                 document.getElementById("controller_page1").removeAttribute("hidden");
                 document.getElementById("controller_page2").setAttribute("hidden", "hidden");
                 document.getElementById("controller_page3").setAttribute("hidden", "hidden");
                 document.getElementById("controller_button1").style.backgroundColor = "rgb(0, 255, 255)";
                 document.getElementById("controller_button2").style.backgroundColor = "#555b6d";
                 document.getElementById("controller_button3").style.backgroundColor = "#555b6d";
+                document.getElementById("controller_button3").setAttribute("hidden", "hidden");
                 skill(0);
                 range_display(0);
             }
-            if (control == 2) {
+            if (page == 2) {
                 document.getElementById("controller_page1").setAttribute("hidden", "hidden");
                 document.getElementById("controller_page2").removeAttribute("hidden");
                 document.getElementById("controller_page3").setAttribute("hidden", "hidden");
                 document.getElementById("controller_button1").style.backgroundColor = "#555b6d";
                 document.getElementById("controller_button2").style.backgroundColor = "rgb(0, 255, 255)";
                 document.getElementById("controller_button3").style.backgroundColor = "#555b6d";
+                document.getElementById("controller_button3").setAttribute("hidden", "hidden");
                 skill(0);
                 range_display(0);
             }
-            if (control == 3) {
+            if (page == 3) {
                 document.getElementById("controller_page1").setAttribute("hidden", "hidden");
                 document.getElementById("controller_page2").setAttribute("hidden", "hidden");
                 document.getElementById("controller_page3").removeAttribute("hidden");
                 document.getElementById("controller_button1").style.backgroundColor = "#555b6d";
                 document.getElementById("controller_button2").style.backgroundColor = "#555b6d";
                 document.getElementById("controller_button3").style.backgroundColor = "rgb(0, 255, 255)";
+                document.getElementById("controller_button3").removeAttribute("hidden");
                 range_display(0);
             }
         }
         function skill(skill) {/*控制器技能*/
             state = 0;
+            if (skill == 1) {
+                skill_index = 'A';
+            }
+            else if (skill == 2) {
+                skill_index = 'B';
+            }
+            else if (skill == 3) {
+                skill_index = 'C';
+            }
             var page = document.getElementById("controller_page3");
             if (skill == 0) {
                 var newskill = document.createElement("skill");
@@ -772,25 +803,25 @@
             if (r == 1) {
                 var list = [[4, 1], [4, 2], [5, 3], [1, 5], [2, 5], [3, 5], [3, 12], [1, 9], [2, 9], [3, 9], [1, 13], [2, 13], [3, 13], [5, 16], [5, 15], [6, 14], [8, 1], [8, 2], [8, 3], [12, 1], [12, 2], [12, 3], [14, 3], [15, 4], [16, 4], [13, 11], [9, 16], [9, 15], [9, 14], [13, 16], [13, 15], [13, 14], [14, 8], [15, 8], [16, 8], [14, 12], [15, 12], [16, 12], [5, 12], [5, 11], [5, 10], [6, 8], [7, 8], [9, 8], [10, 8], [11, 9], [9, 11], [10, 6], [9, 12]]
                 for (var i = 0; i < list.length; i++) {
-                    chess1001(list[i][0], list[i][1]);
+                    chess3007(list[i][0], list[i][1]);
                 }
             }
             else if (r == 2) {
                 var list = [[1, 7], [1, 15], [1, 16], [2, 5], [2, 7], [2, 13], [2, 16], [3, 3], [3, 7], [3, 10], [3, 14], [4, 2], [4, 10], [4, 11], [5, 2], [5, 4], [5, 5], [5, 11], [6, 7], [6, 8], [6, 11], [6, 12], [6, 15], [7, 3], [7, 6], [7, 7], [8, 1], [8, 5], [8, 6], [8, 9], [8, 15], [8, 16], [9, 1], [9, 2], [9, 8], [9, 11], [9, 12], [9, 16], [10, 10], [10, 11], [10, 14], [11, 2], [11, 5], [11, 6], [11, 9], [11, 10], [12, 6], [12, 12], [12, 13], [12, 15], [13, 6], [13, 7], [13, 15], [14, 3], [14, 7], [14, 10], [14, 14], [15, 1], [15, 4], [15, 10], [15, 12], [16, 1], [16, 2], [16, 10]]
                 for (var i = 0; i < list.length; i++) {
-                    chess1001(list[i][0], list[i][1]);
+                    chess3007(list[i][0], list[i][1]);
                 }
             }
             else if (r == 3) {
                 var list = [[4, 4], [11, 9], [9, 11], [8, 11], [11, 8], [7, 10], [10, 7], [6, 11], [11, 6], [13, 13], [9, 12], [12, 9], [7, 13], [13, 7], [6, 13], [13, 6], [8, 14], [14, 8], [9, 14], [14, 9], [5, 13], [4, 12], [3, 13], [13, 5], [12, 4], [13, 3], [7, 15], [15, 7], [6, 15], [15, 6], [5, 10], [10, 5], [5, 9], [9, 5], [3, 10], [10, 3], [3, 9], [9, 3], [3, 8], [8, 3], [5, 8], [8, 5], [3, 7], [7, 3], []];
                 for (var i = 0; i < list.length; i++) {
-                    chess1001(list[i][0], list[i][1]);
+                    chess3007(list[i][0], list[i][1]);
                 }
             }
             else if (r == 4) {
                 var list = [[1, 5], [2, 2], [2, 5], [2, 6], [2, 11], [2, 12], [2, 15], [3, 3], [3, 6], [3, 8], [3, 9], [3, 14], [4, 4], [4, 8], [4, 9], [4, 13], [5, 2], [5, 6], [5, 11], [5, 15], [5, 16], [6, 2], [6, 3], [6, 5], [6, 6], [6, 11], [6, 12], [6, 14], [6, 15], [7, 7], [7, 10], [8, 3], [8, 4], [8, 13], [8, 14], [9, 3], [9, 4], [9, 13], [9, 14], [10, 7], [10, 10], [11, 2], [11, 3], [11, 5], [11, 6], [11, 11], [11, 12], [11, 14], [11, 15], [12, 1], [12, 2], [12, 6], [12, 11], [12, 15], [13, 4], [13, 8], [13, 9], [13, 13], [14, 3], [14, 6], [14, 8], [14, 9], [14, 11], [14, 14], [15, 2], [15, 5], [15, 6], [15, 11], [15, 12], [15, 15], [16, 12]];
                 for (var i = 0; i < list.length; i++) {
-                    chess1001(list[i][0], list[i][1]);
+                    chess3010(list[i][0], list[i][1]);
                 }
             }
         }
@@ -951,7 +982,6 @@
     <script src="./character/chess8.js">//拳击手</script>
     <script src="./character/chess9.js">//定神游</script>
     <script src="./character/chess10.js">//</script>
-    <script src="./character/chess1001.js">//障碍物</script>
     <script src="./character/chess1005.js">//战斗无人机</script>
     <script src="./character/chess1006.js">//救治无人机</script>
     <script src="./character/chess1007.js">//机枪</script>
@@ -971,6 +1001,16 @@
     <script src="./character/chess2006.js">//积水草地</script>
     <script src="./character/chess2007.js">//芦苇</script>
     <script src="./character/chess2008.js">//地刺</script>
+    <script src="./character/chess3001.js">//杂草</script>
+    <script src="./character/chess3002.js">//木板</script>
+    <script src="./character/chess3003.js">//木墙</script>
+    <script src="./character/chess3004.js">//铁栅栏</script>
+    <script src="./character/chess3005.js">//铁板</script>
+    <script src="./character/chess3006.js">//石墙</script>
+    <script src="./character/chess3007.js">//石英墙</script>
+    <script src="./character/chess3008.js">//远古遗迹</script>
+    <script src="./character/chess3009.js">//基岩</script>
+    <script src="./character/chess3010.js">//障碍物</script>
     <style>
         chess0 {
             display: block;
@@ -1092,6 +1132,18 @@
     <script>generate();</script>
     <script>//测试
         //document.getElementById(2).innerHTML = route(1, 1, 5, 5, 0, 0, 0, 0, 0)[0]; 
+        var boardsum = new Array(17);
+        for (var i = 1; i <= 16; i++) {
+            boardsum[i] = new Array(17);
+            for (var j = 1; j <= 16; j++) {
+                var b = new Array(100);
+                b[0] = 1;
+                boardsum[i][j] = [9999, 0, 0, b];//boardsum[i][j][0]所需步数[1]第一步方向[2]停留数[3]障碍物id,[3][0]充当索引
+            }
+        }
+        boardsum[nx][ny][3] = boardsum[x][y][3];
+        boardsum[4][4][3][1] = '257';
+        console.log(boardsum[4][4][3][1], boardsum[1][1][3][1])
     </script>
     <div style="display: flex;">
 
@@ -1135,7 +1187,7 @@
                     style="background-color: #555b6d;border-radius: 0px;height:30px;width:30px;border: 0px;">生</button>
                 <button id="controller_button2" onclick="controller(2)"
                     style="background-color: #555b6d;border-radius: 0px;height:30px;width:30px;border: 0px;">移</button>
-                <button id="controller_button3" onclick="controller(3)"
+                <button id="controller_button3" onclick="controller(3)" hidden
                     style="background-color: #555b6d;border-radius: 0px;height:30px;width:30px;border: 0px;">技</button>
             </div>
 

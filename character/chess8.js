@@ -14,9 +14,9 @@ function chess8(x, y) {//拳击手
     chess.max_movement = 6;//1~20 5
     chess.movement = 6;
     chess.reflect = 6;//1~20 5   -1不可行动
-    skill1.innerHTML = '选择一个目标<img height="25px" width="25px" src="./img/choose.png" id="input8_1_1" onclick="input(1,id,1)">造成1点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-    skill2.innerHTML = '选择一个目标<img height="25px" width="25px" src="./img/choose.png" id="input8_2_1" onclick="input(1,id,1)">造成1点伤害并击退1格<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '选择一个目标<img height="25px" width="25px" src="./img/choose.png" id="input8_3_1" onclick="input(1,id,15)">造成1点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill1.innerHTML = '选择一个目标<img height="25px" width="25px" src="./img/chooseA.png" id="input8_1_1" onclick="input(1,id,1)">造成1点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    skill2.innerHTML = '选择一个目标<img height="25px" width="25px" src="./img/chooseB.png" id="input8_2_1" onclick="input(1,id,1)">造成1点伤害并击退1格<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill3.innerHTML = '选择一个目标<img height="25px" width="25px" src="./img/chooseC.png" id="input8_3_1" onclick="input(1,id,15)">造成1点伤害<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
         if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0 && (chess.effect_sum[15] == 1 || chess.effect_sum[13] == 0) && chess.effect_sum[2] == 0) {

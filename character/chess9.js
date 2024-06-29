@@ -15,8 +15,8 @@ function chess9(x, y) {//定神游
     chess.movement = 5;
     chess.reflect = 6;//1~20 5   -1不可行动
     skill1.innerHTML = '移动归0，进入神游状态：最大移动+5，行动结束后立刻回到原位，受击额外受到一点伤害。（神游状态下发动 退出神游状态并回到原位）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
-    skill2.innerHTML = '选择一个目标<img height="25px" width="25px" src="./img/choose.png" id="input9_2_1" onclick="input(1,id,3)">造成1一点伤害并施加神游印记。（神游状态下发动 传送至前方第三格并对周围8格造成1点伤害）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
-    skill3.innerHTML = '击退范围内所有敌人两格（神游状态下发动 对范围内的敌人造成1点伤害，但对神游印记标记的敌人造成3点伤害并消除神游印记）范围演示：<img height="25px" width="25px" src="./img/choose.png" id="input9_3_1" onclick="input(3,id,13)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
+    skill2.innerHTML = '选择一个目标<img height="25px" width="25px" src="./img/chooseB.png" id="input9_2_1" onclick="input(1,id,3)">造成1一点伤害并施加神游印记。（神游状态下发动 传送至前方第三格并对周围8格造成1点伤害）<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill2_launch()"></button>';
+    skill3.innerHTML = '击退范围内所有敌人两格（神游状态下发动 对范围内的敌人造成1点伤害，但对神游印记标记的敌人造成3点伤害并消除神游印记）范围演示：<img height="25px" width="25px" src="./img/chooseC.png" id="input9_3_1" onclick="input(3,id,13)"><button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill3_launch()"></button>';
     chess.skill1_launch = function () {
         var chess = document.getElementById(selectid);
         if (chess.fixedid == active_fixedid && chess.skill1_cooling <= 0 && (chess.effect_sum[15] == 1 || chess.effect_sum[13] == 0) && chess.effect_sum[2] == 0) {

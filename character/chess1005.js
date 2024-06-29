@@ -14,7 +14,7 @@ function chess1005(x, y) {//战斗无人机
     chess.max_movement = 5;
     chess.movement = 5;
     chess.reflect = 8;
-    skill1.innerHTML = '选择一个目标<img height="25px" width="25px" src="./img/choose.png" id="input1005_1_1" onclick="input(1,id,2)">造成1点伤害。<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
+    skill1.innerHTML = '选择一个目标<img height="25px" width="25px" src="./img/chooseA.png" id="input1005_1_1" onclick="input(1,id,2)">造成1点伤害。<button style="position: absolute;right: 0px;bottom: 0px;height: 50px;width:50px;" onclick="document.getElementById(selectid).skill1_launch()"></button>';
     skill2.innerHTML = '暴走状态下攻击造成2点伤害，移动+3';
     skill3.innerHTML = '';
     chess.skill1_launch = function () {
