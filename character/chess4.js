@@ -383,6 +383,10 @@ function chess4(x, y) {//狂刀
     chess.effect = new Array(300);//0为index索引。特殊效果 ：1防御、2脆弱、3昏厥、4坚毅（无法被眩晕）、5束缚、6大型（无法被束缚）、7泥沼（移动耗费增加）、8火毒（持续掉血）、9超重（无法被推拉）、10免疫（免疫所有特殊效果）、11攻击+、12攻击-、13反应+、14反应-、15移动+、16移动- 、17最大生命+、18最大生命-、19缴械、20武装（无法被缴械）、21禁疗
     chess.effect_sum = new Array(30);//1受伤改动2昏厥3束缚4泥沼5火毒6超重7攻击改动8反应改动9移动改动10最大生命改动11坚毅12大型13缴械14免疫15武装16禁疗
     chess.effect[0] = 1;
+    chess.range_display_array = ['A16'];//选择人物时范围演示
+    chess.range_display_arrayA = [];//选择技能时范围演示
+    chess.range_display_arrayB = [];//选择技能时范围演示
+    chess.range_display_arrayC = [];//选择技能时范围演示
     //tag
 
     for (var i = 0; i <= 25; i++) {

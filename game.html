@@ -248,13 +248,13 @@
                 }
             }
         }
-        function range_display(i) {
-            if (i == 0) {
-                if (document.getElementsByClassName("range_display")[0]) {
-                    document.getElementById("board").removeChild(document.getElementsByClassName("range_display")[0]);
+        function range_display(r) {//0取消1单技能正常演示“一个数组”多技能范围演示
+            if (r == 0) {
+                while (document.getElementsByClassName("range_display")[0]) {
+                    document.getElementById("p_board").removeChild(document.getElementsByClassName("range_display")[0]);
                 }
             }
-            if (i == 1) {
+            else if (r == 1) {
                 var rimg = document.createElement("img");
                 var chess = document.getElementById(selectid);
                 rimg.src = "./img/range" + skill_index + range + ".png";
@@ -266,7 +266,31 @@
                 rimg.style.zIndex = 120;
                 rimg.style.pointerEvents = "none";
                 rimg.setAttribute("class", "range_display")
-                document.getElementById("board").appendChild(rimg);
+                if (chess.direction == 1) { rimg.style.transform = "rotate(0deg)"; }
+                if (chess.direction == 2) { rimg.style.transform = "rotate(90deg)"; }
+                if (chess.direction == 3) { rimg.style.transform = "rotate(180deg)"; }
+                if (chess.direction == 4) { rimg.style.transform = "rotate(270deg)"; }
+                document.getElementById("p_board").appendChild(rimg);
+            }
+            else {
+                for (var i = 0; i < r.length; i++) {
+                    var rimg = document.createElement("img");
+                    var chess = document.getElementById(selectid);
+                    rimg.src = "./img/range" + r[i] + ".png";
+                    rimg.style.position = "absolute";
+                    rimg.style.height = 25 * 31 + "px";
+                    rimg.style.width = 25 * 31 + "px";
+                    rimg.style.left = (chess.x - 16) * 25 + "px";
+                    rimg.style.bottom = (chess.y - 16) * 25 + "px";
+                    rimg.style.zIndex = 120;
+                    rimg.style.pointerEvents = "none";
+                    rimg.setAttribute("class", "range_display")
+                    if (chess.direction == 1) { rimg.style.transform = "rotate(0deg)"; }
+                    if (chess.direction == 2) { rimg.style.transform = "rotate(90deg)"; }
+                    if (chess.direction == 3) { rimg.style.transform = "rotate(180deg)"; }
+                    if (chess.direction == 4) { rimg.style.transform = "rotate(270deg)"; }
+                    document.getElementById("p_board").appendChild(rimg);
+                }
             }
         }
 
@@ -440,6 +464,7 @@
                         document.getElementById("img").src = chess.img;
                         document.getElementById("name").innerHTML = chess.name;
                         document.getElementById("max_health").innerHTML = chess.max_health;
+                        //特殊效果
                         if (chess.effect_sum[10] > 0) {
                             document.getElementById("health_modification").innerHTML = '+' + chess.effect_sum[10];
                             document.getElementById("health_modification").style.color = '#00cc00';
@@ -502,6 +527,8 @@
                         if (chess.class == 0 || chess.class == 3) {
                             controller(0);
                         } else { controller(2); }
+                        //技能范围演示
+                        range_display(chess.range_display_array);
                     }
                     //不强制选择
                     else if (document.getElementById(id).x == document.getElementById(selectid).x && document.getElementById(id).y == document.getElementById(selectid).y) {//选择与已选坐标相同
@@ -623,6 +650,7 @@
         }
         function skill(skill) {/*控制器技能*/
             state = 0;
+            var chess = document.getElementById(selectid);
             if (skill == 1) {
                 skill_index = 'A';
             }
@@ -642,57 +670,60 @@
                 page.childNodes[5].childNodes[1].innerHTML = "要不你猜猜";
             }
             else if (skill == 1) {
-                if (document.getElementById(selectid).skill1_name == "无") {
+                if (chess.skill1_name == "无") {
                 }
                 else {
                     controller(3);
-                    var newskill = document.getElementById(selectid).childNodes[skill - 1].cloneNode(true);
+                    var newskill = chess.childNodes[skill - 1].cloneNode(true);
                     page.replaceChild(newskill, page.childNodes[1]);
                     page.childNodes[1].removeAttribute("hidden");
-                    page.childNodes[3].childNodes[1].innerHTML = document.getElementById(selectid).skill1_cooling;
-                    page.childNodes[3].childNodes[3].innerHTML = document.getElementById(selectid).skill1_max_cooling;
-                    if (document.getElementById(selectid).skill1_class == 0) {
+                    page.childNodes[3].childNodes[1].innerHTML = chess.skill1_cooling;
+                    page.childNodes[3].childNodes[3].innerHTML = chess.skill1_max_cooling;
+                    if (chess.skill1_class == 0) {
                         page.childNodes[5].childNodes[1].innerHTML = "被动";
                     }
-                    if (document.getElementById(selectid).skill1_class == 1) {
+                    if (chess.skill1_class == 1) {
                         page.childNodes[5].childNodes[1].innerHTML = "主动";
                     }
+                    range_display(chess.range_display_arrayA);
                 }
             }
             else if (skill == 2) {
-                if (document.getElementById(selectid).skill2_name == "无") {
+                if (chess.skill2_name == "无") {
                 }
                 else {
                     controller(3);
-                    var newskill = document.getElementById(selectid).childNodes[skill - 1].cloneNode(true);
+                    var newskill = chess.childNodes[skill - 1].cloneNode(true);
                     page.replaceChild(newskill, page.childNodes[1]);
                     page.childNodes[1].removeAttribute("hidden");
-                    page.childNodes[3].childNodes[1].innerHTML = document.getElementById(selectid).skill2_cooling;
-                    page.childNodes[3].childNodes[3].innerHTML = document.getElementById(selectid).skill2_max_cooling;
-                    if (document.getElementById(selectid).skill2_class == 0) {
+                    page.childNodes[3].childNodes[1].innerHTML = chess.skill2_cooling;
+                    page.childNodes[3].childNodes[3].innerHTML = chess.skill2_max_cooling;
+                    if (chess.skill2_class == 0) {
                         page.childNodes[5].childNodes[1].innerHTML = "被动";
                     }
-                    if (document.getElementById(selectid).skill2_class == 1) {
+                    if (chess.skill2_class == 1) {
                         page.childNodes[5].childNodes[1].innerHTML = "主动";
                     }
+                    range_display(chess.range_display_arrayB);
                 }
             }
             else if (skill == 3) {
-                if (document.getElementById(selectid).skill3_name == "无") {
+                if (chess.skill3_name == "无") {
                 }
                 else {
                     controller(3);
-                    var newskill = document.getElementById(selectid).childNodes[skill - 1].cloneNode(true);
+                    var newskill = chess.childNodes[skill - 1].cloneNode(true);
                     page.replaceChild(newskill, page.childNodes[1]);
                     page.childNodes[1].removeAttribute("hidden");
-                    page.childNodes[3].childNodes[1].innerHTML = document.getElementById(selectid).skill3_cooling;
-                    page.childNodes[3].childNodes[3].innerHTML = document.getElementById(selectid).skill3_max_cooling;
-                    if (document.getElementById(selectid).skill3_class == 0) {
+                    page.childNodes[3].childNodes[1].innerHTML = chess.skill3_cooling;
+                    page.childNodes[3].childNodes[3].innerHTML = chess.skill3_max_cooling;
+                    if (chess.skill3_class == 0) {
                         page.childNodes[5].childNodes[1].innerHTML = "被动";
                     }
-                    if (document.getElementById(selectid).skill3_class == 1) {
+                    if (chess.skill3_class == 1) {
                         page.childNodes[5].childNodes[1].innerHTML = "主动";
                     }
+                    range_display(chess.range_display_arrayC);
                 }
             }
         }
@@ -1217,7 +1248,7 @@
                     style="position: absolute ;height: 60px;width:60px;left:70px;top: 56px; ">
                     <p class="turn"
                         onclick="if (turn == 0) { var x = $('.turn')[0]; x.innerHTML='转向 是' ; x.style.backgroundColor='green';turn=1; } else { var x=$('.turn')[0]; x.innerHTML='转向 否' ;x.style.backgroundColor='red'; turn=0; }"
-                        style="width: 40px;height: 40px;border-radius: 0px;position: relative;top: 10px;left: 10px;text-align: center;font-size: 14px;cursor: pointer;background-color: red;">
+                        style="width: 40px;height: 40px;border-radius: 0px;position: relative;top: 10px;left: 10px;text-align: center;font-size: 14px;cursor: pointer;background-color: red;z-index: 100;">
                         转向 否</p>
                     <img src="./img/arrow.png" width="60px" height="50px"
                         onclick="document.getElementById(selectid).movefunction(selectid,1,1,0,0,0,0)"
@@ -1298,7 +1329,6 @@
                 document.getElementById(selectid).movefunction(selectid, 4, 1, 0, 0, 0, 0);
             } else if (k == 'x' || k == 'X') {
                 if (turn == 0) { var x = $('.turn')[0]; x.innerHTML = '转向 是'; x.style.backgroundColor = 'green'; turn = 1; } else { var x = $('.turn')[0]; x.innerHTML = '转向 否'; x.style.backgroundColor = 'red'; turn = 0; }
-                controller(2);
             } else if (k == '1') {
                 skill(1);
             } else if (k == '2') {
