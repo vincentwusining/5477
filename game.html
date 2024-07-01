@@ -1180,7 +1180,7 @@
 
         <!--目标选择器-->
 
-        <div id="selector" style="background-image:url(img/back2.png) ;width:200px;height: 200px; ">
+        <div id="selector" style="background-image:url(img/back2.png) ;width:200px;height: 200px; z-index: 150;">
             <img id="img" src="./img/void.png" width="100px" height="100px" alt=" "
                 style="position: absolute;left: 100px;">
             <p style="display: inline;">目标:</p><b id="name" style="display: inline"></b><br>
@@ -1209,7 +1209,7 @@
                 </div>
             </div>
         </div>
-        <div style="display: flex;flex-direction: column;">
+        <div style="display: flex;flex-direction: column;z-index: 150;">
 
             <!--控制区索引-->
 
@@ -1337,7 +1337,7 @@
                 skill(3);
             } else if (k == 'Enter' || k == 'f' || k == 'F') {
                 $('#controller_page3>skill>button').click();
-            } else if (k == ' ') {
+            } else if (k == 'Tab') {
                 next_act();
             }
         })
