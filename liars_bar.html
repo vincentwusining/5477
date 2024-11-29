@@ -134,6 +134,7 @@
             var bullet_div = document.createElement("div");
             bullet_div.id = "bullet" + x;
             bullet_div.innerHTML = "0/6";
+            bullet_div.style.color = "white";
             bullet_div.style.position = "absolute";
             bullet_div.style.display = "block";
             bullet_div.style.backgroundColor = "grew";
@@ -367,7 +368,7 @@
 </head>
 
 <body style="  background-image:url(./img/back3.png);background-size: 100%;background-position: cover;background-repeat: repeat;">
-    <div id="target_card" style="border: 2px solid white;position: absolute; top: 10px; left:60px; transform: translateX(-50%); font-size: 70px;width: 100px;height: 100px; background-color: rgb(0, 0, 0); text-align: center;color:red">K</div>
+    <div id="target_card" style="border: 2px solid white;position: absolute; top: 10px; left:60px; transform: translateX(-50%); font-size: 70px;width: 100px;height: 100px; background-color: rgb(0, 0, 0); text-align: center;color:red"></div>
     <div style="background-color: rgb(141, 81, 38);width: 400px;height: 400px;position: absolute;left: calc(50% - 200px); top: calc(50% - 200px);">
         <!-- start button --><button id="start" onclick="start_game()" style="border: none;cursor: pointer;width: 120px;height: 70px;font-size: 20px;"></button>
         <!-- target_card -->
