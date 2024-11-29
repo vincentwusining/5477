@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+    <title>Document</title>
+    <style>
+        #start,
+        #text1,
+        #text2,
+        #text3 {
+            transition: opacity 1s;
+            /* 设置过渡效果 */
+            opacity: 0;
+            /* 初始透明度 */
+            display: none;
+            /* 初始隐藏文本 */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(145, 45, 45);
+        }
+    </style>
+    <script>
+        var players = [];
+        var players_guns = [];
+        var players_bullets = [];
+        var player_number = 0;
+        var current_player = -1;
+        var target_card; //Q,K,A       
+        var player_rotation = [null, 90, 270, 180, 0];
+        var arrow_rotation = [null, ["50%", "25%", 90],
+            ["50%", "75%", 270],
+            ["25%", "50%", 180],
+            ["75%", "50%", 0],
+        ];
+        var button_rotation = [null, ["50%", "175%", 90, "-50%", "-250%", "-50%", "150%"],
+            ["50%", "-75%", 270, "-50%", "-250%", "-50%", "150%"],
+            ["175%", "50%", 180, "-150%", "-50%", "50%", "-50%"],
+            ["-75%", "50%", 0, "-150%", "-50%", "50%", "-50%"],
+        ];
+
+        function add_player(x) { //合法测试 
+            for (var i = 0; i < players.length; i++) {
+                if (x == players[i] || current_player != -1) {
+                    return;
+                }
+            } //合法   
+            players.push(x);
+            players_guns[player_number] = Math.floor(Math.random() * 6) + 1;
+            players_bullets[player_number] = 0; //添加start按钮      
+            if (player_number == 0) {
+                var start_button = document.getElementById("start");
+                start_button.innerHTML = "开始游戏";
+                start_button.style.display = "block";
+                start_button.style.opacity = "1";
+            }
+            player_number++; //添加player 
+            var button = document.getElementById(x);
+            button.style.backgroundColor = "transparent";
+            button.innerHTML = "";
+            var img = document.createElement("img"); // 设置图片链接       
+            var player_img = ["", 1, 2, 4, 5, 7, 8, 9, "9_2", 10, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1013, ];
+            img.src = "./img/chess" + player_img[Math.floor(Math.random() * player_img.length)] + ".png"; //           
+            img.height = 60; // 设置高度     
+            img.width = 60; // 设置宽度    
+            img.style.position = "absolute"; /* 绝对定位 */
+            img.style.top = "50%"; // 垂直居中     
+            img.style.left = "50%"; // 水平居中   
+            var rot = "translate(-50%, -50%) rotate(" + player_rotation[x] + "deg)";
+            img.style.transform = rot;
+            button.appendChild(img); //添加操作按钮  
+            //出牌           
+            var next_button = document.createElement("button");
+            next_button.id = "next" + x;
+            next_button.innerHTML = "出牌";
+            next_button.style.position = "absolute";
+            next_button.style.display = "none";
+            next_button.style.backgroundColor = "yellow";
+            next_button.style.border = "2px solid black";
+            next_button.style.cursor = "pointer";
+            next_button.style.width = "80px";
+            next_button.style.height = "40px";
+            next_button.style.fontSize = "20px";
+            next_button.style.top = button_rotation[x][0];
+            next_button.style.left = button_rotation[x][1];
+            next_button.style.transform = "translate(" + button_rotation[x][3] + ", " + button_rotation[x][4] + ") rotate(" + button_rotation[x][2] + "deg)";
+            next_button.onclick = function() {
+                next();
+            };
+            button.appendChild(next_button); //质疑   
+            var liar_button = document.createElement("button");
+            liar_button.id = "liar" + x;
+            liar_button.innerHTML = "质疑";
+            liar_button.style.position = "absolute";
+            liar_button.style.display = "none";
+            liar_button.style.backgroundColor = "yellow";
+            liar_button.style.border = "2px solid black";
+            liar_button.style.cursor = "pointer";
+            liar_button.style.width = "80px";
+            liar_button.style.height = "40px";
+            liar_button.style.fontSize = "20px";
+            liar_button.style.top = button_rotation[x][0];
+            liar_button.style.left = button_rotation[x][1];
+            liar_button.onclick = function() {
+                liar();
+            };
+            liar_button.style.transform = "translate(" + button_rotation[x][5] + ", " + button_rotation[x][6] + ") rotate(" + button_rotation[x][2] + "deg)";
+            button.appendChild(liar_button); //开枪 
+            var kill_button = document.createElement("button");
+            kill_button.id = "kill" + x;
+            kill_button.innerHTML = "开枪";
+            kill_button.style.position = "absolute";
+            kill_button.style.display = "none";
+            kill_button.style.backgroundColor = "red";
+            kill_button.style.border = "2px solid black";
+            kill_button.style.cursor = "pointer";
+            kill_button.style.width = "80px";
+            kill_button.style.height = "40px";
+            kill_button.style.fontSize = "20px";
+            kill_button.style.top = button_rotation[x][0];
+            kill_button.style.left = button_rotation[x][1];
+            var xx = player_number - 1;
+            kill_button.onclick = function() {
+                kill(xx);
+            };
+            kill_button.style.transform = "translate(-50%,-50%) rotate(" + button_rotation[x][2] + "deg)";
+            button.appendChild(kill_button); //添加子弹显示
+        }
+
+        function start_game() {
+            var button = document.getElementById("start");
+            var text1 = document.getElementById("text1");
+            var text2 = document.getElementById("text2");
+            var text3 = document.getElementById("text3");
+            var cards = ["Q", "K", "A"];
+            card = cards[Math.floor(Math.random() * cards.length)];
+            text2.innerHTML = card; //隐藏+      
+            for (var i = 1; i <= 4; i++) {
+                var x = document.getElementById(i);
+                if (x.children.length == 0) {
+                    x.style.backgroundColor = "transparent";
+                    x.innerHTML = "";
+                }
+            } // 按钮慢慢消失      
+            button.style.opacity = "0"; // 等待1秒后执行显示文本1   
+
+            setTimeout(function() {
+                button.style.display = "none"; // 隐藏按钮  
+                text1.style.display = "block"; // 显示文本1     
+                text1.style.opacity = "0"; // 初始透明度为0      
+                // 让文本1慢慢显示        
+                setTimeout(function() {
+                    text1.style.opacity = "1"; // 使文本1渐变为可见          
+                    // 等待1秒后执行消失文本1        
+
+                    setTimeout(function() {
+                        text1.style.opacity = "0"; // 使文本1变为透明                  
+                        // 等待1秒后显示文本2                
+                        setTimeout(function() {
+                            text1.style.display = "none"; // 隐藏文本1                     
+                            text2.style.display = "block"; // 显示文本2    
+                            text2.style.opacity = "0"; // 初始透明度为0      
+                            // 让文本2慢慢显示                
+                            setTimeout(function() {
+                                text2.style.opacity = "1"; // 使文本2渐变为可见            
+                                // 等待1秒后消失文本2
+                                setTimeout(function() {
+                                    text2.style.opacity = "0"; // 使文本2变为透明  
+                                    // 等待1秒后显示文本2                            
+                                    //3                        
+                                    setTimeout(function() {
+                                        text2.style.display = "none"; // 隐藏文本2                          
+                                        text3.style.display = "block"; // 显示文本3     
+                                        text3.style.opacity = "0"; // 初始透明度为0    
+                                        // 让文本3慢慢显示   
+
+                                        setTimeout(function() {
+                                            text3.style.opacity = "1"; // 使文本3渐变为可见                                
+                                            // 等待1秒后消失文本2               
+                                            setTimeout(function() {
+                                                text3.style.opacity = "0"; // 使文本3变为透明 
+                                                setTimeout(function() {
+                                                    display_arrow();
+                                                }, 2000);
+                                            }, 2000);
+                                        }, 100); // 确保文本3准备显示    
+                                    }, 2000); // 文本2消失后1秒显示文本2        
+                                    //3         
+                                }, 2000);
+                            }, 100); // 确保文本2准备显示        
+                        }, 2000); // 文本1消失后1秒显示文本2              
+                    }, 2000); // 文本1显示1秒后消失          
+                }, 100); // 确保文本1在显示时设置透明度      
+            }, 1000); // 按钮消失后1秒显示文本1     
+            current_player = 0;
+            do {
+                current_player++;
+                if (current_player == players.length) {
+                    current_player = 0;
+                }
+            } while (players[current_player] == -1);
+
+            function display_arrow() { //显示箭头   
+                var arrow = document.getElementById("arrow");
+                arrow.style.display = "block";
+                arrow.style.top = arrow_rotation[players[current_player]][0];
+                arrow.style.left = arrow_rotation[players[current_player]][1];
+                arrow.style.transform = "translate(-50%, -50%) rotate(" + arrow_rotation[players[current_player]][2] + "deg)"; //显示第一位操作按钮    
+                var next_button = document.getElementById("next" + players[current_player]);
+                next_button.style.display = "block";
+                var liar_button = document.getElementById("liar" + players[current_player]);
+                liar_button.style.display = "block";
+            }
+        }
+
+        function next() { // 隐藏当前操作按钮    
+            var next_button = document.getElementById("next" + players[current_player]);
+            next_button.style.display = "none";
+            var liar_button = document.getElementById("liar" + players[current_player]);
+            liar_button.style.display = "none";
+            do {
+                current_player++;
+                if (current_player == players.length) {
+                    current_player = 0;
+                }
+            } while (players[current_player] == -1); // 
+            var player = players[current_player];
+            var arrow = document.getElementById("arrow");
+            arrow.style.top = arrow_rotation[players[current_player]][0];
+            arrow.style.left = arrow_rotation[players[current_player]][1];
+            arrow.style.transform = "translate(-50%, -50%) rotate(" + arrow_rotation[players[current_player]][2] + "deg)"; //显示下一位操作按钮    
+            var next_button = document.getElementById("next" + players[current_player]);
+            next_button.style.display = "block";
+            var liar_button = document.getElementById("liar" + players[current_player]);
+            liar_button.style.display = "block";
+        }
+
+        function liar() { // 隐藏当前操作按钮        
+            var next_button = document.getElementById("next" + players[current_player]);
+            next_button.style.display = "none";
+            var liar_button = document.getElementById("liar" + players[current_player]);
+            liar_button.style.display = "none"; //找上一个      
+            var last = current_player;
+            do {
+                last--;
+                if (last < 0) {
+                    last = players.length - 1;
+                }
+            } while (players[last] == -1); //显示kill按钮       
+            var kill_button1 = document.getElementById("kill" + players[last]);
+            var kill_button2 = document.getElementById("kill" + players[current_player]);
+            kill_button1.style.display = "block";
+            kill_button2.style.display = "block";
+        }
+
+        function kill(x) {
+            players_bullets[x]++; // 隐藏kill按钮  
+            for (var i = 0; i < players.length; i++) {
+                if (players[i] != -1) {
+                    document.getElementById("kill" + players[i]).style.display = "none";
+                }
+            }
+            if (players_bullets[x] == players_guns[x]) {
+                players[current_player] = -1; //     
+                alert("你他妈死啦！");
+                player_number--;
+            } else { //       
+                alert("你他妈没死！");
+            } //重置    
+            if (player_number == 1) {
+                alert("游戏结束！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！");
+            } else {
+                current_player = x;
+                reset();
+            }
+        }
+
+        function reset() {
+            while (players[current_player] == -1) {
+                current_player++;
+                if (current_player == players.length) {
+                    current_player = 0;
+                }
+            } // 隐藏箭头   
+            var arrow = document.getElementById("arrow");
+            arrow.style.display = "none";
+            //重置target_card
+            var text2 = document.getElementById("text2");
+            var cards = ["Q", "K", "A"];
+            card = cards[Math.floor(Math.random() * cards.length)];
+            text2.innerHTML = card;
+            //          
+            // 等待1秒后显示文本2     
+            setTimeout(function() {
+                text2.style.display = "block"; // 显示文本2   
+                text2.style.opacity = "0"; // 初始透明度为0    
+                // 让文本2慢慢显示         
+                setTimeout(function() {
+                    text2.style.opacity = "1"; // 使文本2渐变为可见    
+                    // 等待1秒后消失文本2     
+                    setTimeout(function() {
+                        text2.style.opacity = "0"; // 使文本2变为透明  
+                        // 等待1秒后显示文本2           
+                        setTimeout(function() {
+                            text2.style.display = "none"; // 隐藏文本2       
+                            text3.style.display = "block"; // 显示文本3     
+                            text3.style.opacity = "0"; // 初始透明度为0    
+                            // 让文本3慢慢显示   
+                            setTimeout(function() {
+                                text3.style.opacity = "1"; // 使文本3渐变为可见                                
+                                // 等待1秒后消失文本2               
+                                setTimeout(function() {
+                                    text3.style.opacity = "0"; // 使文本3变为透明 
+                                    setTimeout(function() {
+                                        display_arrow();
+                                    }, 2000);
+                                }, 2000);
+                            }, 100); // 确保文本3准备显示    
+                        }, 2000); // 文本2消失后1秒显示文本2    
+                        //3    
+                    }, 2000);
+                }, 100); // 确保文本2准备显示       
+            }, 2000); // 文本1消失后1秒显示文本2     
+            function display_arrow() { //显示箭头   
+                var arrow = document.getElementById("arrow");
+                arrow.style.display = "block";
+                arrow.style.top = arrow_rotation[players[current_player]][0];
+                arrow.style.left = arrow_rotation[players[current_player]][1];
+                arrow.style.transform = "translate(-50%, -50%) rotate(" + arrow_rotation[players[current_player]][2] + "deg)"; //显示第一位操作按钮    
+                var next_button = document.getElementById("next" + players[current_player]);
+                next_button.style.display = "block";
+                var liar_button = document.getElementById("liar" + players[current_player]);
+                liar_button.style.display = "block";
+            }
+        }
+    </script>
+</head>
+
+<body style="  background-image:url(./img/back3.png);background-size: 100%;background-position: cover;background-repeat: no-repeat;">
+    <div style="background-color: rgb(141, 81, 38);width: 400px;height: 400px;position: absolute;left: calc(50% - 200px)                ; top: calc(50% - 200px);">
+        <!-- start button --><button id="start" onclick="start_game()" style="border: none;cursor: pointer;width: 120px;height: 70px;font-size: 20px;"></button>
+        <!-- 文本 -->
+        <div id="text1" style="width: 120px;height: 110px;text-align: center;padding: 10px;font-size: 20px;"> 6 Queens <br> 6 Kings <br> 6 Aces <br> 2 Jockers </div>
+        <div id="text2" style="font-size: 90px;width: 170px;height: 170px;text-align: center;line-height: 170px;"></div>
+        <div id="text3" style="width: 120px;height: 110px;text-align: center;line-height: 110px;font-size: 20px;">请发牌</div>
+        <!-- 箭头 -->
+        <div id="arrow" style="display: none;position: absolute;width: 300;height: 300;border-left: 40px solid transparent;border-right: 40px solid transparent;border-top: 40px solid rgb(255, 215, 0);"></div>
+        <!-- 左侧 -->
+        <button id="1" onclick="add_player(1)" style="border: none;cursor: pointer;font-size: 31px;position: absolute;width: 50px;height: 50px;left: -150px;top: 50%;transform: translateY(-50%);background-color: rgb(256, 256, 256);">+</button>
+        <!-- 右侧 -->
+        <button id="2" onclick="add_player(2)" style="border: none;cursor: pointer;font-size: 31px;position: absolute;width: 50px;height: 50px;right: -150px;top: 50%;transform: translateY(-50%);background-color: rgb(256, 256, 256);">+</button>
+        <!-- 上方 -->
+        <button id="3" onclick="add_player(3)" style="border: none;cursor: pointer;font-size: 31px;position: absolute;width: 50px;height: 50px;left: 50%;top: -150px;transform: translateX(-50%);background-color: rgb(256, 256, 256);">+</button>
+        <!-- 下方 -->
+        <button id="4" onclick="add_player(4)" style="border: none;cursor: pointer;font-size: 31px;position: absolute;width: 50px;height: 50px;left: 50%;bottom: -150px;transform: translateX(-50%);background-color: rgb(256, 256, 256);">+</button> </div>
+</body>
+
+</html>
