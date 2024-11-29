@@ -137,10 +137,9 @@
             bullet_div.style.color = "white";
             bullet_div.style.position = "absolute";
             bullet_div.style.display = "block";
-            bullet_div.style.backgroundColor = "grew";
             bullet_div.style.border = "0px";
             bullet_div.style.width = "80px";
-            bullet_div.style.height = "40px";
+            bullet_div.style.height = "20px";
             bullet_div.style.fontSize = "20px";
             bullet_div.style.top = button_rotation[x][7];
             bullet_div.style.left = button_rotation[x][8];
@@ -216,7 +215,7 @@
                     }, 2000); // 文本1显示1秒后消失          
                 }, 100); // 确保文本1在显示时设置透明度      
             }, 1000); // 按钮消失后1秒显示文本1     
-            current_player = 0;
+            current_player = -1;
             do {
                 current_player++;
                 if (current_player == players.length) {
