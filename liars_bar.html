@@ -36,10 +36,10 @@
             ["25%", "50%", 180],
             ["75%", "50%", 0],
         ];
-        var button_rotation = [null, ["50%", "175%", 90, "-50%", "-250%", "-50%", "150%"],
-            ["50%", "-75%", 270, "-50%", "-250%", "-50%", "150%"],
-            ["175%", "50%", 180, "-150%", "-50%", "50%", "-50%"],
-            ["-75%", "50%", 0, "-150%", "-50%", "50%", "-50%"],
+        var button_rotation = [null, ["50%", "175%", 90, "-50%", "-250%", "-50%", "150%", "50%", "225%"],
+            ["50%", "-75%", 270, "-50%", "-250%", "-50%", "150%", "50%", "-125%"],
+            ["175%", "50%", 180, "-150%", "-50%", "50%", "-50%", "225%", "50%"],
+            ["-75%", "50%", 0, "-150%", "-50%", "50%", "-50%", "-125%", "50%"],
         ];
 
         function add_player(x) { //合法测试 
@@ -90,7 +90,8 @@
             next_button.onclick = function() {
                 next();
             };
-            button.appendChild(next_button); //质疑   
+            button.appendChild(next_button);
+            //质疑   
             var liar_button = document.createElement("button");
             liar_button.id = "liar" + x;
             liar_button.innerHTML = "质疑";
@@ -108,7 +109,8 @@
                 liar();
             };
             liar_button.style.transform = "translate(" + button_rotation[x][5] + ", " + button_rotation[x][6] + ") rotate(" + button_rotation[x][2] + "deg)";
-            button.appendChild(liar_button); //开枪 
+            button.appendChild(liar_button);
+            //开枪 
             var kill_button = document.createElement("button");
             kill_button.id = "kill" + x;
             kill_button.innerHTML = "开枪";
@@ -127,7 +129,23 @@
                 kill(xx);
             };
             kill_button.style.transform = "translate(-50%,-50%) rotate(" + button_rotation[x][2] + "deg)";
-            button.appendChild(kill_button); //添加子弹显示
+            button.appendChild(kill_button);
+            //添加子弹显示
+            var bullet_div = document.createElement("div");
+            bullet_div.id = "bullet" + x;
+            bullet_div.innerHTML = "0/6";
+            bullet_div.style.position = "absolute";
+            bullet_div.style.display = "block";
+            bullet_div.style.backgroundColor = "grew";
+            bullet_div.style.border = "0px";
+            bullet_div.style.width = "80px";
+            bullet_div.style.height = "40px";
+            bullet_div.style.fontSize = "20px";
+            bullet_div.style.top = button_rotation[x][7];
+            bullet_div.style.left = button_rotation[x][8];
+            bullet_div.style.transform = "translate(-50%,-50%) rotate(" + button_rotation[x][2] + "deg)";
+            button.appendChild(bullet_div);
+
         }
 
         function start_game() {
@@ -137,7 +155,8 @@
             var text3 = document.getElementById("text3");
             var cards = ["Q", "K", "A"];
             card = cards[Math.floor(Math.random() * cards.length)];
-            text2.innerHTML = card; //隐藏+      
+            text2.innerHTML = card;
+            //隐藏+      
             for (var i = 1; i <= 4; i++) {
                 var x = document.getElementById(i);
                 if (x.children.length == 0) {
@@ -169,6 +188,7 @@
                                 // 等待1秒后消失文本2
                                 setTimeout(function() {
                                     text2.style.opacity = "0"; // 使文本2变为透明  
+                                    document.getElementById("target_card").innerHTML = card; // 显示目标牌
                                     // 等待1秒后显示文本2                            
                                     //3                        
                                     setTimeout(function() {
@@ -264,12 +284,16 @@
                 }
             }
             if (players_bullets[x] == players_guns[x]) {
-                players[current_player] = -1; //     
+                players[current_player] = -1;
+                //     
                 alert("你他妈死啦！");
                 player_number--;
-            } else { //       
+            } else {
+                //       
                 alert("你他妈没死！");
-            } //重置    
+                document.getElementById("bullet" + players[x]).innerHTML = players_bullets[x] + "/6";
+            }
+            //重置    
             if (player_number == 1) {
                 alert("游戏结束！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！\n恭喜获胜者！");
             } else {
@@ -279,6 +303,7 @@
         }
 
         function reset() {
+            document.getElementById("target_card").innerHTML = '';
             while (players[current_player] == -1) {
                 current_player++;
                 if (current_player == players.length) {
@@ -302,7 +327,9 @@
                     text2.style.opacity = "1"; // 使文本2渐变为可见    
                     // 等待1秒后消失文本2     
                     setTimeout(function() {
-                        text2.style.opacity = "0"; // 使文本2变为透明  
+                        text2.style.opacity = "0";
+                        // 使文本2变为透明  
+                        document.getElementById("target_card").innerHTML = card; // 显示目标牌
                         // 等待1秒后显示文本2           
                         setTimeout(function() {
                             text2.style.display = "none"; // 隐藏文本2       
@@ -339,9 +366,11 @@
     </script>
 </head>
 
-<body style="  background-image:url(./img/back3.png);background-size: 100%;background-position: cover;background-repeat: no-repeat;">
-    <div style="background-color: rgb(141, 81, 38);width: 400px;height: 400px;position: absolute;left: calc(50% - 200px)                ; top: calc(50% - 200px);">
+<body style="  background-image:url(./img/back3.png);background-size: 100%;background-position: cover;background-repeat: repeat;">
+    <div id="target_card" style="border: 2px solid white;position: absolute; top: 10px; left:60px; transform: translateX(-50%); font-size: 70px;width: 100px;height: 100px; background-color: rgb(0, 0, 0); text-align: center;color:red">K</div>
+    <div style="background-color: rgb(141, 81, 38);width: 400px;height: 400px;position: absolute;left: calc(50% - 200px); top: calc(50% - 200px);">
         <!-- start button --><button id="start" onclick="start_game()" style="border: none;cursor: pointer;width: 120px;height: 70px;font-size: 20px;"></button>
+        <!-- target_card -->
         <!-- 文本 -->
         <div id="text1" style="width: 120px;height: 110px;text-align: center;padding: 10px;font-size: 20px;"> 6 Queens <br> 6 Kings <br> 6 Aces <br> 2 Jockers </div>
         <div id="text2" style="font-size: 90px;width: 170px;height: 170px;text-align: center;line-height: 170px;"></div>
@@ -355,7 +384,8 @@
         <!-- 上方 -->
         <button id="3" onclick="add_player(3)" style="border: none;cursor: pointer;font-size: 31px;position: absolute;width: 50px;height: 50px;left: 50%;top: -150px;transform: translateX(-50%);background-color: rgb(256, 256, 256);">+</button>
         <!-- 下方 -->
-        <button id="4" onclick="add_player(4)" style="border: none;cursor: pointer;font-size: 31px;position: absolute;width: 50px;height: 50px;left: 50%;bottom: -150px;transform: translateX(-50%);background-color: rgb(256, 256, 256);">+</button> </div>
+        <button id="4" onclick="add_player(4)" style="border: none;cursor: pointer;font-size: 31px;position: absolute;width: 50px;height: 50px;left: 50%;bottom: -150px;transform: translateX(-50%);background-color: rgb(256, 256, 256);">+</button>
+    </div>
 </body>
 
 </html>
